@@ -1,16 +1,17 @@
 <template>
   <div id="container">
+    <CanvasBg />
     <div id="circle" @click="toggleAnimation">
       <div class="inner-circle" id="inner-circle" />
       <div class="inner-circle" id="inner-circle-2" />
       <div class="inner-circle" id="inner-circle-3" />
     </div>
-    <label for="speedControl">Adjust Breathing Speed:</label>
+    <!-- <label for="speedControl">Adjust Breathing Speed:</label>
     <input type="range" v-model="speed" min="1" max="10" step="1" />
     <label for="inhaleDelayControl">Adjust Inhale Pause Duration:</label>
     <input type="range" v-model="inhaleDelay" min="0" max="2" step="0.1" />
     <label for="exhaleDelayControl">Adjust Exhale Pause Duration:</label>
-    <input type="range" v-model="exhaleDelay" min="0" max="2" step="0.1" />
+    <input type="range" v-model="exhaleDelay" min="0" max="2" step="0.1" /> -->
   </div>
 </template>
 
@@ -18,7 +19,12 @@
 import { ref } from "vue";
 import PlayAudio from '@/core/audio.js'
 
+import CanvasBg from '@/components/canvasBg.vue'
+
 export default {
+  components: {
+    CanvasBg,
+  },
   setup() {
     const speed = ref(1);
     const inhaleDelay = ref(0);
