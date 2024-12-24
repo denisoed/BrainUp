@@ -1,0 +1,309 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@font-face {
+  font-family: 'TrickyJimmy';
+  src: url('./assets/fonts/tricky-jimmy.regular.ttf');
+}
+
+@font-face {
+  font-family: 'Troika';
+  src: url('./assets/fonts/troika.otf');
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100vh;
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  background: rgb(21 57 123);
+  font-family: 'Troika', serif;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+.card {
+  padding: 2em;
+}
+
+.container {
+  min-height: 100vh;
+  padding: 20px 20px 96px;
+  box-sizing: border-box;
+}
+
+#app {
+  width: 100%;
+  height: 100vh;
+  overflow: auto;
+}
+
+canvas {
+  display: block;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+.button {
+  min-width: 40px;
+  min-height: 40px;
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 2px 0 1px #e8e8e8;
+  
+  text-align: center;
+  color: dimgrey;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 16px;
+  
+  -webkit-tap-highlight-color: rgba(black, 0); 
+}
+
+.button:active {
+  top: 2px;
+  box-shadow: 0 1px 0 1px #e8e8e8;
+}
+
+.button--disabled {
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.button--disabled:active {
+  top: 0;
+  box-shadow: 0 2px 0 1px #e8e8e8;
+}
+
+/* FLEXBOX */
+.full-width {
+  width: 100%;  
+}
+
+.hidden {
+  display: none;
+}
+
+.flex {
+  display: flex;
+}
+
+.column {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.items-start {
+  align-items: flex-start;
+}
+
+.items-end {
+  align-items: flex-end;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.no-wrap {
+  flex-wrap: nowrap;
+}
+
+.gap-xs {
+  gap: 4px;
+}
+
+.gap-sm {
+  gap: 8px;
+}
+
+.gap-sl {
+  gap: 12px;
+}
+
+.gap-md {
+  gap: 16px;
+}
+
+.mr-xs {
+  margin-right: 4px;
+}
+
+.mr-sm {
+  margin-right: 8px;
+}
+
+.mr-md {
+  margin-right: 16px;
+}
+
+.mr-lg {
+  margin-right: 32px;
+}
+
+.ml-xs {
+  margin-left: 4px;
+}
+
+.ml-sm {
+  margin-left: 8px;
+}
+
+.ml-md {
+  margin-left: 16px;
+}
+
+.ml-lg {
+  margin-left: 32px;
+}
+
+.mt-xs {
+  margin-top: 4px;
+}
+
+.mt-sm {
+  margin-top: 8px;
+}
+
+.mt-md {
+  margin-top: 16px;
+}
+
+.mt-lg {
+  margin-top: 32px;
+}
+
+.mt-xl {
+  margin-top: 48px;
+}
+.mt-auto {
+  margin-top: auto;
+}
+
+.mb-xs {
+  margin-bottom: 4px;
+}
+
+.mb-sm {
+  margin-bottom: 8px;
+}
+
+.mb-md {
+  margin-bottom: 16px;
+}
+
+.mb-lg {
+  margin-bottom: 32px;
+}
+
+.px-md {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+
+/* Hide scrollbar */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* DIALOG slyles */
+
+.modal-container {
+  align-items: flex-end !important;
+  z-index: 2;
+  background-color: transparent !important;
+  backdrop-filter: blur(3px);
+}
+
+.modal-item {
+  width: 100%;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.slide-bottom-enter-from .modal-item,
+.slide-bottom-leave-to .modal-item{
+  transform: translateY(100%);
+  transition: all 0.3s ease;
+  opacity: 0;
+}
