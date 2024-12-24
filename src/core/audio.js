@@ -1,7 +1,7 @@
 import { Howl } from 'howler';
 
 class PlayAudio {
-  constructor(src) {
+  constructor(src, params) {
     this.sound = new Howl({
       src,
       format: 'mp3',
@@ -10,6 +10,7 @@ class PlayAudio {
       mute: false,
       webAudio: false,
       volume: 1,
+      ...params
     });
   }
 

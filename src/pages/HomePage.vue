@@ -5,17 +5,17 @@
       <div class="inner-circle" id="inner-circle-2" />
       <div class="inner-circle" id="inner-circle-3" />
     </div>
-    <!-- <label for="speedControl">Adjust Breathing Speed:</label>
+    <label for="speedControl">Adjust Breathing Speed:</label>
     <input type="range" v-model="speed" min="1" max="10" step="1" />
     <label for="inhaleDelayControl">Adjust Inhale Pause Duration:</label>
     <input type="range" v-model="inhaleDelay" min="0" max="2" step="0.1" />
     <label for="exhaleDelayControl">Adjust Exhale Pause Duration:</label>
-    <input type="range" v-model="exhaleDelay" min="0" max="2" step="0.1" /> -->
+    <input type="range" v-model="exhaleDelay" min="0" max="2" step="0.1" />
   </div>
 </template>
 
 <script>
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import PlayAudio from '@/core/audio.js'
 
 export default {
@@ -52,7 +52,11 @@ export default {
           if (scale.value >= 1.5) {
             growing.value = false;
             pause.value = true;
-            setTimeout(() => (pause.value = false), exhaleDelay.value * 1000);
+            setTimeout(() => {
+              pause.value = false
+              inhalePlayer.stop();
+              exhalePlayer.play();
+            }, exhaleDelay.value * 1000);
           }
         } else {
           scale.value -= step;
@@ -60,7 +64,11 @@ export default {
           if (scale.value <= 1) {
             growing.value = true;
             pause.value = true;
-            setTimeout(() => (pause.value = false), inhaleDelay.value * 1000);
+            setTimeout(() => {
+              pause.value = false
+              exhalePlayer.stop();
+              inhalePlayer.play();
+            }, inhaleDelay.value * 1000);
           }
         }
 
@@ -75,19 +83,6 @@ export default {
         innerCircle3.style.transform = `translate(-50%, -50%) scale(${innerScale.value})`;
       }
     };
-
-    function playBreatheAudio() {
-      if (isAnimating.value) {
-        if (scale.value >= 1.5) {
-          inhalePlayer.stop();
-          exhalePlayer.play();
-        }
-        if (scale.value <= 1) {
-          exhalePlayer.stop();
-          inhalePlayer.play();
-        }
-      }
-    }
 
     const toggleAnimation = () => {
       if (isAnimating.value) {
@@ -105,10 +100,6 @@ export default {
         intervalId.value = setInterval(animateBreathing, 16); // ~60 FPS
       }
     };
-
-    watch(scale, () => {
-      playBreatheAudio();
-    });
 
     return {
       speed,
