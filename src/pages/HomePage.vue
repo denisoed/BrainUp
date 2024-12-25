@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import PlayAudio from '@/core/audio.js'
 
 import CanvasBg from '@/components/canvasBg.vue'
@@ -29,6 +29,7 @@ export default {
     const speed = ref(1);
     const inhaleDelay = ref(0);
     const exhaleDelay = ref(0);
+    const ticker = ref(null);
 
     const scale = ref(1);
     const innerScale = ref(1);
@@ -59,9 +60,8 @@ export default {
             growing.value = false;
             pause.value = true;
             setTimeout(() => {
+              ticker.value = 0;
               pause.value = false
-              inhalePlayer.stop();
-              exhalePlayer.play();
             }, exhaleDelay.value * 1000);
           }
         } else {
@@ -71,9 +71,8 @@ export default {
             growing.value = true;
             pause.value = true;
             setTimeout(() => {
+              ticker.value = 1;
               pause.value = false
-              exhalePlayer.stop();
-              inhalePlayer.play();
             }, inhaleDelay.value * 1000);
           }
         }
@@ -97,6 +96,7 @@ export default {
         inhalePlayer.stop();
         exhalePlayer.stop();
         scale.value = 1;
+        ticker.value = null;
         innerScale.value = 1;
         clearInterval(intervalId.value);
       } else {
@@ -106,6 +106,17 @@ export default {
         intervalId.value = setInterval(animateBreathing, 16); // ~60 FPS
       }
     };
+
+    watch(ticker, (tick) => {
+      if (tick === 1) {
+        exhalePlayer.stop();
+        inhalePlayer.play();
+      }
+      if (tick === 0) {
+        inhalePlayer.stop();
+        exhalePlayer.play();
+      }
+    });
 
     return {
       speed,
