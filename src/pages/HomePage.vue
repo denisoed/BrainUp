@@ -1,19 +1,9 @@
 <template>
-  <div id="container">
+  <div class="container">
     <CanvasBg />
     <div ref="circleRef" class="circle" @click="toggleAnimation">
       <div class="inner-circle" ref="innerCircleRef" />
-      <div class="inner-circle inner-circle-2" ref="innerCircle2Ref" />
-      <div class="inner-circle inner-circle-3" ref="innerCircle3Ref" />
     </div>
-    <!-- <label for="speedControl">Inhale Speed:</label>
-    <input type="range" v-model="inhaleSpeed" min="1" max="10" step="1" />
-    <label for="speedControl">Exhale Speed:</label>
-    <input type="range" v-model="exhaleSpeed" min="1" max="10" step="1" />
-    <label for="inhaleDelayControl">Adjust Inhale Pause Duration:</label>
-    <input type="range" v-model="inhaleDelay" min="0" max="5" step="1" />
-    <label for="exhaleDelayControl">Adjust Exhale Pause Duration:</label>
-    <input type="range" v-model="exhaleDelay" min="0" max="5" step="1" /> -->
   </div>
 </template>
 
@@ -30,8 +20,8 @@ export default {
     const breathingConfig = ref({
       loop: false,
       cycles: [
-        { inhaleSpeed: 3, inhaleDelay: 1, exhaleSpeed: 3, exhaleDelay: 2 },
-        { inhaleSpeed: 3, inhaleDelay: 1, exhaleSpeed: 3, exhaleDelay: 2 }
+        { inhaleSpeed: 2, inhaleDelay: 0, exhaleSpeed: 2, exhaleDelay: 0 },
+        { inhaleSpeed: 2, inhaleDelay: 0, exhaleSpeed: 2, exhaleDelay: 0 }
       ]
     });
 
@@ -54,14 +44,10 @@ export default {
 
     const circleRef = ref();
     const innerCircleRef = ref();
-    const innerCircle2Ref = ref();
-    const innerCircle3Ref = ref();
 
     function changeCircles() {
       circleRef.value.style.transform = `scale(${scale.value})`;
       innerCircleRef.value.style.transform = `translate(-50%, -50%) scale(${innerScale.value})`;
-      innerCircle2Ref.value.style.transform = `translate(-50%, -50%) scale(${innerScale.value})`;
-      innerCircle3Ref.value.style.transform = `translate(-50%, -50%) scale(${innerScale.value})`;
     }
 
     const animateBreathing = () => {
@@ -123,18 +109,28 @@ export default {
       } else {
         isAnimating.value = true;
         bgMusicPlayer.play();
+
+        // const currentCycle = breathingConfig.value.cycles[currentCycleIndex.value];
+        // Set initial rates for inhale and exhale sounds
+        // inhalePlayer.rate(1 / currentCycle.inhaleSpeed);
+        // exhalePlayer.rate(1 / currentCycle.exhaleSpeed);
+
         inhalePlayer.play();
         intervalId.value = setInterval(animateBreathing, 1000 / 60); // 60 FPS
       }
     };
 
     watch(ticker, (tick) => {
+      // const currentCycle = breathingConfig.value.cycles[currentCycleIndex.value];
+
       if (tick === 1) {
         exhalePlayer.stop();
+        // inhalePlayer.rate(1 / currentCycle.inhaleSpeed);
         inhalePlayer.play();
       }
       if (tick === 0) {
         inhalePlayer.stop();
+        // exhalePlayer.rate(1 / currentCycle.exhaleSpeed);
         exhalePlayer.play();
       }
     });
@@ -150,15 +146,15 @@ export default {
 
       circleRef,
       innerCircleRef,
-      innerCircle2Ref,
-      innerCircle3Ref
     };
   }
 };
 </script>
 
-<style>
-#container {
+<style lang="scss" scoped>
+$circle-color: rgba(0, 0, 255, 0.5);
+
+.container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -171,8 +167,7 @@ export default {
   width: 170px;
   height: 170px;
   border-radius: 50%;
-  background: rgba(0, 0, 255, 0.5);
-  margin-bottom: 40px;
+  background: $circle-color;
   position: relative;
 }
 
@@ -180,28 +175,11 @@ export default {
   width: 80%;
   height: 80%;
   border-radius: 50%;
-  background: rgba(0, 0, 255, 0.5);
+  background: $circle-color;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(1);
   box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
-}
-
-.inner-circle-2 {
-  width: 60%;
-  height: 60%;
-}
-
-.inner-circle-3 {
-  width: 40%;
-  height: 40%;
-}
-
-#speedControl,
-#inhaleDelayControl,
-#exhaleDelayControl {
-  margin-top: 20px;
-  width: 50%;
 }
 </style>

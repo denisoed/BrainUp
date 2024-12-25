@@ -20,6 +20,9 @@ class PlayAudio {
   play() {
     this.sound.play();
   }
+  rate(rate) {
+    this.sound.rate(rate);
+  }
 }
 
 export default PlayAudio;
