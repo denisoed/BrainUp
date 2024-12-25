@@ -24,7 +24,7 @@ const currentCycleIndex = ref(0);
 const ticker = ref<number | null>(null);
 
 const scale = ref(1);
-const innerScale = ref(1);
+const innerScale = ref(0);
 const growing = ref(true);
 const pause = ref(false);
 const isAnimating = ref(false);
@@ -51,12 +51,14 @@ const animateBreathing = () => {
   const step = growing.value
     ? (0.5 / (currentCycle.inhaleSpeed * 60)) // Inhale step
     : (0.5 / (currentCycle.exhaleSpeed * 60)); // Exhale step
-  const innerStep = step * 0.5;
+  const innerStep = growing.value
+    ? (1 / (currentCycle.inhaleSpeed * 60)) // Inner circle grows fully
+    : (1 / (currentCycle.exhaleSpeed * 60)); // Inner circle shrinks fully
 
   if (!pause.value) {
     if (growing.value) {
       scale.value += step;
-      innerScale.value += Math.min(innerStep, 1.5 - innerScale.value);
+      innerScale.value += innerStep; // Grow inner circle
       if (scale.value >= 1.5) {
         growing.value = false;
         pause.value = true;
@@ -67,7 +69,7 @@ const animateBreathing = () => {
       }
     } else {
       scale.value -= step;
-      innerScale.value -= Math.min(innerStep, innerScale.value - 1);
+      innerScale.value -= innerStep; // Shrink inner circle
       if (scale.value <= 1) {
         growing.value = true;
         pause.value = true;
@@ -99,7 +101,7 @@ const toggleAnimation = () => {
     exhalePlayer.stop();
     scale.value = 1;
     ticker.value = null;
-    innerScale.value = 1;
+    innerScale.value = 0;
     clearInterval(intervalId.value);
   } else {
     isAnimating.value = true;
@@ -156,8 +158,8 @@ $circle-color: rgba(0, 0, 255, 0.5);
 }
 
 .inner-circle {
-  width: 80%;
-  height: 80%;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   background: $circle-color;
   position: absolute;
