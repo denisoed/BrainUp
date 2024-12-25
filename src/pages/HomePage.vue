@@ -19,10 +19,22 @@ import PlayAudio from '@/core/audio.js';
 import CanvasBg from '@/components/canvasBg.vue';
 
 const breathingConfig = ref({
-  loop: false,
+  loop: true,
   cycles: [
-    { inhaleSpeed: 2, inhaleDelay: 0, exhaleSpeed: 2, exhaleDelay: 0, repeat: 2, pause: 5 },
-    { inhaleSpeed: 2, inhaleDelay: 0, exhaleSpeed: 2, exhaleDelay: 0, repeat: 2, pause: 0 }
+    {
+      inhale: {
+        duration: 4,
+        delay: 0,
+        speed: 3
+      },
+      exhale: {
+        duration: 6,
+        delay: 0,
+        speed: 3
+      },
+      repeat: 10,
+      pause: 5
+    }
   ]
 });
 
@@ -55,11 +67,11 @@ function changeCircles() {
 const animateBreathing = () => {
   const currentCycle = breathingConfig.value.cycles[currentCycleIndex.value];
   const step = growing.value
-    ? (0.5 / (currentCycle.inhaleSpeed * 60)) // Inhale step
-    : (0.5 / (currentCycle.exhaleSpeed * 60)); // Exhale step
+    ? (0.5 / (currentCycle.inhale.speed * 60)) // Inhale step
+    : (0.5 / (currentCycle.exhale.speed * 60)); // Exhale step
   const innerStep = growing.value
-    ? (1 / (currentCycle.inhaleSpeed * 60)) // Inner circle grows fully
-    : (1 / (currentCycle.exhaleSpeed * 60)); // Inner circle shrinks fully
+    ? (1 / (currentCycle.inhale.speed * 60)) // Inner circle grows fully
+    : (1 / (currentCycle.exhale.speed * 60)); // Inner circle shrinks fully
 
   if (!pause.value) {
     if (growing.value) {
@@ -71,7 +83,7 @@ const animateBreathing = () => {
         setTimeout(() => {
           ticker.value = 0;
           pause.value = false;
-        }, currentCycle.inhaleDelay * 1000);
+        }, currentCycle.inhale.delay * 1000);
       }
     } else {
       scale.value -= step;
@@ -98,7 +110,7 @@ const animateBreathing = () => {
             pause.value = false;
             currentRepeatCount.value += 1;
           }
-        }, currentCycle.exhaleDelay * 1000);
+        }, currentCycle.exhale.delay * 1000);
       }
     }
 
@@ -120,7 +132,6 @@ const toggleAnimation = () => {
   } else {
     isAnimating.value = true;
     bgMusicPlayer.play();
-
     inhalePlayer.play();
     intervalId.value = setInterval(animateBreathing, 1000 / 60); // 60 FPS
   }
