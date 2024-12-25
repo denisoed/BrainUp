@@ -21,7 +21,8 @@ import CanvasBg from '@/components/canvasBg.vue'
 const breathingConfig = ref({
   loop: false,
   cycles: [
-    { inhaleSpeed: 3, inhaleDelay: 5, exhaleSpeed: 4, exhaleDelay: 1, repeat: 10 }
+    { inhaleSpeed: 2, inhaleDelay: 0, exhaleSpeed: 2, exhaleDelay: 0, repeat: 10 },
+    { inhaleSpeed: 2, inhaleDelay: 0, exhaleSpeed: 2, exhaleDelay: 0, repeat: 10 }
   ]
 });
 
@@ -36,8 +37,8 @@ const pause = ref(false);
 const isAnimating = ref(false);
 const intervalId = ref();
 
-const inhalePlayer = new PlayAudio('inhale.mp3');
-const exhalePlayer = new PlayAudio('exhale.mp3');
+const inhalePlayer = new PlayAudio('inhale2.mp3');
+const exhalePlayer = new PlayAudio('exhale2.mp3');
 const bgMusicPlayer = new PlayAudio('music.mp3', {
   volume: 0.2,
   loop: true
@@ -82,7 +83,6 @@ const animateBreathing = () => {
         setTimeout(() => {
           ticker.value = 1;
           pause.value = false;
-
           currentRepeatCount.value += 1;
           if (currentRepeatCount.value >= currentCycle.repeat) {
             currentRepeatCount.value = 0;
