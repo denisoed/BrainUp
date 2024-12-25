@@ -1,14 +1,14 @@
 <template>
   <div class="container">
     <CanvasBg class="canvas-bg" />
+    <div class="info">
+      <span>Cycles: {{ currentCycleIndex + 1 }} / {{ breathingConfig.cycles.length }}</span>
+      <span>Repeats: {{ currentRepeatCount + 1 }} / {{ breathingConfig.cycles[currentCycleIndex].repeat }}</span>
+    </div>
     <div ref="circleRef" class="circle" @click="toggleAnimation">
       <div class="inner-circle" ref="innerCircleRef">
         <div class="cycle-counter">{{ currentRepeatCount + 1 }}</div>
       </div>
-    </div>
-    <div class="info">
-      <span>Cycle: {{ currentCycleIndex + 1 }} / {{ breathingConfig.cycles.length }}</span>
-      <span>Repeat: {{ currentRepeatCount + 1 }} / {{ breathingConfig.cycles[currentCycleIndex].repeat }}</span>
     </div>
   </div>
 </template>
@@ -21,7 +21,7 @@ import CanvasBg from '@/components/canvasBg.vue'
 const breathingConfig = ref({
   loop: false,
   cycles: [
-    { inhaleSpeed: 5, inhaleDelay: 10, exhaleSpeed: 3, exhaleDelay: 0, repeat: 10 }
+    { inhaleSpeed: 3, inhaleDelay: 5, exhaleSpeed: 4, exhaleDelay: 1, repeat: 10 }
   ]
 });
 
@@ -164,13 +164,16 @@ $circle-color: rgba(0, 0, 255, 0.5);
 }
 
 .info {
-  margin-top: 50px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: 20px;
+  justify-content: space-between;
+  font-size: 16px;
   color: white;
+  padding: 8px 12px;
 }
 
 .circle {
