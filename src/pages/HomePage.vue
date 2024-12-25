@@ -64,57 +64,69 @@ function changeCircles() {
   innerCircleRef.value.style.transform = `translate(-50%, -50%) scale(${innerScale.value})`;
 }
 
+function calculateStep(type, speed) {
+  return type === 'inhale'
+    ? (0.5 / (speed * 60))
+    : (0.5 / (speed * 60));
+}
+
+function handleInhaleStep(currentCycle) {
+  const step = calculateStep('inhale', currentCycle.inhale.speed);
+  const innerStep = 1 / (currentCycle.inhale.speed * 60);
+  scale.value += step;
+  innerScale.value += innerStep;
+  if (scale.value >= 1.5) {
+    growing.value = false;
+    pause.value = true;
+    setTimeout(() => {
+      ticker.value = 0;
+      pause.value = false;
+    }, currentCycle.inhale.delay * 1000);
+  }
+}
+
+function handleExhaleStep(currentCycle) {
+  const step = calculateStep('exhale', currentCycle.exhale.speed);
+  const innerStep = 1 / (currentCycle.exhale.speed * 60);
+  scale.value -= step;
+  innerScale.value -= innerStep;
+  if (scale.value <= 1) {
+    growing.value = true;
+    pause.value = true;
+    setTimeout(() => handleCycleCompletion(currentCycle), currentCycle.exhale.delay * 1000);
+  }
+}
+
+function handleCycleCompletion(currentCycle) {
+  if (currentRepeatCount.value + 1 >= currentCycle.repeat) {
+    setTimeout(() => {
+      ticker.value = 1;
+      pause.value = false;
+      currentRepeatCount.value = 0;
+      if (currentCycleIndex.value + 1 < breathingConfig.value.cycles.length) {
+        currentCycleIndex.value += 1;
+      } else if (breathingConfig.value.loop) {
+        currentCycleIndex.value = 0;
+      } else {
+        toggleAnimation();
+      }
+    }, currentCycle.pause * 1000);
+  } else {
+    ticker.value = 1;
+    pause.value = false;
+    currentRepeatCount.value += 1;
+  }
+}
+
 const animateBreathing = () => {
   const currentCycle = breathingConfig.value.cycles[currentCycleIndex.value];
-  const step = growing.value
-    ? (0.5 / (currentCycle.inhale.speed * 60)) // Inhale step
-    : (0.5 / (currentCycle.exhale.speed * 60)); // Exhale step
-  const innerStep = growing.value
-    ? (1 / (currentCycle.inhale.speed * 60)) // Inner circle grows fully
-    : (1 / (currentCycle.exhale.speed * 60)); // Inner circle shrinks fully
-
   if (!pause.value) {
     if (growing.value) {
-      scale.value += step;
-      innerScale.value += innerStep; // Grow inner circle
-      if (scale.value >= 1.5) {
-        growing.value = false;
-        pause.value = true;
-        setTimeout(() => {
-          ticker.value = 0;
-          pause.value = false;
-        }, currentCycle.inhale.delay * 1000);
-      }
+      handleInhaleStep(currentCycle);
     } else {
-      scale.value -= step;
-      innerScale.value -= innerStep; // Shrink inner circle
-      if (scale.value <= 1) {
-        growing.value = true;
-        pause.value = true;
-        setTimeout(() => {
-          if (currentRepeatCount.value + 1 >= currentCycle.repeat) {
-            setTimeout(() => {
-              ticker.value = 1;
-              pause.value = false;
-              currentRepeatCount.value = 0;
-              if (currentCycleIndex.value + 1 < breathingConfig.value.cycles.length) {
-                currentCycleIndex.value += 1;
-              } else if (breathingConfig.value.loop) {
-                currentCycleIndex.value = 0;
-              } else {
-                toggleAnimation();
-              }
-            }, currentCycle.pause * 1000);
-          } else {
-            ticker.value = 1;
-            pause.value = false;
-            currentRepeatCount.value += 1;
-          }
-        }, currentCycle.exhale.delay * 1000);
-      }
+      handleExhaleStep(currentCycle);
     }
-
-    changeCircles(); 
+    changeCircles();
   }
 };
 
