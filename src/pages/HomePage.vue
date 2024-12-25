@@ -2,7 +2,9 @@
   <div class="container">
     <CanvasBg />
     <div ref="circleRef" class="circle" @click="toggleAnimation">
-      <div class="inner-circle" ref="innerCircleRef" />
+      <div class="inner-circle" ref="innerCircleRef">
+        <div class="cycle-counter">{{ currentCycleIndex + 1 }}</div>
+      </div>
     </div>
   </div>
 </template>
@@ -65,7 +67,7 @@ const animateBreathing = () => {
         setTimeout(() => {
           ticker.value = 0;
           pause.value = false;
-        }, currentCycle.exhaleDelay * 1000);
+        }, currentCycle.inhaleDelay * 1000);
       }
     } else {
       scale.value -= step;
@@ -85,7 +87,7 @@ const animateBreathing = () => {
           } else {
             toggleAnimation(); // Stop animation           
           }
-        }, currentCycle.inhaleDelay * 1000);
+        }, currentCycle.exhaleDelay * 1000);
       }
     }
 
@@ -102,6 +104,7 @@ const toggleAnimation = () => {
     scale.value = 1;
     ticker.value = null;
     innerScale.value = 0;
+    currentCycleIndex.value = 0;
     clearInterval(intervalId.value);
   } else {
     isAnimating.value = true;
@@ -167,5 +170,16 @@ $circle-color: rgba(0, 0, 255, 0.5);
   left: 50%;
   transform: translate(-50%, -50%) scale(1);
   box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
+
+  .cycle-counter {
+    color: white;
+    font-size: 80px;
+    font-weight: bold;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.8;
+  }
 }
 </style>
