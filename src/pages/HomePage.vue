@@ -27,11 +27,15 @@ export default {
     CanvasBg,
   },
   setup() {
-    const inhaleSpeed = ref(3); // Time for inhale in seconds
-    const exhaleSpeed = ref(3); // Time for exhale in seconds
-    const inhaleDelay = ref(0);
-    const exhaleDelay = ref(0);
+    const breathingConfig = ref({
+      loop: false,
+      cycles: [
+        { inhaleSpeed: 3, inhaleDelay: 1, exhaleSpeed: 3, exhaleDelay: 2 },
+        { inhaleSpeed: 3, inhaleDelay: 1, exhaleSpeed: 3, exhaleDelay: 2 }
+      ]
+    });
 
+    const currentCycleIndex = ref(0);
     const ticker = ref(null);
 
     const scale = ref(1);
@@ -61,9 +65,11 @@ export default {
     }
 
     const animateBreathing = () => {
+      const currentCycle = breathingConfig.value.cycles[currentCycleIndex.value];
+
       const step = growing.value
-        ? (0.5 / (inhaleSpeed.value * 60)) // Inhale step
-        : (0.5 / (exhaleSpeed.value * 60)); // Exhale step
+        ? (0.5 / (currentCycle.inhaleSpeed * 60)) // Inhale step
+        : (0.5 / (currentCycle.exhaleSpeed * 60)); // Exhale step
       const innerStep = step * 0.5;
 
       if (!pause.value) {
@@ -76,7 +82,7 @@ export default {
             setTimeout(() => {
               ticker.value = 0;
               pause.value = false;
-            }, exhaleDelay.value * 1000);
+            }, currentCycle.exhaleDelay * 1000);
           }
         } else {
           scale.value -= step;
@@ -87,7 +93,16 @@ export default {
             setTimeout(() => {
               ticker.value = 1;
               pause.value = false;
-            }, inhaleDelay.value * 1000);
+
+              // Move to the next cycle or stop if loop is disabled
+              if (currentCycleIndex.value + 1 < breathingConfig.value.cycles.length) {
+                currentCycleIndex.value += 1;
+              } else if (breathingConfig.value.loop) {
+                currentCycleIndex.value = 0;
+              } else {
+                toggleAnimation(); // Stop animation
+              }
+            }, currentCycle.inhaleDelay * 1000);
           }
         }
 
@@ -129,10 +144,7 @@ export default {
     });
 
     return {
-      inhaleSpeed,
-      exhaleSpeed,
-      inhaleDelay,
-      exhaleDelay,
+      breathingConfig,
       isAnimating,
       toggleAnimation,
 
