@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref } from 'vue';
 import PlayAudio from '@/core/audio.js';
 import CanvasBg from '@/components/canvasBg.vue';
 
@@ -23,16 +23,16 @@ const breathingConfig = ref({
   cycles: [
     {
       inhale: {
-        duration: 4,
-        delay: 3,
+        duration: 3,
+        delay: 2,
         speed: 1
       },
       exhale: {
-        duration: 6,
-        delay: 0,
+        duration: 1,
+        delay: 2,
         speed: 1
       },
-      repeat: 3,
+      repeat: 10,
       pause: 5
     }
   ]
@@ -40,7 +40,7 @@ const breathingConfig = ref({
 
 const currentCycleIndex = ref(0);
 const currentRepeatCount = ref(0);
-const ticker = ref<number | null>(null);
+const currentBreathCount = ref(0);
 
 const scale = ref(1);
 const innerScale = ref(0);
@@ -64,41 +64,71 @@ function changeCircles() {
   innerCircleRef.value.style.transform = `translate(-50%, -50%) scale(${innerScale.value})`;
 }
 
-function calculateStep(speed) {
-  return (0.5 / (speed * 60));
+function calculateStep(type, speed) {
+  return type === 'inhale'
+    ? (0.5 / (speed * 60))
+    : (0.5 / (speed * 60));
+}
+
+function playInhaleSound() {
+  exhalePlayer.stop();
+  inhalePlayer.stop();
+  inhalePlayer.play();
+}
+
+function playExhaleSound() {
+  inhalePlayer.stop();
+  exhalePlayer.stop();
+  exhalePlayer.play();
 }
 
 function handleInhaleStep(currentCycle) {
-  const step = calculateStep(currentCycle.inhale.speed);
+  const step = calculateStep('inhale', currentCycle.inhale.speed);
   const innerStep = 1 / (currentCycle.inhale.speed * 60);
   scale.value += step;
   innerScale.value += innerStep;
   if (scale.value >= 1.5) {
-    growing.value = false;
-    pause.value = true;
-    setTimeout(() => {
-      ticker.value = 0;
-      pause.value = false;
-    }, currentCycle.inhale.delay * 1000);
+    currentBreathCount.value += 1;
+    if (currentBreathCount.value >= currentCycle.inhale.duration) {
+      currentBreathCount.value = 0;
+      growing.value = false;
+      pause.value = true;
+      setTimeout(() => {
+        playExhaleSound();
+        pause.value = false;
+      }, currentCycle.inhale.delay * 1000);
+    } else {
+      scale.value = 1; // Reset scale for partial inhales
+      innerScale.value = 0;
+      playInhaleSound();
+    }
   }
 }
 
 function handleExhaleStep(currentCycle) {
-  const step = calculateStep(currentCycle.exhale.speed);
+  const step = calculateStep('exhale', currentCycle.exhale.speed);
   const innerStep = 1 / (currentCycle.exhale.speed * 60);
   scale.value -= step;
   innerScale.value -= innerStep;
   if (scale.value <= 1) {
-    growing.value = true;
-    pause.value = true;
-    setTimeout(() => handleCycleCompletion(currentCycle), currentCycle.exhale.delay * 1000);
+    currentBreathCount.value += 1;
+    if (currentBreathCount.value >= currentCycle.exhale.duration) {
+      currentBreathCount.value = 0;
+      growing.value = true;
+      pause.value = true;
+      setTimeout(() => handleCycleCompletion(currentCycle), currentCycle.exhale.delay * 1000);
+    } else {
+      scale.value = 1.5; // Reset scale for partial exhales
+      innerScale.value = 1;
+      playExhaleSound();
+    }
   }
 }
 
 function handleCycleCompletion(currentCycle) {
   if (currentRepeatCount.value + 1 >= currentCycle.repeat) {
     setTimeout(() => {
-      ticker.value = 1;
+      playExhaleSound();
       pause.value = false;
       currentRepeatCount.value = 0;
       if (currentCycleIndex.value + 1 < breathingConfig.value.cycles.length) {
@@ -110,7 +140,7 @@ function handleCycleCompletion(currentCycle) {
       }
     }, currentCycle.pause * 1000);
   } else {
-    ticker.value = 1;
+    playInhaleSound();
     pause.value = false;
     currentRepeatCount.value += 1;
   }
@@ -135,9 +165,9 @@ const toggleAnimation = () => {
     inhalePlayer.stop();
     exhalePlayer.stop();
     scale.value = 1;
-    ticker.value = null;
     innerScale.value = 0;
     currentCycleIndex.value = 0;
+    currentBreathCount.value = 0;
     clearInterval(intervalId.value);
   } else {
     isAnimating.value = true;
@@ -146,17 +176,6 @@ const toggleAnimation = () => {
     intervalId.value = setInterval(animateBreathing, 1000 / 60); // 60 FPS
   }
 };
-
-watch(ticker, (tick) => {
-  if (tick === 1) {
-    exhalePlayer.stop();
-    inhalePlayer.play();
-  }
-  if (tick === 0) {
-    inhalePlayer.stop();
-    exhalePlayer.play();
-  }
-});
 
 onMounted(() => {
   changeCircles();
