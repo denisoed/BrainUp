@@ -7,7 +7,7 @@
     </div>
     <div ref="circleRef" class="circle" @click="toggleAnimation">
       <div class="inner-circle" ref="innerCircleRef">
-        <div class="cycle-counter">{{ currentRepeatCount + 1 }}</div>
+        <div class="cycle-counter">{{ currentBreathCount + 1 }}</div>
       </div>
     </div>
   </div>
@@ -21,19 +21,20 @@ import CanvasBg from '@/components/canvasBg.vue';
 const breathingConfig = ref({
   loop: true,
   cycles: [
+    // Relaxation and improved sleep
     {
       inhale: {
-        duration: 3,
-        delay: 2,
+        duration: 4,
+        delay: 7,
         speed: 1
       },
       exhale: {
         duration: 1,
         delay: 2,
-        speed: 1
+        speed: 5
       },
-      repeat: 10,
-      pause: 5
+      repeat: 5,
+      pause: 1
     }
   ]
 });
@@ -86,9 +87,7 @@ function handleInhaleStep(currentCycle) {
   scale.value += step;
   innerScale.value += innerStep;
   if (scale.value >= 1.5) {
-    currentBreathCount.value += 1;
-    if (currentBreathCount.value >= currentCycle.inhale.duration) {
-      currentBreathCount.value = 0;
+    if (currentBreathCount.value + 1 >= currentCycle.inhale.duration) {
       growing.value = false;
       pause.value = true;
       setTimeout(() => {
@@ -98,6 +97,7 @@ function handleInhaleStep(currentCycle) {
     } else {
       scale.value = 1; // Reset scale for partial inhales
       innerScale.value = 0;
+      currentBreathCount.value += 1;
       playInhaleSound();
     }
   }
