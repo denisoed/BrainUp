@@ -18,7 +18,6 @@
 <script>
 import { onMounted, ref, watch } from "vue";
 import PlayAudio from '@/core/audio.js'
-
 import CanvasBg from '@/components/canvasBg.vue'
 
 export default {
@@ -26,9 +25,10 @@ export default {
     CanvasBg,
   },
   setup() {
-    const speed = ref(1);
+    const speed = ref(3); // Time for inhale and exhale in seconds
     const inhaleDelay = ref(0);
     const exhaleDelay = ref(0);
+
     const ticker = ref(null);
 
     const scale = ref(1);
@@ -58,13 +58,7 @@ export default {
     }
 
     const animateBreathing = () => {
-      const baseStep = 0.01 * speed.value;
-      const step = baseStep * Math.max(
-        0.2,
-        growing.value
-          ? 1 - (scale.value - 1) / 0.5
-          : 1 - (1.5 - scale.value) / 0.5
-      );
+      const step = (0.5 / (speed.value * 60)); // Scale step for smooth animation
       const innerStep = step * 0.5;
 
       if (!pause.value) {
@@ -76,7 +70,7 @@ export default {
             pause.value = true;
             setTimeout(() => {
               ticker.value = 0;
-              pause.value = false
+              pause.value = false;
             }, exhaleDelay.value * 1000);
           }
         } else {
@@ -87,7 +81,7 @@ export default {
             pause.value = true;
             setTimeout(() => {
               ticker.value = 1;
-              pause.value = false
+              pause.value = false;
             }, inhaleDelay.value * 1000);
           }
         }
@@ -109,8 +103,8 @@ export default {
       } else {
         isAnimating.value = true;
         bgMusicPlayer.play();
-        inhalePlayer.play()
-        intervalId.value = setInterval(animateBreathing, 16); // ~60 FPS
+        inhalePlayer.play();
+        intervalId.value = setInterval(animateBreathing, 1000 / 60); // 60 FPS
       }
     };
 
