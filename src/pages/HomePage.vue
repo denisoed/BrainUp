@@ -14,15 +14,15 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, watch } from "vue";
-import PlayAudio from '@/core/audio.js'
-import CanvasBg from '@/components/canvasBg.vue'
+import { onMounted, ref, watch } from 'vue';
+import PlayAudio from '@/core/audio.js';
+import CanvasBg from '@/components/canvasBg.vue';
 
 const breathingConfig = ref({
   loop: false,
   cycles: [
-    { inhaleSpeed: 2, inhaleDelay: 0, exhaleSpeed: 2, exhaleDelay: 0, repeat: 10 },
-    { inhaleSpeed: 2, inhaleDelay: 0, exhaleSpeed: 2, exhaleDelay: 0, repeat: 10 }
+    { inhaleSpeed: 2, inhaleDelay: 0, exhaleSpeed: 2, exhaleDelay: 0, repeat: 2, pause: 5 },
+    { inhaleSpeed: 2, inhaleDelay: 0, exhaleSpeed: 2, exhaleDelay: 0, repeat: 2, pause: 0 }
   ]
 });
 
@@ -54,7 +54,6 @@ function changeCircles() {
 
 const animateBreathing = () => {
   const currentCycle = breathingConfig.value.cycles[currentCycleIndex.value];
-
   const step = growing.value
     ? (0.5 / (currentCycle.inhaleSpeed * 60)) // Inhale step
     : (0.5 / (currentCycle.exhaleSpeed * 60)); // Exhale step
@@ -81,18 +80,23 @@ const animateBreathing = () => {
         growing.value = true;
         pause.value = true;
         setTimeout(() => {
-          ticker.value = 1;
-          pause.value = false;
-          currentRepeatCount.value += 1;
-          if (currentRepeatCount.value >= currentCycle.repeat) {
-            currentRepeatCount.value = 0;
-            if (currentCycleIndex.value + 1 < breathingConfig.value.cycles.length) {
-              currentCycleIndex.value += 1;
-            } else if (breathingConfig.value.loop) {
-              currentCycleIndex.value = 0;
-            } else {
-              toggleAnimation();
-            }
+          if (currentRepeatCount.value + 1 >= currentCycle.repeat) {
+            setTimeout(() => {
+              ticker.value = 1;
+              pause.value = false;
+              currentRepeatCount.value = 0;
+              if (currentCycleIndex.value + 1 < breathingConfig.value.cycles.length) {
+                currentCycleIndex.value += 1;
+              } else if (breathingConfig.value.loop) {
+                currentCycleIndex.value = 0;
+              } else {
+                toggleAnimation();
+              }
+            }, currentCycle.pause * 1000);
+          } else {
+            ticker.value = 1;
+            pause.value = false;
+            currentRepeatCount.value += 1;
           }
         }, currentCycle.exhaleDelay * 1000);
       }
@@ -117,27 +121,18 @@ const toggleAnimation = () => {
     isAnimating.value = true;
     bgMusicPlayer.play();
 
-    // Set initial rates for inhale and exhale sounds
-    // const currentCycle = breathingConfig.value.cycles[currentCycleIndex.value];
-    // inhalePlayer.rate(1 / currentCycle.inhaleSpeed);
-    // exhalePlayer.rate(1 / currentCycle.exhaleSpeed);
-
     inhalePlayer.play();
     intervalId.value = setInterval(animateBreathing, 1000 / 60); // 60 FPS
   }
 };
 
 watch(ticker, (tick) => {
-  // const currentCycle = breathingConfig.value.cycles[currentCycleIndex.value];
-
   if (tick === 1) {
     exhalePlayer.stop();
-    // inhalePlayer.rate(1 / currentCycle.inhaleSpeed);
     inhalePlayer.play();
   }
   if (tick === 0) {
     inhalePlayer.stop();
-    // exhalePlayer.rate(1 / currentCycle.exhaleSpeed);
     exhalePlayer.play();
   }
 });
