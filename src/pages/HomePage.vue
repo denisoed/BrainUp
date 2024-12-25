@@ -1,10 +1,14 @@
 <template>
   <div class="container">
-    <CanvasBg />
+    <CanvasBg class="canvas-bg" />
     <div ref="circleRef" class="circle" @click="toggleAnimation">
       <div class="inner-circle" ref="innerCircleRef">
-        <div class="cycle-counter">{{ currentCycleIndex + 1 }}</div>
+        <div class="cycle-counter">{{ currentRepeatCount + 1 }}</div>
       </div>
+    </div>
+    <div class="info">
+      <span>Cycle: {{ currentCycleIndex + 1 }} / {{ breathingConfig.cycles.length }}</span>
+      <span>Repeat: {{ currentRepeatCount + 1 }} / {{ breathingConfig.cycles[currentCycleIndex].repeat }}</span>
     </div>
   </div>
 </template>
@@ -17,12 +21,12 @@ import CanvasBg from '@/components/canvasBg.vue'
 const breathingConfig = ref({
   loop: false,
   cycles: [
-    { inhaleSpeed: 2, inhaleDelay: 0, exhaleSpeed: 2, exhaleDelay: 0 },
-    { inhaleSpeed: 2, inhaleDelay: 0, exhaleSpeed: 2, exhaleDelay: 0 }
+    { inhaleSpeed: 5, inhaleDelay: 10, exhaleSpeed: 3, exhaleDelay: 0, repeat: 10 }
   ]
 });
 
 const currentCycleIndex = ref(0);
+const currentRepeatCount = ref(0);
 const ticker = ref<number | null>(null);
 
 const scale = ref(1);
@@ -79,13 +83,16 @@ const animateBreathing = () => {
           ticker.value = 1;
           pause.value = false;
 
-          // Move to the next cycle or stop if loop is disabled
-          if (currentCycleIndex.value + 1 < breathingConfig.value.cycles.length) {
-            currentCycleIndex.value += 1;
-          } else if (breathingConfig.value.loop) {
-            currentCycleIndex.value = 0;
-          } else {
-            toggleAnimation(); // Stop animation           
+          currentRepeatCount.value += 1;
+          if (currentRepeatCount.value >= currentCycle.repeat) {
+            currentRepeatCount.value = 0;
+            if (currentCycleIndex.value + 1 < breathingConfig.value.cycles.length) {
+              currentCycleIndex.value += 1;
+            } else if (breathingConfig.value.loop) {
+              currentCycleIndex.value = 0;
+            } else {
+              toggleAnimation();
+            }
           }
         }, currentCycle.exhaleDelay * 1000);
       }
@@ -110,8 +117,8 @@ const toggleAnimation = () => {
     isAnimating.value = true;
     bgMusicPlayer.play();
 
-    // const currentCycle = breathingConfig.value.cycles[currentCycleIndex.value];
     // Set initial rates for inhale and exhale sounds
+    // const currentCycle = breathingConfig.value.cycles[currentCycleIndex.value];
     // inhalePlayer.rate(1 / currentCycle.inhaleSpeed);
     // exhalePlayer.rate(1 / currentCycle.exhaleSpeed);
 
@@ -150,6 +157,20 @@ $circle-color: rgba(0, 0, 255, 0.5);
   justify-content: center;
   height: 100vh;
   font-family: Arial, sans-serif;
+}
+
+.canvas-bg {
+  z-index: -1;
+}
+
+.info {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: white;
 }
 
 .circle {
