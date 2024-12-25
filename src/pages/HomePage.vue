@@ -1,22 +1,22 @@
 <template>
   <div id="container">
     <CanvasBg />
-    <div id="circle" @click="toggleAnimation">
-      <div class="inner-circle" id="inner-circle" />
-      <div class="inner-circle" id="inner-circle-2" />
-      <div class="inner-circle" id="inner-circle-3" />
+    <div ref="circleRef" class="circle" @click="toggleAnimation">
+      <div class="inner-circle" ref="innerCircleRef" />
+      <div class="inner-circle inner-circle-2" ref="innerCircle2Ref" />
+      <div class="inner-circle inner-circle-3" ref="innerCircle3Ref" />
     </div>
     <!-- <label for="speedControl">Adjust Breathing Speed:</label>
     <input type="range" v-model="speed" min="1" max="10" step="1" />
     <label for="inhaleDelayControl">Adjust Inhale Pause Duration:</label>
-    <input type="range" v-model="inhaleDelay" min="0" max="2" step="0.1" />
+    <input type="range" v-model="inhaleDelay" min="0" max="5" step="1" />
     <label for="exhaleDelayControl">Adjust Exhale Pause Duration:</label>
-    <input type="range" v-model="exhaleDelay" min="0" max="2" step="0.1" /> -->
+    <input type="range" v-model="exhaleDelay" min="0" max="5" step="1" /> -->
   </div>
 </template>
 
 <script>
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import PlayAudio from '@/core/audio.js'
 
 import CanvasBg from '@/components/canvasBg.vue'
@@ -40,7 +40,22 @@ export default {
 
     const inhalePlayer = new PlayAudio('inhale.mp3');
     const exhalePlayer = new PlayAudio('exhale.mp3');
-    const bgMusicPlayer = new PlayAudio('music.mp3');
+    const bgMusicPlayer = new PlayAudio('music.mp3', {
+      volume: 0.2,
+      loop: true
+    });
+
+    const circleRef = ref();
+    const innerCircleRef = ref();
+    const innerCircle2Ref = ref();
+    const innerCircle3Ref = ref();
+
+    function changeCircles() {
+      circleRef.value.style.transform = `scale(${scale.value})`;
+      innerCircleRef.value.style.transform = `translate(-50%, -50%) scale(${innerScale.value})`;
+      innerCircle2Ref.value.style.transform = `translate(-50%, -50%) scale(${innerScale.value})`;
+      innerCircle3Ref.value.style.transform = `translate(-50%, -50%) scale(${innerScale.value})`;
+    }
 
     const animateBreathing = () => {
       const baseStep = 0.01 * speed.value;
@@ -77,15 +92,7 @@ export default {
           }
         }
 
-        const circle = document.getElementById("circle");
-        const innerCircle = document.getElementById("inner-circle");
-        const innerCircle2 = document.getElementById("inner-circle-2");
-        const innerCircle3 = document.getElementById("inner-circle-3");
-
-        circle.style.transform = `scale(${scale.value})`;
-        innerCircle.style.transform = `translate(-50%, -50%) scale(${innerScale.value})`;
-        innerCircle2.style.transform = `translate(-50%, -50%) scale(${innerScale.value})`;
-        innerCircle3.style.transform = `translate(-50%, -50%) scale(${innerScale.value})`;
+        changeCircles(); 
       }
     };
 
@@ -118,12 +125,21 @@ export default {
       }
     });
 
+    onMounted(() => {
+      changeCircles();
+    });
+
     return {
       speed,
       inhaleDelay,
       exhaleDelay,
       isAnimating,
-      toggleAnimation
+      toggleAnimation,
+
+      circleRef,
+      innerCircleRef,
+      innerCircle2Ref,
+      innerCircle3Ref
     };
   }
 };
@@ -139,7 +155,7 @@ export default {
   font-family: Arial, sans-serif;
 }
 
-#circle {
+.circle {
   width: 170px;
   height: 170px;
   border-radius: 50%;
@@ -160,12 +176,12 @@ export default {
   box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
 }
 
-#inner-circle-2 {
+.inner-circle-2 {
   width: 60%;
   height: 60%;
 }
 
-#inner-circle-3 {
+.inner-circle-3 {
   width: 40%;
   height: 40%;
 }
