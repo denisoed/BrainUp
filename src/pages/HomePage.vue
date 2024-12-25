@@ -6,8 +6,10 @@
       <div class="inner-circle inner-circle-2" ref="innerCircle2Ref" />
       <div class="inner-circle inner-circle-3" ref="innerCircle3Ref" />
     </div>
-    <!-- <label for="speedControl">Adjust Breathing Speed:</label>
-    <input type="range" v-model="speed" min="1" max="10" step="1" />
+    <!-- <label for="speedControl">Inhale Speed:</label>
+    <input type="range" v-model="inhaleSpeed" min="1" max="10" step="1" />
+    <label for="speedControl">Exhale Speed:</label>
+    <input type="range" v-model="exhaleSpeed" min="1" max="10" step="1" />
     <label for="inhaleDelayControl">Adjust Inhale Pause Duration:</label>
     <input type="range" v-model="inhaleDelay" min="0" max="5" step="1" />
     <label for="exhaleDelayControl">Adjust Exhale Pause Duration:</label>
@@ -25,7 +27,8 @@ export default {
     CanvasBg,
   },
   setup() {
-    const speed = ref(3); // Time for inhale and exhale in seconds
+    const inhaleSpeed = ref(3); // Time for inhale in seconds
+    const exhaleSpeed = ref(3); // Time for exhale in seconds
     const inhaleDelay = ref(0);
     const exhaleDelay = ref(0);
 
@@ -58,7 +61,9 @@ export default {
     }
 
     const animateBreathing = () => {
-      const step = (0.5 / (speed.value * 60)); // Scale step for smooth animation
+      const step = growing.value
+        ? (0.5 / (inhaleSpeed.value * 60)) // Inhale step
+        : (0.5 / (exhaleSpeed.value * 60)); // Exhale step
       const innerStep = step * 0.5;
 
       if (!pause.value) {
@@ -124,7 +129,8 @@ export default {
     });
 
     return {
-      speed,
+      inhaleSpeed,
+      exhaleSpeed,
       inhaleDelay,
       exhaleDelay,
       isAnimating,
