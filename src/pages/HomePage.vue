@@ -64,10 +64,8 @@ function changeCircles() {
   innerCircleRef.value.style.transform = `translate(-50%, -50%) scale(${innerScale.value})`;
 }
 
-function calculateStep(type, speed) {
-  return type === 'inhale'
-    ? (0.5 / (speed * 60))
-    : (0.5 / (speed * 60));
+function calculateStep(speed) {
+  return (0.5 / (speed * 60));
 }
 
 function playInhaleSound() {
@@ -83,7 +81,7 @@ function playExhaleSound() {
 }
 
 function handleInhaleStep(currentCycle) {
-  const step = calculateStep('inhale', currentCycle.inhale.speed);
+  const step = calculateStep(currentCycle.inhale.speed);
   const innerStep = 1 / (currentCycle.inhale.speed * 60);
   scale.value += step;
   innerScale.value += innerStep;
@@ -106,7 +104,7 @@ function handleInhaleStep(currentCycle) {
 }
 
 function handleExhaleStep(currentCycle) {
-  const step = calculateStep('exhale', currentCycle.exhale.speed);
+  const step = calculateStep(currentCycle.exhale.speed);
   const innerStep = 1 / (currentCycle.exhale.speed * 60);
   scale.value -= step;
   innerScale.value -= innerStep;
