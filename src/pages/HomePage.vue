@@ -14,8 +14,9 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { onBeforeMount, onMounted, ref } from 'vue';
 import PlayAudio from '@/core/audio.js';
+import BreatheAudioController from '@/core/breatheAudioController.ts';
 import CanvasBg from '@/components/canvasBg.vue';
 
 const breathingConfig = ref({
@@ -24,14 +25,14 @@ const breathingConfig = ref({
     // Relaxation and improved sleep
     {
       inhale: {
-        duration: 4,
-        delay: 7,
-        speed: 1
+        duration: 1,
+        delay: 2,
+        speed: 2
       },
       exhale: {
         duration: 1,
         delay: 2,
-        speed: 5
+        speed: 2
       },
       repeat: 5,
       pause: 1
@@ -50,12 +51,11 @@ const pause = ref(false);
 const isAnimating = ref(false);
 const intervalId = ref();
 
-const inhalePlayer = new PlayAudio('inhale2.mp3');
-const exhalePlayer = new PlayAudio('exhale2.mp3');
 const bgMusicPlayer = new PlayAudio('music.mp3', {
   volume: 0.2,
   loop: true
 });
+const breatheAudioController = new BreatheAudioController('inhale2.mp3', 'exhale.mp3');
 
 const circleRef = ref();
 const innerCircleRef = ref();
@@ -69,18 +69,6 @@ function calculateStep(speed) {
   return (0.5 / (speed * 60));
 }
 
-function playInhaleSound() {
-  exhalePlayer.stop();
-  inhalePlayer.stop();
-  inhalePlayer.play();
-}
-
-function playExhaleSound() {
-  inhalePlayer.stop();
-  exhalePlayer.stop();
-  exhalePlayer.play();
-}
-
 function handleInhaleStep(currentCycle) {
   const step = calculateStep(currentCycle.inhale.speed);
   const innerStep = 1 / (currentCycle.inhale.speed * 60);
@@ -91,14 +79,14 @@ function handleInhaleStep(currentCycle) {
       growing.value = false;
       pause.value = true;
       setTimeout(() => {
-        playExhaleSound();
+        breatheAudioController.playExhale(currentCycle.exhale.speed);
         pause.value = false;
       }, currentCycle.inhale.delay * 1000);
     } else {
       scale.value = 1; // Reset scale for partial inhales
       innerScale.value = 0;
       currentBreathCount.value += 1;
-      playInhaleSound();
+      breatheAudioController.playInhale(currentCycle.inhale.speed);
     }
   }
 }
@@ -118,7 +106,7 @@ function handleExhaleStep(currentCycle) {
     } else {
       scale.value = 1.5; // Reset scale for partial exhales
       innerScale.value = 1;
-      playExhaleSound();
+      breatheAudioController.playExhale(currentCycle.exhale.speed);
     }
   }
 }
@@ -126,7 +114,7 @@ function handleExhaleStep(currentCycle) {
 function handleCycleCompletion(currentCycle) {
   if (currentRepeatCount.value + 1 >= currentCycle.repeat) {
     setTimeout(() => {
-      playExhaleSound();
+      breatheAudioController.playExhale(currentCycle.exhale.speed);
       pause.value = false;
       currentRepeatCount.value = 0;
       if (currentCycleIndex.value + 1 < breathingConfig.value.cycles.length) {
@@ -138,7 +126,7 @@ function handleCycleCompletion(currentCycle) {
       }
     }, currentCycle.pause * 1000);
   } else {
-    playInhaleSound();
+    breatheAudioController.playInhale(currentCycle.inhale.speed);
     pause.value = false;
     currentRepeatCount.value += 1;
   }
@@ -160,8 +148,6 @@ const toggleAnimation = () => {
   if (isAnimating.value) {
     isAnimating.value = false;
     bgMusicPlayer.stop();
-    inhalePlayer.stop();
-    exhalePlayer.stop();
     scale.value = 1;
     innerScale.value = 0;
     currentCycleIndex.value = 0;
@@ -170,10 +156,14 @@ const toggleAnimation = () => {
   } else {
     isAnimating.value = true;
     bgMusicPlayer.play();
-    inhalePlayer.play();
+    breatheAudioController.playInhale(breathingConfig.value.cycles[0].inhale.speed);
     intervalId.value = setInterval(animateBreathing, 1000 / 60); // 60 FPS
   }
 };
+
+onBeforeMount(() => {
+  breatheAudioController.initialize();
+});
 
 onMounted(() => {
   changeCircles();
