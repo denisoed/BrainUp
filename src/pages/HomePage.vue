@@ -22,19 +22,18 @@ import CanvasBg from '@/components/canvasBg.vue';
 const breathingConfig = ref({
   loop: true,
   cycles: [
-    // Relaxation and improved sleep
     {
       inhale: {
-        duration: 1,
-        delay: 2,
-        speed: 2
+        duration: 3,
+        delay: 1,
+        speed: 1
       },
       exhale: {
         duration: 1,
-        delay: 2,
+        delay: 1,
         speed: 2
       },
-      repeat: 5,
+      repeat: 2,
       pause: 1
     }
   ]
@@ -114,7 +113,7 @@ function handleExhaleStep(currentCycle) {
 function handleCycleCompletion(currentCycle) {
   if (currentRepeatCount.value + 1 >= currentCycle.repeat) {
     setTimeout(() => {
-      breatheAudioController.playExhale(currentCycle.exhale.speed);
+      breatheAudioController.playInhale(currentCycle.inhale.speed);
       pause.value = false;
       currentRepeatCount.value = 0;
       if (currentCycleIndex.value + 1 < breathingConfig.value.cycles.length) {

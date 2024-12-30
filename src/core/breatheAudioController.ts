@@ -24,11 +24,11 @@ class BreatheAudioController {
     this.exhaleSound = await this.loadAudio(this.exhaleUrl);
   }
 
-  private playSound(audioBuffer: AudioBuffer, durationInSeconds: number, volume: number): void {
+  private playSound(audioBuffer: AudioBuffer, durationInSeconds: number, volume: number, pitch: number): void {
     const source = this.audioContext.createBufferSource();
     source.buffer = audioBuffer;
 
-    const playbackRate = source.buffer.duration / durationInSeconds;
+    const playbackRate = (source.buffer.duration / durationInSeconds) * pitch;
     source.playbackRate.value = playbackRate;
 
     const gainNode = this.audioContext.createGain();
@@ -38,25 +38,25 @@ class BreatheAudioController {
     source.start();
   }
 
-  public playInhale(inhaleDuration: number, volume: number = 1): void {
+  public playInhale(inhaleDuration: number, volume: number = 1, pitch: number = 1): void {
     if (!this.inhaleSound) {
       throw new Error("Inhale sound is not loaded. Call initialize() first.");
     }
-    this.playSound(this.inhaleSound, inhaleDuration, volume);
+    this.playSound(this.inhaleSound, inhaleDuration, volume, pitch);
   }
 
-  public playExhale(exhaleDuration: number, volume: number = 1): void {
+  public playExhale(exhaleDuration: number, volume: number = 1, pitch: number = 1): void {
     if (!this.exhaleSound) {
       throw new Error("Exhale sound is not loaded. Call initialize() first.");
     }
-    this.playSound(this.exhaleSound, exhaleDuration, volume);
+    this.playSound(this.exhaleSound, exhaleDuration, volume, pitch);
   }
 }
 
 // Example usage:
 // const breatheAudioController = new BreatheAudioController('path_to_inhale.mp3', 'path_to_exhale.mp3');
 // await breatheAudioController.initialize();
-// breatheAudioController.playInhale(5, 0.8);
-// breatheAudioController.playExhale(3, 0.6);
+// breatheAudioController.playInhale(5, 0.8, 1.2);
+// breatheAudioController.playExhale(3, 0.6, 0.8);
 
 export default BreatheAudioController;

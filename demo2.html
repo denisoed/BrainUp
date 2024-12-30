@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Breathing Control</title>
+</head>
+
+<body>
+  <h1>Breathing Sound Speed Control</h1>
+
+  <div>
+    <label for="inhale-speed">Inhale Duration (seconds): </label>
+    <input type="range" id="inhale-speed" min="1" max="10" step="0.1" value="5">
+    <span id="inhale-speed-value">5</span>
+  </div>
+
+  <div>
+    <label for="exhale-speed">Exhale Duration (seconds): </label>
+    <input type="range" id="exhale-speed" min="1" max="10" step="0.1" value="3">
+    <span id="exhale-speed-value">3</span>
+  </div>
+
+  <button id="play-breathing">Start Breathing</button>
+
+  <script>
+    async function loadAudioContextSound(audioContext, url) {
+      const response = await fetch(url);
+      const arrayBuffer = await response.arrayBuffer();
+      return await audioContext.decodeAudioData(arrayBuffer);
+    }
+
+    function playSound(audioContext, audioBuffer, durationInSeconds) {
+      const source = audioContext.createBufferSource();
+      source.buffer = audioBuffer;
+
+      const playbackRate = source.buffer.duration / durationInSeconds;
+      source.playbackRate.value = playbackRate;
+
+      source.connect(audioContext.destination);
+      source.start();
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const audioContext = new(window.AudioContext || window.webkitAudioContext)();
+
+      // Load sounds
+      const inhaleSound = await loadAudioContextSound(audioContext, 'public/inhale.mp3');
+      const exhaleSound = await loadAudioContextSound(audioContext, 'public/exhale.mp3');
+
+      const inhaleSpeedSlider = document.getElementById('inhale-speed');
+      const exhaleSpeedSlider = document.getElementById('exhale-speed');
+      const inhaleSpeedValue = document.getElementById('inhale-speed-value');
+      const exhaleSpeedValue = document.getElementById('exhale-speed-value');
+      const playButton = document.getElementById('play-breathing');
+
+      inhaleSpeedSlider.addEventListener('input', () => {
+        inhaleSpeedValue.textContent = inhaleSpeedSlider.value;
+      });
+
+      exhaleSpeedSlider.addEventListener('input', () => {
+        exhaleSpeedValue.textContent = exhaleSpeedSlider.value;
+      });
+
+      playButton.addEventListener('click', () => {
+        const inhaleDuration = parseFloat(inhaleSpeedSlider.value);
+        const exhaleDuration = parseFloat(exhaleSpeedSlider.value);
+
+        // Play inhale sound
+        playSound(audioContext, inhaleSound, inhaleDuration);
+
+        // Schedule exhale sound
+        setTimeout(() => {
+          playSound(audioContext, exhaleSound, exhaleDuration);
+        }, inhaleDuration * 1000);
+      });
+    });
+  </script>
+</body>
+
+</html>
