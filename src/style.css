@@ -67,12 +67,11 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+button:active {
+  transform: scale(0.98);
+}
 button:hover {
   border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
 }
 
 .card {
@@ -81,7 +80,7 @@ button:focus-visible {
 
 .container {
   min-height: 100vh;
-  padding: 20px 20px 96px;
+  padding: 20px;
   box-sizing: border-box;
 }
 

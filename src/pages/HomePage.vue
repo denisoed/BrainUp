@@ -5,10 +5,17 @@
       <span>Cycles: {{ currentCycleIndex + 1 }} / {{ breathingConfig.cycles.length }}</span>
       <span>Repeats: {{ currentRepeatCount + 1 }} / {{ breathingConfig.cycles[currentCycleIndex].repeat }}</span>
     </div>
-    <div ref="circleRef" class="circle" @click="toggleAnimation">
+    <div ref="circleRef" class="circle" @click="startBreathe">
       <div class="inner-circle" ref="innerCircleRef">
         <div class="cycle-counter">{{ currentBreathCount + 1 }}</div>
       </div>
+    </div>
+    <div class="controls">
+      <button class="controls_start-stop" @click="startBreathe">
+        {{ metronomeStartTimer !== null ?
+          `00:0${metronomeStartTimer}` :
+            isAnimating ? 'Stop' : 'Start' }}
+      </button>
     </div>
   </div>
 </template>
@@ -24,17 +31,17 @@ const breathingConfig = ref({
   cycles: [
     {
       inhale: {
-        duration: 3,
-        delay: 1,
-        speed: 1
+        duration: 1,
+        delay: 0,
+        speed: 3
       },
       exhale: {
         duration: 1,
-        delay: 1,
-        speed: 2
+        delay: 0,
+        speed: 5
       },
-      repeat: 2,
-      pause: 1
+      repeat: 1,
+      pause: 0
     }
   ]
 });
@@ -49,7 +56,10 @@ const growing = ref(true);
 const pause = ref(false);
 const isAnimating = ref(false);
 const intervalId = ref();
+const metronomeIntervalId = ref();
+const metronomeStartTimer = ref(null);
 
+const metronomeMusicPlayer = new PlayAudio('metronome-exhale.mp3');
 const bgMusicPlayer = new PlayAudio('music.mp3', {
   volume: 0.2,
   loop: true
@@ -82,7 +92,7 @@ function handleInhaleStep(currentCycle) {
         pause.value = false;
       }, currentCycle.inhale.delay * 1000);
     } else {
-      scale.value = 1; // Reset scale for partial inhales
+      scale.value = 1;
       innerScale.value = 0;
       currentBreathCount.value += 1;
       breatheAudioController.playInhale(currentCycle.inhale.speed);
@@ -152,6 +162,7 @@ const toggleAnimation = () => {
     currentCycleIndex.value = 0;
     currentBreathCount.value = 0;
     clearInterval(intervalId.value);
+    changeCircles();
   } else {
     isAnimating.value = true;
     bgMusicPlayer.play();
@@ -159,6 +170,27 @@ const toggleAnimation = () => {
     intervalId.value = setInterval(animateBreathing, 1000 / 60); // 60 FPS
   }
 };
+
+function startBreathe() {
+  if (isAnimating.value) {
+    toggleAnimation();
+    return;
+  }
+  metronomeStartTimer.value = 4;
+  metronomeStartTimer.value -= 1;
+  metronomeMusicPlayer.play();
+  metronomeIntervalId.value = setInterval(() => {
+    metronomeStartTimer.value -= 1;
+    metronomeMusicPlayer.play();
+  }, 1000);
+  setTimeout(() => {
+    clearInterval(metronomeIntervalId.value);
+    setTimeout(() => {
+      toggleAnimation();
+      metronomeStartTimer.value = null;
+    }, 1000);
+  }, 3000);
+}
 
 onBeforeMount(() => {
   breatheAudioController.initialize();
@@ -183,6 +215,25 @@ $circle-color: rgba(0, 0, 255, 0.5);
 
 .canvas-bg {
   z-index: -1;
+}
+
+.controls {
+  position: fixed;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+
+  &_start-stop {
+    width: 150px;
+    height: 50px;
+    padding: 8px 16px;
+    font-size: 18px;
+    background: rgba(0, 0, 255, 0.6);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+  }
 }
 
 .info {
