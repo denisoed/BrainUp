@@ -4,16 +4,11 @@
       <component :is="Component" />
     </keep-alive>
   </router-view>
-  <JenesiusModal />
 </template>
 
 <script setup>
 import { onMounted, onUnmounted } from 'vue';
 import { VIBRATION_LOCAL_STORAGE_KEY } from '@/config';
-import {
-  container as JenesiusModal,
-  config as configDialog,
-} from 'jenesius-vue-modal';
 
 configDialog({
   animation: "slide-bottom"
