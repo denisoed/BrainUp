@@ -7,7 +7,7 @@
     </div>
     <div ref="circleRef" class="circle" @click="startBreathe">
       <div class="inner-circle" ref="innerCircleRef">
-        <div class="cycle-counter">{{ currentBreathCount + 1 }}</div>
+        <div class="cycle-counter">{{ currentRepeatCount + 1 }}</div>
       </div>
     </div>
     <div class="controls">
