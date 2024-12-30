@@ -10,10 +10,6 @@
 import { onMounted, onUnmounted } from 'vue';
 import { VIBRATION_LOCAL_STORAGE_KEY } from '@/config';
 
-configDialog({
-  animation: "slide-bottom"
-})
-
 function vibrate() {
   const vibrationIsEnabled = localStorage.getItem(VIBRATION_LOCAL_STORAGE_KEY) === 'true';
   if (window?.Telegram?.WebApp && vibrationIsEnabled) {
