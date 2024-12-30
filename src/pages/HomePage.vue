@@ -27,7 +27,7 @@ import BreatheAudioController from '@/core/breatheAudioController.ts';
 import CanvasBg from '@/components/canvasBg.vue';
 
 const breathingConfig = ref({
-  loop: true,
+  loop: false,
   cycles: [
     {
       inhale: {
@@ -57,7 +57,7 @@ const pause = ref(false);
 const isAnimating = ref(false);
 const intervalId = ref();
 const metronomeIntervalId = ref();
-const metronomeStartTimer = ref(null);
+const metronomeStartTimer = ref<number | null>(null);
 
 const metronomeMusicPlayer = new PlayAudio('metronome-exhale.mp3');
 const bgMusicPlayer = new PlayAudio('music.mp3', {
@@ -123,12 +123,13 @@ function handleExhaleStep(currentCycle) {
 function handleCycleCompletion(currentCycle) {
   if (currentRepeatCount.value + 1 >= currentCycle.repeat) {
     setTimeout(() => {
-      breatheAudioController.playInhale(currentCycle.inhale.speed);
       pause.value = false;
       currentRepeatCount.value = 0;
       if (currentCycleIndex.value + 1 < breathingConfig.value.cycles.length) {
+        breatheAudioController.playInhale(currentCycle.inhale.speed);
         currentCycleIndex.value += 1;
       } else if (breathingConfig.value.loop) {
+        breatheAudioController.playInhale(currentCycle.inhale.speed);
         currentCycleIndex.value = 0;
       } else {
         toggleAnimation();
