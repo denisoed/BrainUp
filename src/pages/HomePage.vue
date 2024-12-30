@@ -32,15 +32,15 @@ const breathingConfig = ref({
     {
       inhale: {
         duration: 1,
-        delay: 0,
-        speed: 3
+        delay: 1,
+        speed: 2
       },
       exhale: {
         duration: 1,
-        delay: 0,
-        speed: 5
+        delay: 1,
+        speed: 3
       },
-      repeat: 1,
+      repeat: 20,
       pause: 0
     }
   ]
