@@ -16,13 +16,6 @@
       <div class="value">{{ currentRepeatCount + 1 }} / {{ breathingConfig.cycles[currentCycleIndex].repeat }}</div>
       <div class="label">Repeats</div>
     </div>
-    <div class="controls">
-      <button class="controls_start-stop" @click="startBreathe">
-        {{ metronomeStartTimer !== null ?
-          `00:0${metronomeStartTimer}` :
-            isAnimating ? 'Stop' : 'Start' }}
-      </button>
-    </div>
   </div>
 </template>
 
@@ -221,26 +214,6 @@ onMounted(() => {
   z-index: -1;
 }
 
-.controls {
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  display: none;
-
-  &_start-stop {
-    width: 150px;
-    height: 50px;
-    padding: 8px 16px;
-    font-size: 18px;
-    background: rgba(0, 0, 255, 0.6);
-    color: white;
-    border: none;
-    border-radius: 16px;
-    cursor: pointer;
-  }
-}
-
 .info {
   width: 100%;
   position: fixed;
@@ -269,7 +242,7 @@ onMounted(() => {
 
 .info-2 {
   position: fixed;
-  bottom: 15%;
+  bottom: 10%;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
