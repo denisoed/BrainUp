@@ -223,6 +223,8 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   height: 100vh;
+  min-height: 100vh;
+  max-height: 100vh;
   font-family: Arial, sans-serif;
 }
 
