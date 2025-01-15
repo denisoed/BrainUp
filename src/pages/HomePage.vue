@@ -18,6 +18,7 @@
         v-if="typeof metronomeStartTimer === 'number'"
         class="cycle-timer"
       >{{ `00:0${metronomeStartTimer}` }}</div>
+      <img v-else-if="!isAnimating" class="play-icon" src="@/assets/play-icon.svg" alt="Play" />
       <BlobCircles />
     </div>
 
@@ -181,14 +182,7 @@ const toggleAnimation = () => {
   }
 };
 
-function startBreathe() {
-  if (isAnimating.value) {
-    toggleAnimation();
-    return;
-  }
-  metronomeStartTimer.value = 4;
-  metronomeStartTimer.value -= 1;
-  metronomeMusicPlayer.play();
+function runMetronome(callback: () => any) {
   setTimeout(() => {
     metronomeStartTimer.value -= 1;
     metronomeMusicPlayer.play();
@@ -200,11 +194,24 @@ function startBreathe() {
   setTimeout(() => {
     metronomeStartTimer.value -= 1;
     metronomeMusicPlayer.play();
+    callback();
+  }, 3000);
+}
+
+function startBreathe() {
+  if (isAnimating.value) {
+    toggleAnimation();
+    return;
+  }
+  metronomeStartTimer.value = 4;
+  metronomeStartTimer.value -= 1;
+  metronomeMusicPlayer.play();
+  runMetronome(() => {
     setTimeout(() => {
       toggleAnimation();
       metronomeStartTimer.value = null;
     }, 1000);
-  }, 3000);
+  });
 }
 
 onBeforeMount(() => {
@@ -221,7 +228,7 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   height: 100vh;
   min-height: 100vh;
   max-height: 100vh;
@@ -234,9 +241,6 @@ onMounted(() => {
 
 .info {
   width: 100%;
-  position: fixed;
-  top: 10%;
-  left: 50%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -244,7 +248,6 @@ onMounted(() => {
   font-size: 16px;
   color: #3c3c4c;
   padding: 8px 12px;
-  transform: translateX(-50%);
   z-index: 2;
 
   .name {
@@ -260,10 +263,6 @@ onMounted(() => {
 }
 
 .info-2 {
-  position: fixed;
-  bottom: 10%;
-  left: 50%;
-  transform: translateX(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -289,6 +288,15 @@ onMounted(() => {
   // background: #c3c2dd;
   position: relative;
   z-index: 1;
+
+  .play-icon {
+    width: 40px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.8;
+  }
 }
 
 .inner-circle {
