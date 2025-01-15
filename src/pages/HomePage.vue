@@ -1,14 +1,20 @@
 <template>
   <div class="container">
-    <CanvasBg class="canvas-bg" />
     <div class="info">
-      <span>Cycles: {{ currentCycleIndex + 1 }} / {{ breathingConfig.cycles.length }}</span>
-      <span>Repeats: {{ currentRepeatCount + 1 }} / {{ breathingConfig.cycles[currentCycleIndex].repeat }}</span>
+      <div class="name">Antistress</div>
+      <div class="action">Exhale 3 seconds...</div>
+      <!-- <span>Cycles: {{ currentCycleIndex + 1 }} / {{ breathingConfig.cycles.length }}</span>
+      <span>Repeats: {{ currentRepeatCount + 1 }} / {{ breathingConfig.cycles[currentCycleIndex].repeat }}</span> -->
     </div>
     <div ref="circleRef" class="circle" @click="startBreathe">
       <div class="inner-circle" ref="innerCircleRef">
         <div class="cycle-counter">{{ currentRepeatCount + 1 }}</div>
       </div>
+      <div v-if="metronomeStartTimer" class="cycle-timer">{{ `00:0${metronomeStartTimer}` }}</div>
+    </div>
+    <div class="info-2">
+      <div class="value">{{ currentRepeatCount + 1 }} / {{ breathingConfig.cycles[currentCycleIndex].repeat }}</div>
+      <div class="label">Repeats</div>
     </div>
     <div class="controls">
       <button class="controls_start-stop" @click="startBreathe">
@@ -24,7 +30,6 @@
 import { onBeforeMount, onMounted, ref } from 'vue';
 import PlayAudio from '@/core/audio.js';
 import BreatheAudioController from '@/core/breatheAudioController.ts';
-import CanvasBg from '@/components/canvasBg.vue';
 
 const breathingConfig = ref({
   loop: false,
@@ -203,8 +208,6 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-$circle-color: rgba(0, 0, 255, 0.5);
-
 .container {
   display: flex;
   flex-direction: column;
@@ -220,9 +223,10 @@ $circle-color: rgba(0, 0, 255, 0.5);
 
 .controls {
   position: fixed;
-  bottom: 10%;
+  bottom: 0;
   left: 50%;
   transform: translateX(-50%);
+  display: none;
 
   &_start-stop {
     width: 150px;
@@ -240,21 +244,56 @@ $circle-color: rgba(0, 0, 255, 0.5);
 .info {
   width: 100%;
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 10%;
+  left: 50%;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-direction: column;
   font-size: 16px;
-  color: white;
+  color: #3c3c4c;
   padding: 8px 12px;
+  transform: translateX(-50%);
+
+  .name {
+    font-size: 30px;
+    color: #3c3c4c;
+    font-weight: bold;
+  }
+
+  .action {
+    font-size: 14px;
+    color: #3c3c4c;
+  }
+}
+
+.info-2 {
+  position: fixed;
+  bottom: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  .label {
+    font-size: 14px;
+    color: #3c3c4c;
+  }
+
+  .value {
+    font-size: 24px;
+    color: #3c3c4c;
+    font-weight: bold;
+  }
 }
 
 .circle {
   width: 170px;
   height: 170px;
   border-radius: 50%;
-  background: $circle-color;
+  background: #c3c2dd;
   position: relative;
 }
 
@@ -262,16 +301,15 @@ $circle-color: rgba(0, 0, 255, 0.5);
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: $circle-color;
+  background: #9b9bc6;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(1);
-  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
 
   .cycle-counter {
     color: white;
-    font-size: 80px;
+    font-size: 60px;
     font-weight: bold;
     position: absolute;
     top: 50%;
@@ -279,5 +317,16 @@ $circle-color: rgba(0, 0, 255, 0.5);
     transform: translate(-50%, -50%) scale(1);
     opacity: 0.8;
   }
+}
+
+.cycle-timer {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 0.8;
 }
 </style>
