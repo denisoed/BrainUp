@@ -10,7 +10,10 @@
       <div class="inner-circle" ref="innerCircleRef">
         <div class="cycle-counter">{{ currentRepeatCount + 1 }}</div>
       </div>
-      <div v-if="metronomeStartTimer" class="cycle-timer">{{ `00:0${metronomeStartTimer}` }}</div>
+      <div
+        v-if="typeof metronomeStartTimer === 'number'"
+        class="cycle-timer"
+      >{{ `00:0${metronomeStartTimer}` }}</div>
     </div>
     <div class="info-2">
       <div class="value">{{ currentRepeatCount + 1 }} / {{ breathingConfig.cycles[currentCycleIndex].repeat }}</div>
@@ -54,7 +57,6 @@ const growing = ref(true);
 const pause = ref(false);
 const isAnimating = ref(false);
 const intervalId = ref();
-const metronomeIntervalId = ref();
 const metronomeStartTimer = ref<number | null>(null);
 
 const metronomeMusicPlayer = new PlayAudio('metronome-exhale.mp3');
@@ -178,12 +180,17 @@ function startBreathe() {
   metronomeStartTimer.value = 4;
   metronomeStartTimer.value -= 1;
   metronomeMusicPlayer.play();
-  metronomeIntervalId.value = setInterval(() => {
+  setTimeout(() => {
     metronomeStartTimer.value -= 1;
     metronomeMusicPlayer.play();
   }, 1000);
   setTimeout(() => {
-    clearInterval(metronomeIntervalId.value);
+    metronomeStartTimer.value -= 1;
+    metronomeMusicPlayer.play();
+  }, 2000);
+  setTimeout(() => {
+    metronomeStartTimer.value -= 1;
+    metronomeMusicPlayer.play();
     setTimeout(() => {
       toggleAnimation();
       metronomeStartTimer.value = null;
