@@ -1,11 +1,15 @@
 <template>
-  <div class="container">
+  <div class="container home-page">
+
+    <!-- Info 1 -->
     <div class="info">
       <div class="name">Antistress</div>
       <div class="action">Exhale 3 seconds...</div>
       <!-- <span>Cycles: {{ currentCycleIndex + 1 }} / {{ breathingConfig.cycles.length }}</span>
       <span>Repeats: {{ currentRepeatCount + 1 }} / {{ breathingConfig.cycles[currentCycleIndex].repeat }}</span> -->
     </div>
+
+    <!-- Circles -->
     <div ref="circleRef" class="circle" @click="startBreathe">
       <div class="inner-circle" ref="innerCircleRef">
         <div class="cycle-counter">{{ currentRepeatCount + 1 }}</div>
@@ -14,7 +18,11 @@
         v-if="typeof metronomeStartTimer === 'number'"
         class="cycle-timer"
       >{{ `00:0${metronomeStartTimer}` }}</div>
+      <BlobCircles />
     </div>
+
+
+    <!-- Info 2 -->
     <div class="info-2">
       <div class="value">{{ currentRepeatCount + 1 }} / {{ breathingConfig.cycles[currentCycleIndex].repeat }}</div>
       <div class="label">Repeats</div>
@@ -26,6 +34,7 @@
 import { onBeforeMount, onMounted, ref } from 'vue';
 import PlayAudio from '@/core/audio.js';
 import BreatheAudioController from '@/core/breatheAudioController.ts';
+import BlobCircles from '@/components/BlobCircles.vue';
 
 const breathingConfig = ref({
   loop: false,
@@ -234,6 +243,7 @@ onMounted(() => {
   color: #3c3c4c;
   padding: 8px 12px;
   transform: translateX(-50%);
+  z-index: 2;
 
   .name {
     font-size: 30px;
@@ -256,6 +266,7 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  z-index: 2;
 
   .label {
     font-size: 14px;
@@ -273,22 +284,23 @@ onMounted(() => {
   width: 170px;
   height: 170px;
   border-radius: 50%;
-  background: #c3c2dd;
+  // background: #c3c2dd;
   position: relative;
+  z-index: 1;
 }
 
 .inner-circle {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: #9b9bc6;
+  // background: #9b9bc6;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(1);
 
   .cycle-counter {
-    color: white;
+    color: #3c3c4c;
     font-size: 60px;
     font-weight: bold;
     position: absolute;
@@ -300,7 +312,7 @@ onMounted(() => {
 }
 
 .cycle-timer {
-  color: white;
+  color: #3c3c4c;
   font-size: 24px;
   font-weight: bold;
   position: absolute;
