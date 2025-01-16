@@ -10,18 +10,19 @@
     </div>
 
     <!-- Circles -->
-    <div ref="circleRef" class="circle" @click="startBreathe">
-      <div class="inner-circle" ref="innerCircleRef">
-        <div class="cycle-counter">{{ currentRepeatCount + 1 }}</div>
+    <div class="circle-container">
+      <div ref="circleRef" class="circle" @click="startBreathe">
+        <div class="inner-circle" ref="innerCircleRef">
+          <div class="cycle-counter">{{ currentRepeatCount + 1 }}</div>
+        </div>
+        <div
+          v-if="typeof metronomeStartTimer === 'number'"
+          class="cycle-timer"
+        >{{ `00:0${metronomeStartTimer}` }}</div>
+        <img v-else-if="!isAnimating" class="play-icon" src="@/assets/play-icon.svg" alt="Play" />
+        <BlobCircles />
       </div>
-      <div
-        v-if="typeof metronomeStartTimer === 'number'"
-        class="cycle-timer"
-      >{{ `00:0${metronomeStartTimer}` }}</div>
-      <img v-else-if="!isAnimating" class="play-icon" src="@/assets/play-icon.svg" alt="Play" />
-      <BlobCircles />
     </div>
-
 
     <!-- Info 2 -->
     <div class="info-2">
@@ -228,7 +229,7 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
   height: 100vh;
   min-height: 100vh;
   max-height: 100vh;
@@ -247,8 +248,8 @@ onMounted(() => {
   flex-direction: column;
   font-size: 16px;
   color: #3c3c4c;
-  padding: 8px 12px;
   z-index: 2;
+  margin-top: 80px;
 
   .name {
     font-size: 30px;
@@ -268,6 +269,7 @@ onMounted(() => {
   justify-content: center;
   flex-direction: column;
   z-index: 2;
+  margin-bottom: 80px;
 
   .label {
     font-size: 14px;
@@ -281,11 +283,17 @@ onMounted(() => {
   }
 }
 
+.circle-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .circle {
   width: 170px;
   height: 170px;
   border-radius: 50%;
-  // background: #c3c2dd;
   position: relative;
   z-index: 1;
 
