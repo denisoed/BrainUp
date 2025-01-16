@@ -49,7 +49,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background: #fff;
-  font-family: 'Troika', serif;
+  /* font-family: 'Troika', serif; */
 }
 
 h1 {
