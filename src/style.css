@@ -39,6 +39,7 @@ a:hover {
 html {
   height: 100vh;
   overflow: hidden;
+  background: #fff;
 }
 
 body {
