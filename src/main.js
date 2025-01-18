@@ -7,7 +7,6 @@ import initBoots from '@/boots';
 import { createPinia } from 'pinia'
 import Vue3TouchEvents from 'vue3-touch-events';
 import { initYandexMetrika } from 'yandex-metrika-vue3';
-import './registerServiceWorker'
 
 const app = createApp(App)
 
