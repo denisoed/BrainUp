@@ -51,6 +51,10 @@ class BreatheAudioController {
     }
     this.playSound(this.exhaleSound, exhaleDuration, volume, pitch);
   }
+
+  public stopAllSounds(): void {
+    this.audioContext.close();
+  }
 }
 
 // Example usage:

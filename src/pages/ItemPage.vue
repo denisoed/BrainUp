@@ -1,6 +1,10 @@
 <template>
   <div class="container item-page">
 
+    <router-link to="/" class="back-btn">
+      <img src="@/assets/burger-menu-right.svg" alt="Back" />
+    </router-link>
+
     <!-- Info 1 -->
     <div class="info">
       <div class="name">Antistress</div>
@@ -33,7 +37,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeMount, onMounted, ref } from 'vue';
+import { onBeforeMount, onMounted, onUnmounted, ref } from 'vue';
 import PlayAudio from '@/core/audio.js';
 import BreatheAudioController from '@/core/breatheAudioController.ts';
 import BlobCircles from '@/components/BlobCircles.vue';
@@ -165,15 +169,20 @@ const animateBreathing = () => {
   }
 };
 
+const stopAnimation = () => {
+  isAnimating.value = false;
+  bgMusicPlayer.stop();
+  breatheAudioController.stopAllSounds();
+  scale.value = 1;
+  innerScale.value = 0;
+  currentCycleIndex.value = 0;
+  currentBreathCount.value = 0;
+  clearInterval(intervalId.value);
+};
+
 const toggleAnimation = () => {
   if (isAnimating.value) {
-    isAnimating.value = false;
-    bgMusicPlayer.stop();
-    scale.value = 1;
-    innerScale.value = 0;
-    currentCycleIndex.value = 0;
-    currentBreathCount.value = 0;
-    clearInterval(intervalId.value);
+    stopAnimation();
     changeCircles();
   } else {
     isAnimating.value = true;
@@ -222,6 +231,10 @@ onBeforeMount(() => {
 onMounted(() => {
   changeCircles();
 });
+
+onUnmounted(() => {
+  stopAnimation();
+});
 </script>
 
 <style lang="scss" scoped>
@@ -236,8 +249,18 @@ onMounted(() => {
   font-family: Arial, sans-serif;
 }
 
-.canvas-bg {
-  z-index: -1;
+.back-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 2;
+  width: 30px;
+  height: 30px;
+  
+  img {
+    width: 100%;
+    display: block;
+  }
 }
 
 .info {
