@@ -74,7 +74,7 @@ const isAnimating = ref(false);
 const intervalId = ref();
 const metronomeStartTimer = ref<number | null>(null);
 
-const metronomeMusicPlayer = new PlayAudio('metronome-exhale.mp3');
+const beforeStartMetronome = new PlayAudio('before-start-metronome.mp3');
 const bgMusicPlayer = new PlayAudio('music.mp3', {
   volume: 0.2,
   loop: true
@@ -126,7 +126,9 @@ function handleExhaleStep(currentCycle) {
       currentBreathCount.value = 0;
       growing.value = true;
       pause.value = true;
-      setTimeout(() => handleCycleCompletion(currentCycle), currentCycle.exhale.delay * 1000);
+      setTimeout(() => {
+        handleCycleCompletion(currentCycle);
+      }, currentCycle.exhale.delay * 1000);
     } else {
       scale.value = 1.5; // Reset scale for partial exhales
       innerScale.value = 1;
@@ -193,19 +195,14 @@ const toggleAnimation = () => {
 };
 
 function runMetronome(callback: () => any) {
+  beforeStartMetronome.play();
   setTimeout(() => {
     metronomeStartTimer.value -= 1;
-    metronomeMusicPlayer.play();
   }, 1000);
   setTimeout(() => {
     metronomeStartTimer.value -= 1;
-    metronomeMusicPlayer.play();
-  }, 2000);
-  setTimeout(() => {
-    metronomeStartTimer.value -= 1;
-    metronomeMusicPlayer.play();
     callback();
-  }, 3000);
+  }, 2000);
 }
 
 function startBreathe() {
@@ -215,7 +212,6 @@ function startBreathe() {
   }
   metronomeStartTimer.value = 4;
   metronomeStartTimer.value -= 1;
-  metronomeMusicPlayer.play();
   runMetronome(() => {
     setTimeout(() => {
       toggleAnimation();
