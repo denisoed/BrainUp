@@ -7,7 +7,7 @@
 
     <!-- Info 1 -->
     <div class="info">
-      <div class="name">Antistress</div>
+      <div class="name">{{ breathingConfig.title }}</div>
       <div class="action">Exhale 3 seconds...</div>
       <!-- <span>Cycles: {{ currentCycleIndex + 1 }} / {{ breathingConfig.cycles.length }}</span>
       <span>Repeats: {{ currentRepeatCount + 1 }} / {{ breathingConfig.cycles[currentCycleIndex].repeat }}</span> -->
@@ -15,16 +15,15 @@
 
     <!-- Circles -->
     <div class="circle-container">
-      <div ref="circleRef" class="circle" @click="startBreathe">
+      <div ref="circleRef" class="circle" :class="[breathingConfig.class]" @click="startBreathe">
         <div class="inner-circle" ref="innerCircleRef">
-          <div class="cycle-counter">{{ currentRepeatCount + 1 }}</div>
+          <!-- <div class="cycle-counter">{{ currentRepeatCount + 1 }}</div> -->
         </div>
         <div
           v-if="typeof metronomeStartTimer === 'number'"
           class="cycle-timer"
         >{{ `00:0${metronomeStartTimer}` }}</div>
         <img v-else-if="!isAnimating" class="play-icon" src="@/assets/play-icon.svg" alt="Play" />
-        <BlobCircles />
       </div>
     </div>
 
@@ -40,32 +39,60 @@
 import { onBeforeMount, onMounted, onUnmounted, ref } from 'vue';
 import PlayAudio from '@/core/audio.js';
 import BreatheAudioController from '@/core/breatheAudioController.ts';
-import BlobCircles from '@/components/BlobCircles.vue';
+import { useRoute } from 'vue-router';
 
-const breathingConfig = ref({
-  loop: false,
-  cycles: [
-    {
-      inhale: {
-        duration: 1,
-        delay: 1,
-        speed: 2
-      },
-      exhale: {
-        duration: 1,
-        delay: 1,
-        speed: 3
-      },
-      repeat: 20,
-      pause: 0
-    }
-  ]
-});
+const LIST_BREATHING = {
+  ['antistress']: {
+    title: 'Antistress',
+    class: 'antistress',
+    loop: false,
+    cycles: [
+      {
+        inhale: {
+          duration: 1,
+          delay: 1,
+          speed: 2
+        },
+        exhale: {
+          duration: 1,
+          delay: 1,
+          speed: 3
+        },
+        repeat: 20,
+        pause: 0
+      }
+    ]
+  },
+  ['box']: {
+    title: 'Box',
+    class: 'box',
+    loop: false,
+    cycles: [
+      {
+        inhale: {
+          duration: 1,
+          delay: 4,
+          speed: 4
+        },
+        exhale: {
+          duration: 1,
+          delay: 4,
+          speed: 4
+        },
+        repeat: 20,
+        pause: 0
+      }
+    ]
+  }
+};
+
+const route = useRoute();
+
+const breathingConfig = LIST_BREATHING[route.params.type as keyof typeof LIST_BREATHING];
 
 const currentCycleIndex = ref(0);
 const currentRepeatCount = ref(0);
 const currentBreathCount = ref(0);
-
 const scale = ref(1);
 const innerScale = ref(0);
 const growing = ref(true);
@@ -73,6 +100,8 @@ const pause = ref(false);
 const isAnimating = ref(false);
 const intervalId = ref();
 const metronomeStartTimer = ref<number | null>(null);
+const circleRef = ref();
+const innerCircleRef = ref();
 
 const beforeStartMetronome = new PlayAudio('before-start-metronome.mp3');
 const bgMusicPlayer = new PlayAudio('music.mp3', {
@@ -81,8 +110,6 @@ const bgMusicPlayer = new PlayAudio('music.mp3', {
 });
 const breatheAudioController = new BreatheAudioController('inhale2.mp3', 'exhale.mp3');
 
-const circleRef = ref();
-const innerCircleRef = ref();
 
 function changeCircles() {
   circleRef.value.style.transform = `scale(${scale.value})`;
@@ -142,10 +169,10 @@ function handleCycleCompletion(currentCycle) {
     setTimeout(() => {
       pause.value = false;
       currentRepeatCount.value = 0;
-      if (currentCycleIndex.value + 1 < breathingConfig.value.cycles.length) {
+      if (currentCycleIndex.value + 1 < breathingConfig.cycles.length) {
         breatheAudioController.playInhale(currentCycle.inhale.speed);
         currentCycleIndex.value += 1;
-      } else if (breathingConfig.value.loop) {
+      } else if (breathingConfig.loop) {
         breatheAudioController.playInhale(currentCycle.inhale.speed);
         currentCycleIndex.value = 0;
       } else {
@@ -160,7 +187,7 @@ function handleCycleCompletion(currentCycle) {
 }
 
 const animateBreathing = () => {
-  const currentCycle = breathingConfig.value.cycles[currentCycleIndex.value];
+  const currentCycle = breathingConfig.cycles[currentCycleIndex.value];
   if (!pause.value) {
     if (growing.value) {
       handleInhaleStep(currentCycle);
@@ -189,7 +216,7 @@ const toggleAnimation = () => {
   } else {
     isAnimating.value = true;
     bgMusicPlayer.play();
-    breatheAudioController.playInhale(breathingConfig.value.cycles[0].inhale.speed);
+    breatheAudioController.playInhale(breathingConfig.cycles[0].inhale.speed);
     intervalId.value = setInterval(animateBreathing, 1000 / 60); // 60 FPS
   }
 };
@@ -246,7 +273,7 @@ onUnmounted(() => {
 }
 
 .back-btn {
-  position: fixed;
+  position: absolute;
   top: 20px;
   right: 20px;
   z-index: 2;
@@ -313,6 +340,7 @@ onUnmounted(() => {
   width: 170px;
   height: 170px;
   border-radius: 50%;
+  background: #c3c2dd;
   position: relative;
   z-index: 1;
 
@@ -330,7 +358,7 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  // background: #9b9bc6;
+  background: #9b9bc6;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -345,6 +373,14 @@ onUnmounted(() => {
     left: 50%;
     transform: translate(-50%, -50%) scale(1);
     opacity: 0.8;
+  }
+}
+
+.box {
+  border-radius: 16px;
+
+  .inner-circle {
+    border-radius: 16px;
   }
 }
 

@@ -1,11 +1,9 @@
-import { ref } from "vue";
-
 <template>
   <div class="container home-page">
     <h1>Breathe...</h1>
     <div class="home-page_links mt-lg">
       <router-link to="/">Home</router-link>
-      <router-link to="/exercises">Exercises</router-link>
+      <router-link to="/exercises" class="disabled">Exercises</router-link>
     </div>
     <div class="home-page_list mt-lg">
       <div
@@ -42,13 +40,13 @@ const LIST = [
     name: 'Antistress Technique',
     link: '/item/antistress',
     type: 'antistress',
-    descripion: 'Box breathing, also referred to as square breathing, is a deep breathing technique that can help you slow down your breathing. It works by distracting your mind as you count to four, calming your nervous system, and decreasing stress in your body.',
-    method: '<span>Inhale for 4 seconds</span><span>hold for 4 seconds</span><span>exhale for 4 seconds</span><span>hold for 4 seconds</span><span>repeat</span>',
+    descripion: 'Antistress breathing is a simple breathing technique that can help you relax and reduce stress. It involves taking slow, deep breaths to help calm your nervous system and reduce anxiety.',
+    method: '<span>Inhale for 2 seconds</span><span>hold for 1 seconds</span><span>exhale for 3 seconds</span><span>hold for 1 seconds</span><span>repeat</span>',
   },
   {
-    name: '4-7-8 Technique',
-    link: '/item/four-seven-eight',
-    type: 'four-seven-eight',
+    name: 'Box Technique',
+    link: '/item/box',
+    type: 'box',
     descripion: 'Box breathing, also referred to as square breathing, is a deep breathing technique that can help you slow down your breathing. It works by distracting your mind as you count to four, calming your nervous system, and decreasing stress in your body.',
     method: '<span>Inhale for 4 seconds</span><span>hold for 4 seconds</span><span>exhale for 4 seconds</span><span>hold for 4 seconds</span><span>repeat</span>',
   }
@@ -158,7 +156,7 @@ function openItem(item) {
       background-image: url('@/assets/circle-bg.svg');
     }
     
-    .four-seven-eight {
+    .box {
       background-image: url('@/assets/cube-bg.svg');
       background-size: 90%;
       background-position: 150% 40px;
