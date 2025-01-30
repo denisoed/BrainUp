@@ -1,5 +1,5 @@
 <template>
-  <div class="container item-page">
+  <div class="item-page page">
 
     <router-link to="/" class="back-btn">
       <img src="@/assets/burger-menu-right.svg" alt="Back" />
@@ -17,8 +17,9 @@
     <div class="circle-container">
       <div ref="circleRef" class="circle" :class="[breathingConfig.class]" @click="startBreathe">
         <div class="inner-circle" ref="innerCircleRef">
-          <!-- <div class="cycle-counter">{{ currentRepeatCount + 1 }}</div> -->
+          <div class="cycle-counter">{{ currentRepeatCount + 1 }}</div>
         </div>
+        <BlobCircles />
         <div
           v-if="typeof metronomeStartTimer === 'number'"
           class="cycle-timer"
@@ -40,6 +41,7 @@ import { onBeforeMount, onMounted, onUnmounted, ref } from 'vue';
 import PlayAudio from '@/core/audio.js';
 import BreatheAudioController from '@/core/breatheAudioController.ts';
 import { useRoute } from 'vue-router';
+import BlobCircles from '@/components/BlobCircles.vue';
 
 const LIST_BREATHING = {
   ['antistress']: {
@@ -261,14 +263,12 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
-.container {
+.item-page {
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  height: 100vh;
-  min-height: 100vh;
-  max-height: 100vh;
   font-family: Arial, sans-serif;
 }
 
@@ -340,7 +340,7 @@ onUnmounted(() => {
   width: 170px;
   height: 170px;
   border-radius: 50%;
-  background: #c3c2dd;
+  background: transparent;
   position: relative;
   z-index: 1;
 
@@ -358,7 +358,7 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: #9b9bc6;
+  background: transparent;
   position: absolute;
   top: 50%;
   left: 50%;
