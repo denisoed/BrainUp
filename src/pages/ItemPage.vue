@@ -1,9 +1,15 @@
 <template>
   <div class="item-page page">
 
-    <router-link to="/" class="back-btn">
+    <router-link to="/exercises" class="back-btn">
       <img src="@/assets/burger-menu-right.svg" alt="Back" />
     </router-link>
+
+    <div class="flex">
+      <button @click="runBreathe">Start breathe</button>
+      <button @click="pauseBreathing">Pause</button>
+      <button @click="stopBreathing">Stop</button>
+    </div>
 
     <!-- Info 1 -->
     <div class="info">
@@ -42,6 +48,142 @@ import PlayAudio from '@/core/audio.js';
 import BreatheAudioController from '@/core/breatheAudioController.ts';
 import { useRoute } from 'vue-router';
 import BlobCircles from '@/components/BlobCircles.vue';
+
+// ----------- V2 ----------- //
+const isPaused = ref(false);
+const isStopped = ref(false);
+
+const serverData = {
+  inhale: { speed: 3, hold: 1 },
+  exhale: { speed: 4, hold: 2 },
+  repeat: 2,
+};
+
+function pauseBreathing() {
+  isPaused.value = !isPaused.value;
+}
+
+function stopBreathing() {
+  isStopped.value = true;
+}
+
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function waitForResume() {
+  while (isPaused.value) {
+    await delay(10000);
+  }
+}
+
+async function simulateBreathing(params, onPhaseChange) {
+  const { inhale, exhale, repeat } = params;
+
+  for (let i = 0; i < repeat; i++) {
+    if (isStopped.value) return;
+
+    onPhaseChange?.('inhale', inhale.speed, i);
+    await waitForResume();
+    await delay(inhale.speed * 1000);
+
+    if (inhale.hold > 0) {
+      onPhaseChange?.('inhale-hold', inhale.hold, i);
+      await waitForResume();
+      await delay(inhale.hold * 1000);
+    }
+
+    onPhaseChange?.('exhale', exhale.speed, i);
+    await waitForResume();
+    await delay(exhale.speed * 1000);
+
+    if (exhale.hold > 0) {
+      onPhaseChange?.('exhale-hold', exhale.hold, i);
+      await waitForResume();
+      await delay(exhale.hold * 1000);
+    }
+  }
+
+  onPhaseChange?.('done');
+}
+
+
+async function animateIncrease(start, end, duration, onUpdate) {
+  let startTime = performance.now();
+
+  function step(currentTime) {
+    if (isStopped.value) return;
+    if (isPaused.value) {
+      requestAnimationFrame(step);
+      return;
+    }
+
+    let elapsedTime = (currentTime - startTime) / 1000;
+    let progress = Math.min(elapsedTime / duration, 1);
+    let value = start + (end - start) * progress;
+    
+    onUpdate(value);
+
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    }
+  }
+
+  requestAnimationFrame(step);
+}
+
+function animateDecrease(start, end, duration, onUpdate) {
+  let startTime = performance.now();
+
+  function step(currentTime) {
+    if (isStopped.value) return;
+    if (isPaused.value) {
+      requestAnimationFrame(step);
+      return;
+    }
+
+    let elapsedTime = (currentTime - startTime) / 1000;
+    let progress = Math.min(elapsedTime / duration, 1);
+    let value = start - (start - end) * progress;
+
+    onUpdate(value);
+
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    }
+  }
+
+  requestAnimationFrame(step);
+}
+
+function runBreathe() {
+  simulateBreathing(serverData, (phase, speed, cycle) => {
+    switch (phase) {
+      case 'inhale':
+        console.log(`Вдох (#${cycle + 1})`);
+        animateIncrease(0, 100, speed, (scale) => {
+          console.log('Scale:', scale);
+        });
+        break;
+      case 'inhale-hold':
+        console.log(`Задержка после вдоха (#${cycle + 1})`);
+        break;
+      case 'exhale':
+        console.log(`Выдох (#${cycle + 1})`);
+        animateDecrease(100, 0, speed, (scale) => {
+          console.log('Scale:', scale);
+        })
+        break;
+      case 'exhale-hold':
+        console.log(`Задержка после выдоха (#${cycle + 1})`);
+        break;
+      case 'done':
+        console.log("Дыхательный цикл завершён.");
+        break;
+    }
+  });
+}
+// --------------------------------------------- //
 
 const LIST_BREATHING = {
   ['antistress']: {
