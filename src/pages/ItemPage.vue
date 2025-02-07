@@ -119,10 +119,10 @@ async function animateIncrease(start, end, duration, onUpdate) {
     }
 
     let elapsedTime = (currentTime - startTime) / 1000;
-    let progress = Math.min(elapsedTime / duration, 1);
-    let value = start + (end - start) * progress;
-    
-    onUpdate(value);
+    let progress = Math.min(elapsedTime / duration, 1); // 0-1
+    let value = start + (end - start) * progress; // 0-100
+
+    onUpdate(value / 100);
 
     if (progress < 1) {
       requestAnimationFrame(step);
@@ -143,10 +143,10 @@ function animateDecrease(start, end, duration, onUpdate) {
     }
 
     let elapsedTime = (currentTime - startTime) / 1000;
-    let progress = Math.min(elapsedTime / duration, 1);
-    let value = start - (start - end) * progress;
+    let progress = Math.min(elapsedTime / duration, 1); // 0-1
+    let value = start - (start - end) * progress; // 0-100
 
-    onUpdate(value);
+    onUpdate(value / 100);
 
     if (progress < 1) {
       requestAnimationFrame(step);
@@ -156,13 +156,18 @@ function animateDecrease(start, end, duration, onUpdate) {
   requestAnimationFrame(step);
 }
 
+function changeCircle(val) {
+  // circleRef.value.style.transform = `scale(${val})`;
+  innerCircleRef.value.style.transform = `translate(-50%, -50%) scale(${val})`;
+}
+
 function runBreathe() {
   simulateBreathing(serverData, (phase, speed, cycle) => {
     switch (phase) {
       case 'inhale':
         console.log(`Вдох (#${cycle + 1})`);
-        animateIncrease(0, 100, speed, (scale) => {
-          console.log('Scale:', scale);
+        animateIncrease(60, 100, speed, (scale) => {
+          changeCircle(scale);
         });
         break;
       case 'inhale-hold':
@@ -170,8 +175,8 @@ function runBreathe() {
         break;
       case 'exhale':
         console.log(`Выдох (#${cycle + 1})`);
-        animateDecrease(100, 0, speed, (scale) => {
-          console.log('Scale:', scale);
+        animateDecrease(100, 60, speed, (scale) => {
+          changeCircle(scale);
         })
         break;
       case 'exhale-hold':
