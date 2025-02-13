@@ -16,7 +16,7 @@ defineProps({
   border-radius: 24px;
   cursor: pointer;
   transition: background-color 0.3s;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   background-color: rgba(255, 255, 255, 0.05);
   line-height: normal;
   text-align: center;

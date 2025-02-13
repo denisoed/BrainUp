@@ -1,17 +1,19 @@
 <template>
   <div class="home-page flex column">
-    <h1>Let's start <br> your day</h1>
-    <div class="home-page_tabs mt-lg">
+    <div class="container">
+      <h1>Let's start <br> your day</h1>
+    </div>
+    <div class="container home-page_tabs mt-lg">
       <Tabs v-model="tab" :tabs="tabs" />
     </div>
-    <div class="home-page_cards mt-md">
+    <div class="container home-page_cards mt-md">
       <CardComp
         v-for="(card, index) in cards"
         :key="index"
         :title="card.title"
         :to="card.to"
         :icon="card.icon"
-        :style="{ width: `calc(${card.width} - 8px)` }"
+        :style="{ width: `calc(${card.width} - 4px)` }"
       />
     </div>
   </div>
@@ -53,28 +55,17 @@ const tab = ref('all');
     color: #fff;
     font-weight: bold;
     margin: 0;
-    padding: 0 20px;
   }
   
   &_tabs {
     max-width: 100%;
     overflow: auto;
-    padding: 0 20px;
-
-    .tabs {
-      width: calc(100vw + 40px);
-    }
   }
 
   &_cards {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    padding: 0 20px;
-
-    // .card {
-    //   flex: 1 1 calc(50% - 8px);
-    // }
   }
 }
 </style>

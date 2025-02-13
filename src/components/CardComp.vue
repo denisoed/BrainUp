@@ -18,7 +18,7 @@ defineProps({
   min-height: 100px;
   border-radius: 12px;
   background-color: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 16px;
   color: #fff;
   position: relative;

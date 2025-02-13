@@ -111,6 +111,11 @@ canvas {
   min-height: 100vh;
 }
 
+.container {
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
