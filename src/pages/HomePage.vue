@@ -4,9 +4,9 @@
       <div class="container">
         <h1>Let's start <br> your day</h1>
       </div>
-      <button class="home-page_menu-btn">
+      <div class="home-page_menu-btn">
         <img src="@/assets/burger-menu-right.svg" alt="Back" />
-      </button>
+      </div>
     </div>
     <div class="container home-page_tabs mt-lg">
       <Tabs v-model="tab" :tabs="tabs" />
