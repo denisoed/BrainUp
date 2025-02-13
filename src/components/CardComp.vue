@@ -20,17 +20,17 @@ defineProps({
   background-color: transparent;
   border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 16px;
-  color: #fff;
+  color: rgba(255, 255, 255, 0.8);
   position: relative;
   overflow: hidden;
 
   .card-icon {
-    width: 120px;
-    height: 120px;
+    width: 80px;
+    height: 80px;
     position: absolute;
-    bottom: -40px;
-    right: -20px;
-    opacity: 0.1;
+    bottom: 0;
+    right: 10px;
+    opacity: 0.2;
   }
 }
 </style>

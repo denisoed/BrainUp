@@ -20,6 +20,7 @@ defineProps({
   background-color: rgba(255, 255, 255, 0.05);
   line-height: normal;
   text-align: center;
+  color: rgba(255, 255, 255, 0.8);
 
   &.tab--active {
     background-color: #fff;
