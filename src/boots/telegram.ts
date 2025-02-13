@@ -6,8 +6,8 @@ export default async () => {
   try {
     if (WebApp) {
       WebApp.expand()
-      WebApp.setBackgroundColor('#ffffff')
-      WebApp.setHeaderColor('#ffffff')
+      WebApp.setBackgroundColor('#212121')
+      WebApp.setHeaderColor('#212121')
       WebApp.ready()
     }
   } catch {

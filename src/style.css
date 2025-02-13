@@ -6,6 +6,9 @@
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
+  
+  --color: #3c3c4c;
+  --primary: #00d9ff;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -39,7 +42,7 @@ a:hover {
 html {
   height: 100vh;
   overflow: hidden;
-  background-color: #fff !important;
+  background-color: #212121 !important;
 }
 
 body {
@@ -47,7 +50,7 @@ body {
   min-height: 100vh;
   margin: 0;
   display: flex;
-  background: #fff;
+  background: #212121;
   /* font-family: 'Troika', serif; */
 }
 
@@ -104,7 +107,7 @@ canvas {
 .page {
   position: relative;
   z-index: 1;
-  padding: 20px;
+  padding: 20px 0;
   min-height: 100vh;
 }
 
