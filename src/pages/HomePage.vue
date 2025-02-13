@@ -13,7 +13,7 @@
         :title="card.title"
         :to="card.to"
         :icon="card.icon"
-        :style="{ width: `calc(${card.width} - 4px)` }"
+        :style="{ width: getCardWidth(card.width) }"
       />
     </div>
   </div>
@@ -29,11 +29,11 @@ import Abstract3 from '@/assets/abstracts/3.svg';
 import Abstract4 from '@/assets/abstracts/4.svg';
 
 const cards = [
-  { to: '', icon: Abstract1, title: 'Stress', width: '50%' },
-  { to: '', icon: Abstract2, title: 'Sleep', width: '50%' },
-  { to: '', icon: Abstract3, title: 'Work', width: '80%' },
-  { to: '', icon: null, title: '', width: '20%' },
-  { to: '', icon: Abstract4, title: 'Brain', width: '100%' },
+  { to: '', icon: Abstract1, title: 'Stress', width: 50 },
+  { to: '', icon: Abstract2, title: 'Sleep', width: 50 },
+  { to: '', icon: Abstract3, title: 'Work', width: 80 },
+  { to: '', icon: null, title: '', width: 20 },
+  { to: '', icon: Abstract4, title: 'Brain', width: 100 },
 ]
 
 const tabs = computed(() => [
@@ -46,12 +46,19 @@ const tabs = computed(() => [
 ]);
 
 const tab = ref('all');
+
+function getCardWidth(width: number) {
+  if (width === 100) {
+    return '100%';
+  }
+  return `calc(${width}% - 4px)`;
+}
 </script>
 
 <style lang="scss" scoped>
 .home-page {
   h1 {
-    font-size: 30px;
+    font-size: 32px;
     color: #fff;
     font-weight: bold;
     margin: 0;

@@ -42,7 +42,7 @@ a:hover {
 html {
   height: 100vh;
   overflow: hidden;
-  background-color: #212121 !important;
+  background: linear-gradient(175deg, #212121 0%, rgba(34, 40, 49 ,1) 100%);
 }
 
 body {
@@ -50,8 +50,8 @@ body {
   min-height: 100vh;
   margin: 0;
   display: flex;
-  background: #212121;
-  /* font-family: 'Troika', serif; */
+  background: linear-gradient(175deg, #212121 0%, rgba(34, 40, 49 ,1) 100%);
+  font-family: 'Troika', serif;
 }
 
 h1 {
