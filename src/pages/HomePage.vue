@@ -18,6 +18,7 @@
         :title="card.title"
         :to="card.to"
         :icon="card.icon"
+        :class="card.class"
         :style="{ width: getCardWidth(card.width) }"
       />
     </div>
@@ -32,13 +33,16 @@ import Abstract1 from '@/assets/abstracts/1.svg';
 import Abstract2 from '@/assets/abstracts/2.svg';
 import Abstract3 from '@/assets/abstracts/3.svg';
 import Abstract4 from '@/assets/abstracts/4.svg';
+import Abstract5 from '@/assets/abstracts/5.svg';
+import AbstractVip from '@/assets/abstracts/vip.svg';
 
 const cards = [
-  { to: '', icon: Abstract1, title: 'Stress', width: 50 },
-  { to: '', icon: Abstract2, title: 'Sleep', width: 50 },
-  { to: '', icon: Abstract3, title: 'Work', width: 80 },
-  { to: '', icon: null, title: '', width: 20 },
-  { to: '', icon: Abstract4, title: 'Brain', width: 100 },
+  { to: '', class: '', icon: Abstract4, title: 'Stress', width: 50 },
+  { to: '', class: '', icon: Abstract2, title: 'Sleep', width: 50 },
+  { to: '', class: '', icon: Abstract3, title: 'Brain', width: 80 },
+  { to: '', class: 'abstract-vip', icon: AbstractVip, title: '', width: 20 },
+  { to: '', class: '', icon: Abstract1, title: 'Sport', width: 30 },
+  { to: '', class: '', icon: Abstract5, title: 'Work', width: 70 },
 ]
 
 const tabs = computed(() => [
@@ -94,6 +98,17 @@ function getCardWidth(width: number) {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
+
+    :deep(.abstract-vip) {
+      background: var(--primary);
+
+      .card-icon {
+        width: 50px;
+        height: 50px;
+        opacity: 1;
+        bottom: 20px;
+      }
+    }
   }
 }
 </style>
