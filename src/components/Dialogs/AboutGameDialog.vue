@@ -49,13 +49,13 @@ function onClose() {
 	text-align: left;
 	border-top-left-radius: 16px;
 	border-top-right-radius: 16px;
-	background: linear-gradient(175deg, #464646 0%, rgba(34, 40, 49 ,1) 100%);
+	background: linear-gradient(175deg, #3b3b3b 0%, rgba(34, 40, 49 ,1) 100%);
 
 	.close-line {
 		position: absolute;
-		top: 16px;
+		top: 12px;
 		left: 50%;
-		width: 35px;
+		width: 40px;
 		height: 3px;
 		background-color: var(--white-color);
 		border-radius: 10px;
