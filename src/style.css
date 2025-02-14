@@ -138,9 +138,8 @@ canvas {
   justify-content: center;
   align-items: center;
   padding: 10px;
-  border-radius: 8px;
+  border-radius: 12px;
   background: var(--white-color);
-  box-shadow: 0 2px 0 1px #e8e8e8;
   
   text-align: center;
   color: dimgrey;

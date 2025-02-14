@@ -22,6 +22,14 @@
     "time": "Time",
     "score": "Score",
     "colors": {
+      "about": {
+        "title": "<span>Game:</span> Colors",
+        "descr": "<span>Benefit:</span> Develops cognitive flexibility, ability to make quick decisions, suppress automatic reactions (Stroop effect).",
+        "rules": "Rules:",
+        "rule1": "<span>1.</span> Look at the word — it's written in different colors! Click on the card that matches the color of the text, not its value. 🎨",
+        "rule2": "<span>2.</span> Make 15 correct answers in a row to win! 🏆",
+        "btn": "Start"
+      },
       "listColors": {
         "red": "Red",
         "blue": "Blue",
@@ -32,6 +40,16 @@
         "pink": "Pink",
         "white": "White",
         "gray": "Gray"
+      }
+    },
+    "numbers": {
+      "about": {
+        "title": "<span>Game:</span> Numbers",
+        "descr": "<span>Benefit:</span> Improves visual perception, trains the ability to focus on the desired object among many distracting elements.",
+        "rules": "Rules:",
+        "rule1": "<span>1.</span> You need to find and click on the card with the number that matches the number under the cards. 😊",
+        "rule2": "<span>2.</span> Make 15 correct answers in a row to win! 🏆",
+        "btn": "Start"
       }
     }
   }
