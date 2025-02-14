@@ -31,11 +31,13 @@ import { useI18n } from 'vue-i18n';
 
 import Tabs from '@/components/Tabs/index.vue';
 import CardComp from '@/components/CardComp.vue';
-import Abstract1 from '@/assets/abstracts/1.svg';
+// import Abstract1 from '@/assets/abstracts/1.svg';
 import Abstract2 from '@/assets/abstracts/2.svg';
 import Abstract3 from '@/assets/abstracts/3.svg';
 import Abstract4 from '@/assets/abstracts/4.svg';
-import Abstract5 from '@/assets/abstracts/5.svg';
+// import Abstract5 from '@/assets/abstracts/5.svg';
+import ColorsIcon from '@/assets/abstracts/colors.svg';
+import NumbersIcon from '@/assets/abstracts/numbers.svg';
 import AbstractVip from '@/assets/abstracts/vip.svg';
 
 const { t } = useI18n();
@@ -55,8 +57,8 @@ const cards = [
   { to: '', class: '', icon: Abstract2, title: t('home.cards.sleep'), width: 50 },
   { to: '', class: '', icon: Abstract3, title: t('home.cards.memory'), width: 80 },
   { to: '', class: 'abstract-vip', icon: AbstractVip, title: '', width: 20 },
-  { to: '/game/colors', class: '', icon: Abstract1, title: t('home.cards.colors'), width: 30 },
-  { to: '/game/numbers', class: '', icon: Abstract5, title: t('home.cards.numbers'), width: 70 },
+  { to: '/game/colors', class: '', icon: ColorsIcon, title: t('home.cards.colors'), width: 30 },
+  { to: '/game/numbers', class: '', icon: NumbersIcon, title: t('home.cards.numbers'), width: 70 },
 ]
 
 const tab = ref('all');
