@@ -20,7 +20,7 @@ defineProps({
   background-color: transparent;
   border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 16px;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--white-color);
   position: relative;
   overflow: hidden;
 

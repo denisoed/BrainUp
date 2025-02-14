@@ -64,20 +64,20 @@ function getCardWidth(width: number) {
 .home-page {
   h1 {
     font-size: 32px;
-    color: #fff;
+    color: var(--white-color);
     font-weight: bold;
     margin: 0;
   }
 
   &_menu-btn {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 0;
+    right: 0;
     z-index: 2;
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     background: transparent;
-    padding: 10px;
+    padding: 16px;
     
     img {
       width: 100%;

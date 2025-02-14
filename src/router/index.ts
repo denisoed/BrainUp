@@ -6,6 +6,9 @@ import ItemPage from '@/pages/ItemPage.vue'
 
 const routes = [
   { path: '/', component: HomePage, meta: { layout: 'MainLayout' }},
+  { path: '/list', component: HomePage, meta: { layout: 'MainLayout' }},
+  { path: '/activity', component: HomePage, meta: { layout: 'MainLayout' }},
+  { path: '/settings', component: HomePage, meta: { layout: 'MainLayout' }},
   { path: '/exercises', component: ExercisesPage, meta: { layout: 'MainLayout' }},
   { path: '/item/:type', component: ItemPage, meta: { layout: 'BreatheLayout' }},
 ]

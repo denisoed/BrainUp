@@ -20,10 +20,10 @@ defineProps({
   background-color: rgba(255, 255, 255, 0.05);
   line-height: normal;
   text-align: center;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--white-color);
 
   &.tab--active {
-    background-color: #fff;
+    background-color: var(--white-color);
     color: #212121;
   }
 }
