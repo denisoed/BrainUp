@@ -4,7 +4,7 @@
     <div class="score">🏆 {{ t('games.score') }}: <span>{{ score }}/{{ WINNING_STREAK }}</span></div>
     <div class="buttons mb-lg mt-lg">
       <div
-        v-for="color in shuffledColors"
+        v-for="color in randomColors"
         :key="color.name"
         class="btn"
         :style="{ backgroundColor: color.color }"
@@ -13,7 +13,7 @@
     </div>
     <div class="color-text" :style="{ color: currentTextColor }">{{ currentWord }}</div>
 
-    <SuccessCounter :value="score" :show="score > 0" />
+    <SuccessCounter :value="`${score}/${WINNING_STREAK}`" :show="score > 0" />
   </div>
 </template>
 
@@ -25,7 +25,7 @@ import SuccessCounter from '@/components/Games/SuccessCounter.vue';
 
 const { t } = useI18n();
 
-const INITIAL_TIME = 1;
+const INITIAL_TIME = 2;
 const WINNING_STREAK = 15;
 const colors = [
   { name: t('games.colors.listColors.red'), color: 'red' },
@@ -46,10 +46,10 @@ let timerInterval;
 
 const currentWordObj = ref(getRandomColor());
 const currentTextColorObj = ref(getRandomColor());
+const randomColors = ref([]);
 
 const currentWord = computed(() => currentWordObj.value.name);
 const currentTextColor = computed(() => currentTextColorObj.value.color);
-const shuffledColors = computed(() => [...colors].sort(() => Math.random() - 0.5));
 
 function getRandomColor() {
   return colors[Math.floor(Math.random() * colors.length)];
@@ -76,6 +76,7 @@ function resetGame() {
 function generateColorTask() {
   currentWordObj.value = getRandomColor();
   currentTextColorObj.value = getRandomColor();
+  randomColors.value = [...colors].sort(() => Math.random() - 0.5);
   startTimer();
 }
 
