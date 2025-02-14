@@ -14,8 +14,25 @@
       "focus": "Focus",
       "memory": "Memory",
       "sleep": "Sleep",
-      "vision": "Vision",
+      "colors": "Colors",
       "breath": "Breathing"
+    }
+  },
+  "games": {
+    "colors": {
+      "time": "Time",
+      "score": "Score",
+      "listColors": {
+        "red": "Red",
+        "blue": "Blue",
+        "green": "Green",
+        "yellow": "Yellow",
+        "purple": "Purple",
+        "orange": "Orange",
+        "pink": "Pink",
+        "white": "White",
+        "gray": "Gray"
+      }
     }
   }
 }

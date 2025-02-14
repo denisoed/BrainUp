@@ -1,12 +1,14 @@
 import { createMemoryHistory, createRouter } from 'vue-router'
 
 import HomePage from '@/pages/HomePage.vue'
+import GamePage from '@/pages/GamePage.vue'
 
 const routes = [
   { path: '/', component: HomePage, meta: { layout: 'MainLayout' }},
   { path: '/list', component: HomePage, meta: { layout: 'MainLayout' }},
   { path: '/activity', component: HomePage, meta: { layout: 'MainLayout' }},
   { path: '/settings', component: HomePage, meta: { layout: 'MainLayout' }},
+  { path: '/game/:game', component: GamePage, meta: { layout: 'MainLayout' }},
 ]
 
 export async function loadLayoutMiddleware(route) {
