@@ -1,83 +1,21 @@
 {
-  "common": {
-    "loading": "Loading...",
-    "finished": "Finished",
-    "farming": "Farming",
-    "farmed": "Farmed",
-    "collect": "Collect",
-    "coomingSoon": "This service will be available soon"
-  },
-  "dailyReward": {
-    "title": "Your daily reward",
-    "descr": "Come back tomorrow for your next daily reward",
-    "collect": "Collect"
-  },
-  "farming": {
-    "timeLeft": "{time} left"
-  },
-  "game": {
-    "bestScore": "Best Score:",
-    "gameOver": "Round is over",
-    "restart": "Tap to start again",
-    "play": "Play"
-  },
-  "leaderboard": {
-    "title": "Top 100 players"
-  },
-  "settings": {
-    "settingsTab": {
-      "title": "Settings",
-      "audio": {
-        "title": "Audio"
-      },
-      "vibration": {
-        "title": "Vibration"
-      },
-      "connectWallet": "Connect TON Wallet"
+  "home": {
+    "title": "Get better <br><span>every day</span>",
+    "tabs": {
+      "all": "All",
+      "focus": "Focus",
+      "memory": "Memory",
+      "sleep": "Sleep",
+      "vision": "Vision",
+      "breath": "Breathing",
+      "logic": "Logic"
     },
-    "statsTab": {
-      "title": "Stats"
-    },
-    "friendsTab": {
-      "title": "Friends"
+    "cards": {
+      "focus": "Focus",
+      "memory": "Memory",
+      "sleep": "Sleep",
+      "vision": "Vision",
+      "breath": "Breathing"
     }
-  },
-  "tasks": {
-    "dailyTitle": "Daily Tasks",
-    "claim": "Collect",
-    "claimed": "Collected",
-    "goal": "Goal",
-    "todayScoreTitle": "Earned Today"
-  },
-  "boosters": {
-    "title": "Boosters",
-    "rounds": "Rounds",
-    "roundsLeft1": "{roundsLeft} round left",
-    "roundsLeft2_3_4": "{roundsLeft} rounds left",
-    "roundsLeft5+": "{roundsLeft} rounds left",
-    "round": "Round",
-    "profitable": "Most profitable",
-    "notEnoughBalance": "Insufficient balance",
-    "yourBalance": "Your balance",
-    "bought": "Bought",
-    "buy": "Buy this booster",
-    "dialogDescr": "This booster multiplies earned points by x<span>{reward}</span> for <span>{rounds}</span> of rounds after purchase"
-  },
-  "editAvatar": {
-    "back": "Back",
-    "save": "Save changes",
-    "clothes": "Clothes",
-    "graphic": "Graphic",
-    "mouths": "Mouths",
-    "eyes": "Eyes",
-    "brows": "Brows",
-    "top": "Top",
-    "circle": "Circle",
-    "skin": "Skin",
-    "facialHair": "Facial Hair",
-    "accessories": "Accessories"
-  },
-  "qrCode": {
-    "title": "Use Telegram on your mobile"
   }
 }

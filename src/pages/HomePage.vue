@@ -2,7 +2,7 @@
   <div class="home-page flex column">
     <div class="flex">
       <div class="container">
-        <h1>Let's start <br> your day</h1>
+        <h1 v-html="$t('home.title')" />
       </div>
       <div class="home-page_menu-btn">
         <img src="@/assets/burger-menu-right.svg" alt="Back" />
@@ -27,6 +27,8 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+
 import Tabs from '@/components/Tabs/index.vue';
 import CardComp from '@/components/CardComp.vue';
 import Abstract1 from '@/assets/abstracts/1.svg';
@@ -36,22 +38,25 @@ import Abstract4 from '@/assets/abstracts/4.svg';
 import Abstract5 from '@/assets/abstracts/5.svg';
 import AbstractVip from '@/assets/abstracts/vip.svg';
 
+const { t } = useI18n();
+
 const cards = [
-  { to: '', class: '', icon: Abstract4, title: 'Stress', width: 50 },
-  { to: '', class: '', icon: Abstract2, title: 'Sleep', width: 50 },
-  { to: '', class: '', icon: Abstract3, title: 'Brain', width: 80 },
+  { to: '', class: '', icon: Abstract4, title: t('home.cards.breath'), width: 50 },
+  { to: '', class: '', icon: Abstract2, title: t('home.cards.sleep'), width: 50 },
+  { to: '', class: '', icon: Abstract3, title: t('home.cards.memory'), width: 80 },
   { to: '', class: 'abstract-vip', icon: AbstractVip, title: '', width: 20 },
-  { to: '', class: '', icon: Abstract1, title: 'Sport', width: 30 },
-  { to: '', class: '', icon: Abstract5, title: 'Work', width: 70 },
+  { to: '', class: '', icon: Abstract1, title: t('home.cards.vision'), width: 30 },
+  { to: '', class: '', icon: Abstract5, title: t('home.cards.focus'), width: 70 },
 ]
 
 const tabs = computed(() => [
-  { name: 'all', title: 'All' },
-  { name: 'stress',  title: 'Stress' },
-  { name: 'sleep', title: 'Sleep' },
-  { name: 'work', title: 'Work' },
-  { name: 'sport', title: 'Sport' },
-  { name: 'brain', title: 'Brain' },
+  { name: 'all', title: t('home.tabs.all') },
+  { name: 'focus',  title: t('home.tabs.focus') },
+  { name: 'memory', title: t('home.tabs.memory') },
+  { name: 'sleep', title: t('home.tabs.sleep') },
+  { name: 'vision', title: t('home.tabs.vision') },
+  { name: 'breath', title: t('home.tabs.breath') },
+  { name: 'logic', title: t('home.tabs.logic') },
 ]);
 
 const tab = ref('all');
@@ -66,11 +71,15 @@ function getCardWidth(width: number) {
 
 <style lang="scss" scoped>
 .home-page {
-  h1 {
+  :deep(h1) {
     font-size: 32px;
     color: var(--white-color);
     font-weight: bold;
     margin: 0;
+
+    span {
+      color: var(--primary);
+    }
   }
 
   &_menu-btn {
@@ -79,9 +88,8 @@ function getCardWidth(width: number) {
     right: 0;
     z-index: 2;
     width: 60px;
-    height: 60px;
     background: transparent;
-    padding: 16px;
+    padding: 20px 16px;
     
     img {
       width: 100%;

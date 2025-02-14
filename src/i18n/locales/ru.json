@@ -1,83 +1,21 @@
 {
-  "common": {
-    "loading": "Загрузка...",
-    "finished": "Завершено",
-    "farming": "Фарминг",
-    "farmed": "Нафармлено",
-    "collect": "Забрать",
-    "coomingSoon": "Этот сервис будет доступен в ближайшее время"
-  },
-  "dailyReward": {
-    "title": "Ваша ежедневная награда",
-    "descr": "Возвращайтесь завтра для получения следующей ежедневной награды",
-    "collect": "Забрать"
-  },
-  "farming": {
-    "timeLeft": "{time}"
-  },
-  "game": {
-    "bestScore": "Лучший результат:",
-    "gameOver": "Раунд окончен",
-    "restart": "Тапните, чтобы начать сначала",
-    "play": "Играть"
-  },
-  "leaderboard": {
-    "title": "Топ 100 игроков"
-  },
-  "settings": {
-    "settingsTab": {
-      "title": "Настройки",
-      "audio": {
-        "title": "Звуки"
-      },
-      "vibration": {
-        "title": "Вибрация"
-      },
-      "connectWallet": "Подключить TON кошелек"
+  "home": {
+    "title": "Улучшайтесь <br><span>каждый день</span>",
+    "tabs": {
+      "all": "Все",
+      "focus": "Концентрация",
+      "memory": "Память",
+      "sleep": "Сон",
+      "vision": "Зрение",
+      "breath": "Дыхание",
+      "logic": "Логика"
     },
-    "statsTab": {
-      "title": "Статистика"
-    },
-    "friendsTab": {
-      "title": "Друзья"
+    "cards": {
+      "focus": "Концентрация",
+      "memory": "Память",
+      "sleep": "Сон",
+      "vision": "Зрение",
+      "breath": "Дыхание"
     }
-  },
-  "tasks": {
-    "dailyTitle": "Ежедневные задания",
-    "claim": "Получить",
-    "claimed": "Получено",
-    "goal": "Цель",
-    "todayScoreTitle": "Заработано за сегодня"
-  },
-  "boosters": {
-    "title": "Бустеры",
-    "rounds": "раундов",
-    "roundsLeft1": "Остался {roundsLeft} раунд",
-    "roundsLeft2_3_4": "Осталось {roundsLeft} раунда",
-    "roundsLeft5+": "Осталось {roundsLeft} раундов",
-    "round": "раунд",
-    "profitable": "Прибыльный",
-    "notEnoughBalance": "Недостаточно средств",
-    "yourBalance": "Ваш баланс",
-    "bought": "Куплен",
-    "buy": "Купить этот бустер",
-    "dialogDescr": "Этот бустер умнажает заработанные баллы на x<span>{reward}</span> в течении <span>{rounds}</span> раундов после покупки"
-  },
-  "editAvatar": {
-    "back": "Назад",
-    "save": "Сохранить",
-    "clothes": "Одежда",
-    "graphic": "Графика",
-    "mouths": "Рты",
-    "eyes": "Глаза",
-    "brows": "Брови",
-    "top": "Верх",
-    "circle": "Круг",
-    "skin": "Кожа",
-    "facialHair": "Борода",
-    "accessories": "Аксессуары"
-  },
-  "qrCode": {
-    "title": "Используйте Telegram на мобильном устройстве"
   }
 }
