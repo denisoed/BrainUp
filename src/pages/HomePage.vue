@@ -50,13 +50,13 @@ const cards = [
 ]
 
 const tabs = computed(() => [
-  { name: 'all', title: t('home.tabs.all') },
-  { name: 'focus',  title: t('home.tabs.focus') },
-  { name: 'memory', title: t('home.tabs.memory') },
-  { name: 'sleep', title: t('home.tabs.sleep') },
-  { name: 'vision', title: t('home.tabs.vision') },
-  { name: 'breath', title: t('home.tabs.breath') },
-  { name: 'logic', title: t('home.tabs.logic') },
+  { name: 'all', count: 59, title: t('home.tabs.all') },
+  { name: 'focus',  count: 6, title: t('home.tabs.focus') },
+  { name: 'memory', count: 3, title: t('home.tabs.memory') },
+  { name: 'sleep', count: 5, title: t('home.tabs.sleep') },
+  { name: 'vision', count: 7, title: t('home.tabs.vision') },
+  { name: 'breath', count: 4, title: t('home.tabs.breath') },
+  { name: 'logic', count: 6, title: t('home.tabs.logic') },
 ]);
 
 const tab = ref('all');
