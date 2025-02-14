@@ -11,12 +11,16 @@
       >{{ number }}</div>
     </div>
     <div class="target-text">{{ target }}</div>
+
+    <SuccessCounter :value="score" :show="score > 0" />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
+
+import SuccessCounter from '@/components/Games/SuccessCounter.vue';
 
 const { t } = useI18n();
 
