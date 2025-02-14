@@ -1,6 +1,6 @@
 {
   "home": {
-    "title": "Улучшайтесь <br><span>каждый день</span>",
+    "title": "Развивайтесь <br><span>каждый день</span>",
     "tabs": {
       "all": "Все",
       "focus": "Концентрация",
@@ -11,17 +11,17 @@
       "logic": "Логика"
     },
     "cards": {
-      "focus": "Концентрация",
       "memory": "Память",
       "sleep": "Сон",
       "colors": "Цвета",
-      "breath": "Дыхание"
+      "breath": "Дыхание",
+      "numbers": "Цифры"
     }
   },
   "games": {
+    "time": "Время",
+    "score": "Очки",
     "colors": {
-      "time": "Время",
-      "score": "Очки",
       "listColors": {
         "red": "Красный",
         "blue": "Синий",

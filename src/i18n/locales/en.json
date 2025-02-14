@@ -11,17 +11,17 @@
       "logic": "Logic"
     },
     "cards": {
-      "focus": "Focus",
       "memory": "Memory",
       "sleep": "Sleep",
       "colors": "Colors",
-      "breath": "Breathing"
+      "breath": "Breathing",
+      "numbers": "Numbers"
     }
   },
   "games": {
+    "time": "Time",
+    "score": "Score",
     "colors": {
-      "time": "Time",
-      "score": "Score",
       "listColors": {
         "red": "Red",
         "blue": "Blue",

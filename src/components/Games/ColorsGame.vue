@@ -1,7 +1,7 @@
 <template>
   <div class="colors-game flex column items-center justify-center">
-    <div class="timer">⏳ {{ t('games.colors.time') }}: <span>{{ timeLeft.toFixed(1) }}</span> {{ t('games.colors.time') }}</div>
-    <div class="score">🏆 {{ t('games.colors.score') }}: <span>{{ score }}/{{ WINNING_STREAK }}</span></div>
+    <div class="timer">⏳ {{ t('games.time') }}: <span>{{ timeLeft.toFixed(1) }}</span></div>
+    <div class="score">🏆 {{ t('games.score') }}: <span>{{ score }}/{{ WINNING_STREAK }}</span></div>
     <div class="buttons mb-lg mt-lg">
       <div
         v-for="color in shuffledColors"
@@ -22,7 +22,7 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 const INITIAL_TIME = 1;
-const WINNING_STREAK = 10;
+const WINNING_STREAK = 20;
 const colors = [
   { name: t('games.colors.listColors.red'), color: 'red' },
   { name: t('games.colors.listColors.blue'), color: 'blue' },

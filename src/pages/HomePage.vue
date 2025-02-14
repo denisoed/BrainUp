@@ -56,7 +56,7 @@ const cards = [
   { to: '', class: '', icon: Abstract3, title: t('home.cards.memory'), width: 80 },
   { to: '', class: 'abstract-vip', icon: AbstractVip, title: '', width: 20 },
   { to: '/game/colors', class: '', icon: Abstract1, title: t('home.cards.colors'), width: 30 },
-  { to: '', class: '', icon: Abstract5, title: t('home.cards.focus'), width: 70 },
+  { to: '/game/numbers', class: '', icon: Abstract5, title: t('home.cards.numbers'), width: 70 },
 ]
 
 const tab = ref('all');
