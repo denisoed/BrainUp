@@ -26,7 +26,7 @@ import SuccessCounter from '@/components/Games/SuccessCounter.vue';
 const { t } = useI18n();
 
 const INITIAL_TIME = 1;
-const WINNING_STREAK = 20;
+const WINNING_STREAK = 15;
 const colors = [
   { name: t('games.colors.listColors.red'), color: 'red' },
   { name: t('games.colors.listColors.blue'), color: 'blue' },
@@ -113,6 +113,7 @@ onUnmounted(() => {
 }
 
 .buttons {
+  width: 100%;
   display: flex;
   justify-content: center;
   gap: 8px;
@@ -120,8 +121,8 @@ onUnmounted(() => {
 }
 
 .btn {
-  min-width: 80px;
-  height: 50px;
+  width: calc(33% - 8px);
+  aspect-ratio: 1/1;
   font-size: 18px;
   cursor: pointer;
   border-radius: 5px;

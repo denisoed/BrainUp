@@ -44,7 +44,7 @@ watch(() => props.value, () => {
   left: -80px;
   transform: translateY(-50%);
   border-radius: 10px;
-  color: var(--primary);
+  color: var(--white-color);
   z-index: 2;
   font-size: 18px;
   font-weight: bold;
