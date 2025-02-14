@@ -8,6 +8,7 @@ export default async () => {
       WebApp.expand()
       WebApp.setBackgroundColor('#212121')
       WebApp.setHeaderColor('#212121')
+      WebApp.disableVerticalSwipes()
       WebApp.ready()
     }
   } catch {

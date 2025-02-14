@@ -47,13 +47,13 @@ function onClose() {
 	padding: 20px 20px 30px;
 	box-sizing: border-box;
 	text-align: left;
-	border-top-left-radius: 8px;
-	border-top-right-radius: 8px;
-	background: linear-gradient(175deg, #212121 0%, rgba(34, 40, 49 ,1) 100%);
+	border-top-left-radius: 16px;
+	border-top-right-radius: 16px;
+	background: linear-gradient(175deg, #464646 0%, rgba(34, 40, 49 ,1) 100%);
 
 	.close-line {
 		position: absolute;
-		top: 8px;
+		top: 16px;
 		left: 50%;
 		width: 35px;
 		height: 3px;
