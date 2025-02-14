@@ -1,15 +1,23 @@
 <template>
-  <router-link :to="to || '/'" class="card">
+  <component
+    :is="to ? 'router-link' : 'div'" :to="to || '/'"
+    class="card"
+    :class="{ locked }"
+  >
     <div class="card-title">{{ title }}</div>
     <img v-if="icon" :src="icon" alt="icon" class="card-icon">
-  </router-link>
+    <LockIcon v-if="locked" class="card-lock" />
+  </component>
 </template>
 
 <script setup lang="ts">
+import LockIcon from '@/components/Icons/LockIcon.vue';
+
 defineProps({
   title: String,
   to: String,
   icon: String,
+  locked: Boolean,
 });
 </script>
 
@@ -24,13 +32,28 @@ defineProps({
   position: relative;
   overflow: hidden;
 
-  .card-icon {
+  &.locked {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  &-icon {
     width: 80px;
     height: 80px;
     position: absolute;
     bottom: 0;
     right: 10px;
     opacity: 0.2;
+  }
+
+  &-lock {
+    width: 15px;
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    opacity: 0.5;
   }
 }
 </style>

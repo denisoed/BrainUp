@@ -19,6 +19,7 @@
         :to="card.to"
         :icon="card.icon"
         :class="card.class"
+        :locked="card.locked"
         :style="{ width: getCardWidth(card.width) }"
       />
     </div>
@@ -53,9 +54,9 @@ const tabs = computed(() => [
 ]);
 
 const cards = [
-  { to: '', class: '', icon: Abstract4, title: t('home.cards.breath'), width: 50 },
-  { to: '', class: '', icon: Abstract2, title: t('home.cards.sleep'), width: 50 },
-  { to: '', class: '', icon: Abstract3, title: t('home.cards.memory'), width: 80 },
+  { to: '', locked: true, class: '', icon: Abstract4, title: t('home.cards.breath'), width: 50 },
+  { to: '', locked: true, class: '', icon: Abstract2, title: t('home.cards.sleep'), width: 50 },
+  { to: '', locked: true, class: '', icon: Abstract3, title: t('home.cards.memory'), width: 80 },
   { to: '', class: 'abstract-vip', icon: AbstractVip, title: '', width: 20 },
   { to: '/game/colors', class: '', icon: ColorsIcon, title: t('home.cards.colors'), width: 30 },
   { to: '/game/numbers', class: '', icon: NumbersIcon, title: t('home.cards.numbers'), width: 70 },
