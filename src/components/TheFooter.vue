@@ -33,7 +33,7 @@ import SettingsIcon from '@/components/Icons/Settings.vue';
   -webkit-backdrop-filter: blur(5px);
   backdrop-filter: blur(5px);
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   gap: 16px;
   z-index: 1;
 

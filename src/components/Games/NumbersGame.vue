@@ -54,7 +54,7 @@ function resetGame() {
 }
 
 function generateGrid() {
-  numbers.value = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100));
+  numbers.value = Array.from({ length: 9 }, () => Math.floor(Math.random() * 100));
   target.value = numbers.value[Math.floor(Math.random() * numbers.value.length)];
   startTimer();
 }
@@ -94,6 +94,7 @@ onUnmounted(() => {
 }
 
 .buttons {
+  width: 100%;
   display: flex;
   justify-content: center;
   gap: 8px;
@@ -101,7 +102,7 @@ onUnmounted(() => {
 }
 
 .btn {
-  width: calc(25% - 8px);
+  width: calc(33% - 8px);
   aspect-ratio: 1/1;
   font-size: 24px;
   cursor: pointer;
