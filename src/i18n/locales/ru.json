@@ -19,6 +19,7 @@
     }
   },
   "games": {
+    "howToPlay": "Как играть?",
     "time": "Время",
     "score": "Очки",
     "colors": {

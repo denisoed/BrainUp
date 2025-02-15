@@ -19,6 +19,7 @@
     }
   },
   "games": {
+    "howToPlay": "How to play?",
     "time": "Time",
     "score": "Score",
     "colors": {
