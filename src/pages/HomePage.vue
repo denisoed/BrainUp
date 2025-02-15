@@ -37,6 +37,7 @@ import Abstract2 from '@/assets/abstracts/2.svg';
 import Abstract3 from '@/assets/abstracts/3.svg';
 import Abstract4 from '@/assets/abstracts/4.svg';
 // import Abstract5 from '@/assets/abstracts/5.svg';
+import MathSprintIcon from '@/assets/abstracts/mathSprint.svg';
 import ColorsIcon from '@/assets/abstracts/colors.svg';
 import NumbersIcon from '@/assets/abstracts/numbers.svg';
 import AbstractVip from '@/assets/abstracts/vip.svg';
@@ -56,7 +57,7 @@ const tabs = computed(() => [
 const cards = [
   { to: '', locked: true, class: '', icon: Abstract4, title: t('home.cards.breath'), width: 50 },
   { to: '', locked: true, class: '', icon: Abstract2, title: t('home.cards.sleep'), width: 50 },
-  { to: '', locked: true, class: '', icon: Abstract3, title: t('home.cards.memory'), width: 80 },
+  { to: '/game/mathSprint', class: '', icon: MathSprintIcon, title: t('home.cards.mathSprint'), width: 80 },
   { to: '', class: 'abstract-vip', icon: AbstractVip, title: '', width: 20 },
   { to: '/game/colors', class: '', icon: ColorsIcon, title: t('home.cards.colors'), width: 30 },
   { to: '/game/numbers', class: '', icon: NumbersIcon, title: t('home.cards.numbers'), width: 70 },

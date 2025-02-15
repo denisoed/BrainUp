@@ -25,7 +25,7 @@ import SuccessCounter from '@/components/Games/SuccessCounter.vue';
 
 const { t } = useI18n();
 
-const INITIAL_TIME = 1;
+const INITIAL_TIME = 1.5;
 const WINNING_STREAK = 15;
 const colors = [
   { name: t('games.colors.listColors.red'), color: 'red' },

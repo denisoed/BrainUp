@@ -11,7 +11,7 @@
       "logic": "Logic"
     },
     "cards": {
-      "memory": "Memory",
+      "mathSprint": "Math Sprint",
       "sleep": "Sleep",
       "colors": "Colors",
       "breath": "Breathing",
@@ -48,6 +48,16 @@
         "descr": "<span>Benefit:</span> Improves visual perception, trains the ability to focus on the desired object among many distracting elements.",
         "rules": "Rules:",
         "rule1": "<span>1.</span> You need to find and click on the card with the number that matches the number under the cards. 😊",
+        "rule2": "<span>2.</span> Make 15 correct answers in a row to win! 🏆",
+        "btn": "Start"
+      }
+    },
+    "mathSprint": {
+      "about": {
+        "title": "<span>Game:</span> Math Sprint",
+        "descr": "<span>Benefit:</span> Develops speed of information processing, improves arithmetic skills, and helps train the brain for quick calculations.",
+        "rules": "Rules:",
+        "rule1": "<span>1.</span> You need to find and click on the card with the correct answer. 😊",
         "rule2": "<span>2.</span> Make 15 correct answers in a row to win! 🏆",
         "btn": "Start"
       }

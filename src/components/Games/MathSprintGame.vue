@@ -1,18 +1,18 @@
 <template>
-  <div class="numbers-game flex column items-center justify-center">
+  <div class="math-sprint-game flex column items-center justify-center">
     <div class="timer">⏳ {{ t('games.time') }}: <span>{{ timeLeft.toFixed(1) }}</span></div>
     <div class="score">🏆 {{ t('games.score') }}: <span>{{ score }}/{{ WINNING_STREAK }}</span></div>
     <div class="buttons mb-lg mt-lg">
       <div
-        v-for="(number, index) in numbers"
+        v-for="(answer, index) in answers"
         :key="index"
         class="btn"
-        @click="checkAnswer(number)"
-      >{{ number }}</div>
+        @click="checkAnswer(answer)"
+      >{{ answer }}</div>
     </div>
-    <div class="target-text">{{ target }}</div>
+    <div class="current-text">{{ question }}</div>
 
-    <SuccessCounter :value="score" :show="score > 0" />
+    <SuccessCounter :value="`${score}/${WINNING_STREAK}`" :show="score > 0" />
   </div>
 </template>
 
@@ -24,16 +24,16 @@ import SuccessCounter from '@/components/Games/SuccessCounter.vue';
 
 const { t } = useI18n();
 
-const INITIAL_TIME = 3;
+const INITIAL_TIME = 5;
 const WINNING_STREAK = 15;
 
 const timeLeft = ref(INITIAL_TIME);
 const score = ref(0);
+const question = ref('');
+const correctAnswer = ref(0);
 const correctStreak = ref(0);
+const answers = ref([]);
 let timerInterval;
-
-const target = ref(0);
-const numbers = ref([]);
 
 function startTimer() {
   clearInterval(timerInterval);
@@ -50,23 +50,34 @@ function startTimer() {
 function resetGame() {
   score.value = 0;
   correctStreak.value = 0;
-  generateGrid();
+  generateQuestion();
 }
 
-function generateGrid() {
-  numbers.value = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100));
-  target.value = numbers.value[Math.floor(Math.random() * numbers.value.length)];
+function generateQuestion() {
+  let num1 = Math.floor(Math.random() * 50) + 1;
+  let num2 = Math.floor(Math.random() * num1) + 1;
+  let isAddition = Math.random() > 0.5;
+  correctAnswer.value = isAddition ? num1 + num2 : num1 - num2;
+  question.value = `${num1} ${isAddition ? '+' : '-'} ${num2}`;
+  let answersSet = new Set([correctAnswer.value]);
+  while (answersSet.size < 6) {
+    let randomAnswer = correctAnswer.value + Math.floor(Math.random() * 21) - 10;
+    if (randomAnswer !== correctAnswer.value) {
+      answersSet.add(randomAnswer);
+    }
+  }
+  answers.value = [...answersSet].sort(() => Math.random() - 0.5);
   startTimer();
 }
 
-function checkAnswer(selectedNumber) {
-  if (selectedNumber === target.value) {
+function checkAnswer(selectedAnswer) {
+  if (selectedAnswer === correctAnswer.value) {
     score.value++;
     correctStreak.value++;
     if (correctStreak.value >= WINNING_STREAK) {
       return;
     }
-    generateGrid();
+    generateQuestion();
   } else {
     resetGame();
   }
@@ -83,17 +94,18 @@ onUnmounted(() => {
 </script>
 
 <style scoped lang="scss">
-.numbers-game {
+.math-sprint-game {
   height: calc(100vh - 100px);
 }
 
-.target-text {
-  font-size: 56px;
+.current-text {
+  font-size: 36px;
   font-weight: bold;
   color: var(--primary);
 }
 
 .buttons {
+  width: 100%;
   display: flex;
   justify-content: center;
   gap: 8px;
@@ -101,7 +113,7 @@ onUnmounted(() => {
 }
 
 .btn {
-  width: calc(25% - 8px);
+  width: calc(33% - 8px);
   aspect-ratio: 1/1;
   font-size: 24px;
   cursor: pointer;

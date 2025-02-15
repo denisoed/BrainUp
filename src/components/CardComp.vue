@@ -32,6 +32,11 @@ defineProps({
   position: relative;
   overflow: hidden;
 
+  &-title {
+    position: relative;
+    z-index: 2;
+  }
+
   &.locked {
     opacity: 0.6;
     cursor: not-allowed;
@@ -46,6 +51,7 @@ defineProps({
     bottom: 0;
     right: 10px;
     opacity: 0.2;
+    z-index: 1;
   }
 
   &-lock {
