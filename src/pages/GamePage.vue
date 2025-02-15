@@ -1,5 +1,6 @@
 <template>
   <div class="game-page">
+    <BackBtn class="game-page_back" @click="$router.back()" />
     <div class="container">
       <component :is="game" />
     </div>
@@ -13,6 +14,7 @@ import ColorsGame from '@/components/Games/ColorsGame.vue';
 import NumbersGame from '@/components/Games/NumbersGame.vue';
 import MathSprintGame from '@/components/Games/MathSprintGame.vue';
 import AboutGameDialog from '@/components/Dialogs/AboutGameDialog.vue';
+import BackBtn from '@/components/BackBtn.vue';
 import {
   openModal
 } from 'jenesius-vue-modal';
@@ -40,3 +42,13 @@ onMounted(() => {
   onOpenAboutGameDialog();
 })
 </script>
+
+<style lang="scss" scoped>
+.game-page {
+  &_back {
+    position: absolute;
+    top: 20px;
+    left: 16px;
+  }
+}
+</style>
