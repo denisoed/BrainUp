@@ -50,7 +50,7 @@ defineProps({
     position: absolute;
     bottom: 0;
     right: 10px;
-    opacity: 0.2;
+    opacity: 0.4;
     z-index: 1;
   }
 
