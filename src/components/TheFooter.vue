@@ -34,7 +34,7 @@ import SettingsIcon from '@/components/Icons/Settings.vue';
   backdrop-filter: blur(5px);
   display: flex;
   justify-content: center;
-  gap: 12px;
+  gap: 16px;
   z-index: 1;
 
   a {

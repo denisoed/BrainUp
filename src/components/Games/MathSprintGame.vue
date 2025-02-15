@@ -24,7 +24,7 @@ import SuccessCounter from '@/components/Games/SuccessCounter.vue';
 
 const { t } = useI18n();
 
-const INITIAL_TIME = 5;
+const INITIAL_TIME = 4;
 const WINNING_STREAK = 15;
 
 const timeLeft = ref(INITIAL_TIME);
