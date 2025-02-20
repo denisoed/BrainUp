@@ -58,8 +58,22 @@ const twistersRu = [
   'Карл у Клары украл кораллы а Клара у Карла украла кларнет',
   'На дворе трава на траве дрова',
   'Шла Саша по шоссе и сосала сушку',
-  'Четыре чёрненьких чумазеньких чертёнка',
-  'Ехал Грека через реку видит Грека в реке рак'
+  'Четыре черненьких чумазеньких чертенка',
+  'Ехал Грека через реку видит Грека в реке рак',
+  'Бык тупогуб тупогубенький бычок у быка бела губа была тупа',
+  'Дятел дуб долбил долбил не додолбил и ушел',
+  'От топота копыт пыль по полю летит',
+  'Три сороки тараторки тараторили на горке',
+  'Всех скороговорок не перескороговоришь не перевыскороговоришь',
+  'Стоит поп на копне, колпак на попе, копна под попом, поп под колпаком.',
+  'Везет Сенька Саньку с Сонькой на санках',
+  'У осы не усы не усищи а усики',
+  'Шестнадцать шли мышей и шесть нашли грошей',
+  'Цапля чахла цапля сохла цапля сдохла',
+  'Протокол про протокол протоколом запротоколировали',
+  'Летели лебеди с лебедятами',
+  'Наш Полкан попал в капкан',
+  'Бык тупогуб тупогубенький бычок у быка бела губа была тупа'
 ];
 
 const twistersEn = [
@@ -67,7 +81,22 @@ const twistersEn = [
   'Peter Piper picked a peck of pickled peppers',
   'How much wood would a woodchuck chuck',
   'Red lorry yellow lorry',
-  'Fuzzy Wuzzy was a bear'
+  'Fuzzy Wuzzy was a bear',
+  'I scream you scream we all scream for ice cream',
+  'Betty bought some butter but the butter was bitter',
+  'Six slick slim slimy snakes slowly sliding southward',
+  'Unique New York unique New York you know you need unique New York',
+  'Three free throws free throws three',
+  'Fresh fried fish fish fresh fried',
+  'Lesser leather never weathered wetter weather better',
+  'A proper copper coffee pot',
+  'She sees cheese seas she sees seas cheese',
+  'Truly rural truly rural',
+  'Toy boat toy boat toy boat',
+  'Greek grapes Greek grapes Greek grapes',
+  'Nine nice night nurses nursing nicely',
+  'Flash message flash message flash message',
+  'Clean clams crammed in clean cans'
 ];
 
 recognition.continuous = false;
