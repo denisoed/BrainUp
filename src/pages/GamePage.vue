@@ -50,7 +50,7 @@ onMounted(() => {
   &_back {
     position: absolute;
     top: 20px;
-    left: 16px;
+    right: 16px;
   }
 }
 </style>

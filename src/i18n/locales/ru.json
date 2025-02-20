@@ -81,5 +81,24 @@
         "btn": "Начать"
       }
     }
+  },
+  "premium": {
+    "title": "Откройте полный <br><span>потенциал</span>",
+    "subtitle": "Преимущества Premium",
+    "features": {
+      "allGames": "Доступ ко всем тренировкам",
+      "newContent": "Новый контент каждую неделю",
+      "exclusive": "Эксклюзивные упражнения"
+    },
+    "plans": {
+      "monthly": {
+        "title": "Месячный",
+        "description": "4.99$ / месяц"
+      },
+      "yearly": {
+        "title": "Годовой",
+        "description": "39.99$ / год"
+      }
+    }
   }
 }

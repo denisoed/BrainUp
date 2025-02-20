@@ -9,6 +9,11 @@ const routes = [
   { path: '/activity', component: HomePage, meta: { layout: 'MainLayout' }},
   { path: '/settings', component: HomePage, meta: { layout: 'MainLayout' }},
   { path: '/game/:game', component: GamePage, meta: { layout: 'MainLayout' }},
+  { 
+    path: '/buy-premium', 
+    component: () => import('@/pages/BuyPremiumPage.vue'),
+    meta: { layout: 'MainLayout' }
+  },
 ]
 
 export async function loadLayoutMiddleware(route) {

@@ -81,5 +81,24 @@
         "btn": "Start"
       }
     }
+  },
+  "premium": {
+    "title": "Unlock your full <br><span>potential</span>",
+    "subtitle": "Premium Benefits",
+    "features": {
+      "allGames": "Access to all exercises",
+      "newContent": "New content weekly",
+      "exclusive": "Exclusive exercises"
+    },
+    "plans": {
+      "monthly": {
+        "title": "Monthly",
+        "description": "$4.99 / month"
+      },
+      "yearly": {
+        "title": "Yearly",
+        "description": "$39.99 / year"
+      }
+    }
   }
 }
