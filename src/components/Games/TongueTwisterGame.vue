@@ -24,7 +24,7 @@
 
     <div 
       v-else 
-      class="mic-status listening"
+      class="mic-status listening mt-md"
     >
       🎤 {{ t('games.tongueTwister.listening') }}
     </div>
@@ -40,7 +40,7 @@ import SuccessCounter from '@/components/Games/SuccessCounter.vue';
 
 const { t } = useI18n();
 
-const INITIAL_TIME = 10;
+const INITIAL_TIME = 5;
 const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
 const visualizer = ref(null);
 let audioContext;
