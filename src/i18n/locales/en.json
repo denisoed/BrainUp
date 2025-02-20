@@ -83,7 +83,7 @@
     }
   },
   "premium": {
-    "title": "Unlock your full <br><span>potential</span>",
+    "title": "Full <br><span>potential</span>",
     "subtitle": "Premium Benefits",
     "features": {
       "allGames": "Access to all exercises",
@@ -91,6 +91,8 @@
       "exclusive": "Exclusive exercises"
     },
     "plans": {
+      "title": "Choose your plan",
+      "subtitle": "Unlock all exercises and get more features",
       "monthly": {
         "title": "Monthly",
         "description": "$4.99 / month"

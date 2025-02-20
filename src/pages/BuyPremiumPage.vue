@@ -7,7 +7,12 @@
       <BackBtn class="premium-page_back" @click="$router.back()" />
     </div>
 
-    <div class="container premium-page_content mt-lg">
+    <div class="container premium-page_content">
+      <div class="plans-header">
+        <h2>{{ $t('premium.plans.title') }}</h2>
+        <p>{{ $t('premium.plans.subtitle') }}</p>
+      </div>
+
       <div class="premium-plans">
         <div 
           v-for="(plan, index) in plans" 
@@ -107,7 +112,7 @@ function selectPlan(plan: any) {
 .features-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
   margin-left: 16px;
 }
 
@@ -179,5 +184,23 @@ function selectPlan(plan: any) {
   height: 80px;
   opacity: 0.5;
   transition: opacity 0.2s;
+}
+
+.plans-header {
+  text-align: left;
+  margin-bottom: 24px;
+
+  h2 {
+    color: var(--white-color);
+    font-size: 22px;
+    margin-bottom: 0;
+  }
+
+  p {
+    color: var(--white-color);
+    opacity: 0.8;
+    margin-top: 0;
+    font-size: 14px;
+  }
 }
 </style> 
