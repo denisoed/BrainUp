@@ -15,7 +15,8 @@
       "sleep": "Sleep",
       "colors": "Colors",
       "breath": "Breathing",
-      "numbers": "Numbers"
+      "numbers": "Numbers",
+      "tongueTwister": "Tongue Twisters"
     }
   },
   "games": {
@@ -60,6 +61,23 @@
         "rules": "Rules:",
         "rule1": "<span>1.</span> You need to find and click on the card with the correct answer. 😊",
         "rule2": "<span>2.</span> Make 15 correct answers in a row to win! 🏆",
+        "btn": "Start"
+      }
+    },
+    "tongueTwister": {
+      "lang": "en-US",
+      "listening": "Listening...",
+      "pressToStart": "Press the microphone button to start",
+      "start": "Start speaking",
+      "stop": "Stop",
+      "ready": "Ready to twist your tongue? 👅\nPress the button to start!",
+      "about": {
+        "title": "<span>Game:</span> Tongue Twisters",
+        "descr": "<span>Benefit:</span> Improves diction, develops speech apparatus, trains memory and concentration.",
+        "rules": "Rules:",
+        "rule1": "<span>1.</span> Press the microphone button and say the tongue twister shown on the screen. 🎤",
+        "rule2": "<span>2.</span> You have 10 seconds to correctly pronounce the tongue twister. ⏳",
+        "rule3": "<span>3.</span> You get a point for each correctly pronounced tongue twister. If you make a mistake, the score resets! 🏆",
         "btn": "Start"
       }
     }

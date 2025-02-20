@@ -41,6 +41,7 @@ import MathSprintIcon from '@/assets/abstracts/mathSprint.svg';
 import ColorsIcon from '@/assets/abstracts/colors.svg';
 import NumbersIcon from '@/assets/abstracts/numbers.svg';
 import AbstractVip from '@/assets/abstracts/vip.svg';
+import TongueTwisterIcon from '@/assets/abstracts/5.svg';
 
 const { t } = useI18n();
 
@@ -61,6 +62,13 @@ const cards = [
   { to: '', class: 'abstract-vip', icon: AbstractVip, title: '', width: 20 },
   { to: '/game/colors', class: '', icon: ColorsIcon, title: t('home.cards.colors'), width: 30 },
   { to: '/game/numbers', class: '', icon: NumbersIcon, title: t('home.cards.numbers'), width: 70 },
+  { 
+    to: '/game/tongueTwister', 
+    class: '', 
+    icon: TongueTwisterIcon, 
+    title: t('home.cards.tongueTwister'), 
+    width: 100
+  },
 ]
 
 const tab = ref('all');

@@ -13,6 +13,7 @@ import { useRoute } from 'vue-router';
 import ColorsGame from '@/components/Games/ColorsGame.vue';
 import NumbersGame from '@/components/Games/NumbersGame.vue';
 import MathSprintGame from '@/components/Games/MathSprintGame.vue';
+import TongueTwisterGame from '@/components/Games/TongueTwisterGame.vue';
 import AboutGameDialog from '@/components/Dialogs/AboutGameDialog.vue';
 import BackBtn from '@/components/BackBtn.vue';
 import {
@@ -24,7 +25,8 @@ const route = useRoute();
 const GAMES = {
   colors: ColorsGame,
   numbers: NumbersGame,
-  mathSprint: MathSprintGame
+  mathSprint: MathSprintGame,
+  tongueTwister: TongueTwisterGame
 };
 
 const game = computed(() => GAMES[route.params.game as keyof typeof GAMES]);
