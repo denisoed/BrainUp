@@ -1,0 +1,29 @@
+<svg width="170" height="170" viewBox="0 0 170 170" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Речевой пузырь (нарисован "от руки") -->
+  <path d="M20 50C20 30 35 15 65 15C95 15 150 15 150 50C150 85 130 95 100 95C85 95 60 95 45 95C30 95 20 85 20 70C20 60 20 55 20 50Z" 
+    stroke="#FF6B6B" 
+    stroke-width="10" 
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    fill="none" />
+    
+  <!-- "Хвостик" речевого пузыря -->
+  <path d="M45 95C40 105 35 115 25 125" 
+    stroke="#FF6B6B" 
+    stroke-width="10" 
+    stroke-linecap="round"
+    fill="none" />
+    
+  <!-- Волнистые линии внутри (символизируют скороговорку) -->
+  <path d="M40 45C50 35 60 45 70 35C80 45 90 35 100 45C110 35 120 45 130 35" 
+    stroke="#FF6B6B" 
+    stroke-width="8" 
+    stroke-linecap="round"
+    fill="none" />
+    
+  <path d="M45 65C55 55 65 65 75 55C85 65 95 55 105 65C115 55 125 65 135 55" 
+    stroke="#FF6B6B" 
+    stroke-width="8" 
+    stroke-linecap="round"
+    fill="none" />
+</svg> 

@@ -41,7 +41,7 @@ import MathSprintIcon from '@/assets/abstracts/mathSprint.svg';
 import ColorsIcon from '@/assets/abstracts/colors.svg';
 import NumbersIcon from '@/assets/abstracts/numbers.svg';
 import AbstractVip from '@/assets/abstracts/vip.svg';
-import TongueTwisterIcon from '@/assets/abstracts/5.svg';
+import TongueTwisterIcon from '@/assets/abstracts/tongueTwister.svg';
 
 const { t } = useI18n();
 
