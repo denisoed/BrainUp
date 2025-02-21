@@ -90,7 +90,7 @@
         "title": "<span>Game:</span> Sequence",
         "descr": "<span>Benefit:</span> Trains memory, attention and reaction speed.",
         "rules": "Rules:",
-        "rule1": "<span>1.</span> Memorize the sequence of symbols in 5 seconds. 👀",
+        "rule1": "<span>1.</span> Memorize the sequence of cards in 5 seconds. 👀",
         "rule2": "<span>2.</span> You have 5 seconds to reproduce it in the correct order. ⏳",
         "rule3": "<span>3.</span> Get a point for each correct sequence. Score resets on error! 🏆",
         "btn": "Start"

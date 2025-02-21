@@ -6,6 +6,11 @@
 				<div class="about-game-dialog_content-title mb-sm" v-html="$t(`games.howToPlay`)" />
 				<div class="about-game-dialog_content-rules mb-sm" v-html="$t(`games.${game}.about.rule1`)" />
 				<div class="about-game-dialog_content-rules mb-md" v-html="$t(`games.${game}.about.rule2`)" />
+				<div
+					v-if="$t(`games.${game}.about.rule3`) !== `games.${game}.about.rule3`"
+					class="about-game-dialog_content-rules mb-md" 
+					v-html="$t(`games.${game}.about.rule3`)" 
+				/>
 				<div class="about-game-dialog_content-descr" v-html="$t(`games.${game}.about.descr`)" />
 				<Button
 					class="mt-md"
