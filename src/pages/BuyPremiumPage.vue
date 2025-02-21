@@ -105,15 +105,15 @@ function selectPlan(plan: any) {
   
   h2 {
     color: var(--white-color);
-    font-size: 22px;
+    font-size: 18px;
+    margin: 0 0 8px;
   }
 }
 
 .features-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-left: 16px;
+  gap: 4px;
 }
 
 .feature-item {
