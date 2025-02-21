@@ -3,7 +3,13 @@
     <div class="timer" v-if="isStarted">⏳ {{ t('games.time') }}: <span>{{ timeLeft.toFixed(1) }}</span></div>
     <div class="score">🏆 {{ t('games.score') }}: <span>{{ score }}</span></div>
 
-    <div class="tongue-twister mt-lg mb-lg">
+    <div 
+      class="tongue-twister mt-lg mb-lg"
+      :class="{
+        'success': showSuccessColor,
+        'error': showErrorColor
+      }"
+    >
       {{ isStarted ? currentTwister : t('games.tongueTwister.ready') }}
     </div>
 
@@ -54,11 +60,14 @@ const isStarted = ref(false);
 const currentTwister = ref('');
 let timerInterval;
 
+const showSuccessColor = ref(false);
+const showErrorColor = ref(false);
+
 const twistersRu = [
   'Карл у Клары украл кораллы а Клара у Карла украла кларнет',
   'На дворе трава на траве дрова',
   'Шла Саша по шоссе и сосала сушку',
-  'Четыре черненьких чумазеньких чертенка',
+  'Четыре чёрненьких чумазеньких чертёнка',
   'Ехал Грека через реку видит Грека в реке рак',
   'Бык тупогуб тупогубенький бычок у быка бела губа была тупа',
   'Дятел дуб долбил долбил не додолбил и ушел',
@@ -66,7 +75,7 @@ const twistersRu = [
   'Три сороки тараторки тараторили на горке',
   'Всех скороговорок не перескороговоришь не перевыскороговоришь',
   'Стоит поп на копне, колпак на попе, копна под попом, поп под колпаком.',
-  'Везет Сенька Саньку с Сонькой на санках',
+  'Везёт Сенька Саньку с Сонькой на санках',
   'У осы не усы не усищи а усики',
   'Шестнадцать шли мышей и шесть нашли грошей',
   'Цапля чахла цапля сохла цапля сдохла',
@@ -112,8 +121,10 @@ function startTimer() {
   clearInterval(timerInterval);
   timeLeft.value = INITIAL_TIME;
   timerInterval = setInterval(() => {
-    timeLeft.value -= 0.1;
-    if (timeLeft.value <= 0) {
+    if (timeLeft.value > 0.1) {
+      timeLeft.value -= 0.1;
+    }
+    if (timeLeft.value <= 0.1) {
       clearInterval(timerInterval);
       handleGameEnd(false);
     }
@@ -122,11 +133,24 @@ function startTimer() {
 
 function handleGameEnd(success) {
   if (success) {
+    showSuccessColor.value = true;
     score.value++;
   } else {
+    showErrorColor.value = true;
     score.value = 0;
   }
-  startTimer();
+  
+  setTimeout(() => {
+    showSuccessColor.value = false;
+    showErrorColor.value = false;
+    recognition.stop();
+    currentTwister.value = getRandomTwister();
+    startTimer();
+    
+    setTimeout(() => {
+      recognition.start();
+    }, 100);
+  }, 500);
 }
 
 async function setupAudioVisualization() {
@@ -155,8 +179,7 @@ function drawVisualizer() {
   const ctx = canvas.getContext('2d');
   const width = canvas.width;
   const height = canvas.height;
-  
-  // Создаем градиент
+
   const gradient = ctx.createLinearGradient(0, 0, width, 0);
   gradient.addColorStop(0, '#FF6B6B');
   gradient.addColorStop(0.5, '#4ECDC4');
@@ -192,23 +215,22 @@ async function startGame() {
 recognition.onresult = (event) => {
   const spokenText = event.results[0][0].transcript.toLowerCase().trim();
   const currentTwisterLower = currentTwister.value.toLowerCase().trim();
+  
+  console.log('Сказано:', spokenText);
+  console.log('Должно быть:', currentTwisterLower);
+  
   const isCorrect = spokenText === currentTwisterLower;
   handleGameEnd(isCorrect);
 };
 
 recognition.onend = () => {
-  if (isStarted.value) {
-    setTimeout(() => {
-      currentTwister.value = getRandomTwister();
-      recognition.start();
-    }, 100);
+  if (!isStarted.value) {
+    recognition.stop();
   }
 };
 
 onMounted(async () => {
-  // Инициализируем визуализацию сразу
   await setupAudioVisualization();
-  // Устанавливаем начальное значение твистера, но оно пока не показывается
   currentTwister.value = getRandomTwister();
 });
 
@@ -239,6 +261,15 @@ onUnmounted(() => {
   background: var(--card-bg);
   border-radius: 12px;
   max-width: 600px;
+  transition: background-color 0.2s ease;
+
+  &.success {
+    color: rgba(75, 181, 67, 1);
+  }
+
+  &.error {
+    color: rgba(255, 107, 107, 1);
+  }
 }
 
 .timer, .score {

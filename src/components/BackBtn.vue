@@ -19,7 +19,7 @@ import ChevronLeftIcon from '@/components/Icons/ChevronLeftIcon.vue';
   justify-content: center;
 
   svg {
-    width: 9px;
+    width: 8px;
   }
 }
 </style>
