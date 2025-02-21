@@ -36,12 +36,12 @@ import CardComp from '@/components/CardComp.vue';
 import Abstract2 from '@/assets/abstracts/2.svg';
 import Abstract3 from '@/assets/abstracts/3.svg';
 import Abstract4 from '@/assets/abstracts/4.svg';
-// import Abstract5 from '@/assets/abstracts/5.svg';
 import MathSprintIcon from '@/assets/abstracts/mathSprint.svg';
 import ColorsIcon from '@/assets/abstracts/colors.svg';
 import NumbersIcon from '@/assets/abstracts/numbers.svg';
 import AbstractVip from '@/assets/abstracts/vip.svg';
 import TongueTwisterIcon from '@/assets/abstracts/tongueTwister.svg';
+import SequenceIcon from '@/assets/abstracts/sequence.svg';
 
 const { t } = useI18n();
 
@@ -67,8 +67,15 @@ const cards = [
     class: '', 
     icon: TongueTwisterIcon, 
     title: t('home.cards.tongueTwister'), 
-    width: 100
+    width: 60
   },
+  {
+    to: '/game/sequence',
+    class: '',
+    icon: SequenceIcon,
+    title: t('home.cards.sequence'),
+    width: 40
+  }
 ]
 
 const tab = ref('all');

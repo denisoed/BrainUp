@@ -16,7 +16,8 @@
       "colors": "Colors",
       "breath": "Breathing",
       "numbers": "Numbers",
-      "tongueTwister": "Tongue Twisters"
+      "tongueTwister": "Tongue Twisters",
+      "sequence": "Sequence"
     }
   },
   "games": {
@@ -78,6 +79,20 @@
         "rule1": "<span>1.</span> Press the microphone button and say the tongue twister shown on the screen. 🎤",
         "rule2": "<span>2.</span> You have 10 seconds to correctly pronounce the tongue twister. ⏳",
         "rule3": "<span>3.</span> You get a point for each correctly pronounced tongue twister. If you make a mistake, the score resets! 🏆",
+        "btn": "Start"
+      }
+    },
+    "sequence": {
+      "memorize": "Memorize 🤔",
+      "reproduce": "Reproduce 🎯",
+      "title": "Train your brain and become a memory champion! 🧠",
+      "about": {
+        "title": "<span>Game:</span> Sequence",
+        "descr": "<span>Benefit:</span> Trains memory, attention and reaction speed.",
+        "rules": "Rules:",
+        "rule1": "<span>1.</span> Memorize the sequence of symbols in 5 seconds. 👀",
+        "rule2": "<span>2.</span> You have 5 seconds to reproduce it in the correct order. ⏳",
+        "rule3": "<span>3.</span> Get a point for each correct sequence. Score resets on error! 🏆",
         "btn": "Start"
       }
     }
