@@ -82,7 +82,27 @@ const twistersRu = [
   'Протокол про протокол протоколом запротоколировали',
   'Летели лебеди с лебедятами',
   'Наш Полкан попал в капкан',
-  'Бык тупогуб тупогубенький бычок у быка бела губа была тупа'
+  'Бык тупогуб тупогубенький бычок у быка бела губа была тупа',
+  'Расскажите про покупки про какие про покупки про покупки про покупки расскажите',
+  'Рыла свинья белорыла тупорыла весь двор перерыла',
+  'У четырех черепашек по четыре черепашонка',
+  'Тридцать три корабля лавировали лавировали да не вылавировали',
+  'Сшит колпак не по-колпаковски выколпаковать бы надо колпак',
+  'Клара у карла украла кораллы а карл у клары украл кларнет',
+  'Пришел прокоп кипел укроп ушел прокоп кипел укроп как при прокопе кипел укроп так и без прокопа кипел укроп',
+  'Говорил попугай попугаю попугай я тебя попугаю',
+  'Сыворотка из-под простокваши',
+  'Шли сорок мышей нашли сорок грошей два мыша поплоше нашли по два гроша',
+  'Водовоз вез воду из водопровода',
+  'На горе Арарат рвала Варвара виноград',
+  'Ткет ткач ткани на платки Тане',
+  'Жужжит жужелица жужжит кружится',
+  'Два щенка щека к щеке щиплют щетку в уголке',
+  'Яшма в замше замша в яшме',
+  'У ежа ежата у ужа ужата',
+  'Косарь Касьян косой косит косо',
+  'Мамаша Ромаше дала сыворотку из-под простокваши',
+  'Шла Саша по шоссе и сосала сушку'
 ];
 
 const twistersEn = [
@@ -105,7 +125,27 @@ const twistersEn = [
   'Greek grapes Greek grapes Greek grapes',
   'Nine nice night nurses nursing nicely',
   'Flash message flash message flash message',
-  'Clean clams crammed in clean cans'
+  'Clean clams crammed in clean cans',
+  'Round and round the rugged rocks the ragged rascal ran',
+  'Which wristwatches are Swiss wristwatches',
+  'Thirty-three thousand thoughtful boys thought they would make thundering noise',
+  'Four fine fresh fish for free',
+  'Six sticky skeletons six sticky skeletons',
+  'Seventy-seven benevolent elephants',
+  'Purple paper people paper purple people',
+  'Friendly Frank flips fine flapjacks',
+  'Thin things think thick thoughts',
+  'Stupid superstition stupid superstition',
+  'Selfish shellfish selfish shellfish',
+  'Crisp crusts crackle and crunch',
+  'Stupid superstition stupid superstition',
+  'Six slick slim slimy snakes',
+  'Thirty-three thirsty thundering thoroughbreds',
+  'Two tried and true tridents',
+  'Freshly fried flying fish flying freely',
+  'Brave brigadiers brandished bright blades',
+  'Scissors sizzle tizzle mizzle',
+  'Mixed biscuits mixed biscuits mixed biscuits'
 ];
 
 recognition.continuous = false;
