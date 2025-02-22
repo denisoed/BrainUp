@@ -35,7 +35,7 @@
       🎤 {{ t('games.tongueTwister.listening') }}
     </div>
 
-    <SuccessCounter :value="score" :show="score > 0" />
+    <SuccessCounter :value="`${score}/${WINNING_STREAK}`" :show="score > 0" />
   </div>
 </template>
 
@@ -47,6 +47,8 @@ import SuccessCounter from '@/components/Games/SuccessCounter.vue';
 const { t } = useI18n();
 
 const INITIAL_TIME = 5;
+const WINNING_STREAK = 15;
+
 const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
 const visualizer = ref(null);
 let audioContext;
@@ -265,9 +267,23 @@ async function startGame() {
   await setupAudioVisualization();
 }
 
+function normalizeText(text) {
+  return text
+    .toLowerCase()
+    // Удаляем всю пунктуацию и специальные символы
+    .replace(/[.,!?;:"\-—–()[\]{}«»„"'`]/g, '')
+    // Базовые замены букв
+    .replace(/ё/g, 'е')
+    .replace(/й/g, 'и')
+    .replace(/ъ/g, 'ь')
+    // Удаляем множественные пробелы
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 recognition.onresult = (event) => {
-  const spokenText = event.results[0][0].transcript.toLowerCase().trim();
-  const currentTwisterLower = currentTwister.value.toLowerCase().trim();
+  const spokenText = normalizeText(event.results[0][0].transcript);
+  const currentTwisterLower = normalizeText(currentTwister.value);
   
   console.log('Сказано:', spokenText);
   console.log('Должно быть:', currentTwisterLower);
