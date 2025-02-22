@@ -169,24 +169,15 @@ function startTimer() {
     if (timeLeft.value <= 0.1) {
       clearInterval(timerInterval);
       timeLeft.value = 0;
-      handleGameEnd(false);
+      score.value = 0;
+      clearInterval(timerInterval);
+      isStarted.value = false;
+      recognition.stop();
     }
   }, 100);
 }
 
 function handleGameEnd(success) {
-  if (timeLeft.value <= 0 && !success) {
-    showErrorColor.value = true;
-    score.value = 0;
-    
-    setTimeout(() => {
-      showErrorColor.value = false;
-      currentTwister.value = getRandomTwister();
-      startTimer();
-    }, 500);
-    return;
-  }
-
   if (success) {
     showSuccessColor.value = true;
     score.value++;
@@ -270,13 +261,10 @@ async function startGame() {
 function normalizeText(text) {
   return text
     .toLowerCase()
-    // Удаляем всю пунктуацию и специальные символы
     .replace(/[.,!?;:"\-—–()[\]{}«»„"'`]/g, '')
-    // Базовые замены букв
     .replace(/ё/g, 'е')
     .replace(/й/g, 'и')
     .replace(/ъ/g, 'ь')
-    // Удаляем множественные пробелы
     .replace(/\s+/g, ' ')
     .trim();
 }
