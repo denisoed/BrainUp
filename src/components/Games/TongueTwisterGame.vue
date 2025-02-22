@@ -166,18 +166,23 @@ function startTimer() {
     }
     if (timeLeft.value <= 0.1) {
       clearInterval(timerInterval);
-      handleGameEnd(false);
+      timeLeft.value = 0;
     }
   }, 100);
 }
 
 function handleGameEnd(success) {
-  if (success) {
-    showSuccessColor.value = true;
-    score.value++;
-  } else {
+  if (timeLeft.value <= 0 && !success) {
     showErrorColor.value = true;
     score.value = 0;
+  } else {
+    if (success) {
+      showSuccessColor.value = true;
+      score.value++;
+    } else {
+      showErrorColor.value = true;
+      score.value = 0;
+    }
   }
   
   setTimeout(() => {
