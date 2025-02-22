@@ -89,7 +89,7 @@ const twistersRu = [
   'Тридцать три корабля лавировали лавировали да не вылавировали',
   'Сшит колпак не по-колпаковски выколпаковать бы надо колпак',
   'Клара у карла украла кораллы а карл у клары украл кларнет',
-  'Пришел прокоп кипел укроп ушел прокоп кипел укроп как при прокопе кипел укроп так и без прокопа кипел укроп',
+  'Пришел прокоп кипел укроп ушел прокоп кипел укроп',
   'Говорил попугай попугаю попугай я тебя попугаю',
   'Сыворотка из-под простокваши',
   'Шли сорок мышей нашли сорок грошей два мыша поплоше нашли по два гроша',
@@ -167,6 +167,7 @@ function startTimer() {
     if (timeLeft.value <= 0.1) {
       clearInterval(timerInterval);
       timeLeft.value = 0;
+      handleGameEnd(false);
     }
   }, 100);
 }
@@ -175,14 +176,21 @@ function handleGameEnd(success) {
   if (timeLeft.value <= 0 && !success) {
     showErrorColor.value = true;
     score.value = 0;
+    
+    setTimeout(() => {
+      showErrorColor.value = false;
+      currentTwister.value = getRandomTwister();
+      startTimer();
+    }, 500);
+    return;
+  }
+
+  if (success) {
+    showSuccessColor.value = true;
+    score.value++;
   } else {
-    if (success) {
-      showSuccessColor.value = true;
-      score.value++;
-    } else {
-      showErrorColor.value = true;
-      score.value = 0;
-    }
+    showErrorColor.value = true;
+    score.value = 0;
   }
   
   setTimeout(() => {
