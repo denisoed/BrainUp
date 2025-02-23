@@ -61,7 +61,7 @@ const { t } = useI18n();
 
 const BOARD_SIZE = 10;
 const MINES_COUNT = 15;
-const WINNING_STREAK = 5;
+const WINNING_STREAK = 1;
 
 interface Cell {
   isMine: boolean;
@@ -75,8 +75,9 @@ const board = ref<Cell[][]>([]);
 const isGameStarted = ref(false);
 const remainingCells = ref(0);
 const isFlagMode = ref(false);
+const isFirstClick = ref(true);
 
-function createBoard(): Cell[][] {
+function createBoard(firstClickRow?: number, firstClickCol?: number): Cell[][] {
   const newBoard: Cell[][] = Array(BOARD_SIZE).fill(null).map(() =>
     Array(BOARD_SIZE).fill(null).map(() => ({
       isMine: false,
@@ -86,14 +87,22 @@ function createBoard(): Cell[][] {
     }))
   );
 
-  // Place mines randomly
-  let minesPlaced = 0;
-  while (minesPlaced < MINES_COUNT) {
-    const row = Math.floor(Math.random() * BOARD_SIZE);
-    const col = Math.floor(Math.random() * BOARD_SIZE);
-    if (!newBoard[row][col].isMine) {
-      newBoard[row][col].isMine = true;
-      minesPlaced++;
+  // Если это первый клик, исключаем область вокруг него из возможных мест для мин
+  if (firstClickRow !== undefined && firstClickCol !== undefined) {
+    // Размещаем мины, избегая область вокруг первого клика
+    let minesPlaced = 0;
+    while (minesPlaced < MINES_COUNT) {
+      const row = Math.floor(Math.random() * BOARD_SIZE);
+      const col = Math.floor(Math.random() * BOARD_SIZE);
+      
+      // Проверяем, что мина не попадает в область 3x3 вокруг первого клика
+      const isSafeZone = Math.abs(row - firstClickRow) <= 1 && 
+                        Math.abs(col - firstClickCol) <= 1;
+      
+      if (!isSafeZone && !newBoard[row][col].isMine) {
+        newBoard[row][col].isMine = true;
+        minesPlaced++;
+      }
     }
   }
 
@@ -121,6 +130,12 @@ function createBoard(): Cell[][] {
 
 function revealCell(row: number, col: number) {
   if (!isGameStarted.value || board.value[row][col].isFlagged) return;
+
+  // Если это первый клик, пересоздаем доску
+  if (isFirstClick.value) {
+    isFirstClick.value = false;
+    board.value = createBoard(row, col);
+  }
 
   const cell = board.value[row][col];
   if (cell.isRevealed) return;
@@ -205,9 +220,10 @@ function handleGameOver(won: boolean) {
 }
 
 function startGame() {
-  board.value = createBoard();
+  board.value = createBoard(); // Создаем пустую доску без мин
   remainingCells.value = BOARD_SIZE * BOARD_SIZE - MINES_COUNT;
   isGameStarted.value = true;
+  isFirstClick.value = true;
 }
 
 function handleCellClick(row: number, col: number) {
