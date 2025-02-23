@@ -27,10 +27,10 @@
         </div>
       </div>
 
-      <div class="sequence-status" v-if="isShowingSequence">
+      <div class="sequence-status sequence-status--memorize" v-if="isShowingSequence">
         {{ t('games.sequence.memorize') }}
       </div>
-      <div class="sequence-status" v-else>
+      <div class="sequence-status sequence-status--reproduce" v-else>
         {{ t('games.sequence.reproduce') }}
       </div>
     </div>
@@ -287,6 +287,14 @@ onUnmounted(() => {
   font-size: 24px;
   color: var(--primary);
   margin-top: 20px;
+
+  &--reproduce {
+    color: rgba(255, 107, 107, 1);
+  }
+  
+  &--memorize {
+    color: var(--yellow-color);
+  }
 }
 
 .timer, .score {
