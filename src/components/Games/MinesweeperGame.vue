@@ -19,8 +19,7 @@
               'flagged': cell.isFlagged,
               [`nearby-${cell.nearbyMines}`]: cell.isRevealed && cell.nearbyMines > 0
             }"
-            @click="revealCell(rowIndex, colIndex)"
-            @contextmenu.prevent="toggleFlag(rowIndex, colIndex)"
+            @click="handleCellClick(rowIndex, colIndex)"
           >
             <template v-if="cell.isRevealed">
               <span v-if="cell.isMine">💣</span>
@@ -30,6 +29,23 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <div class="controls">
+      <button 
+        class="control-btn" 
+        :class="{ active: !isFlagMode }"
+        @click="isFlagMode = false"
+      >
+        👁️ {{ t('games.minesweeper.reveal') }}
+      </button>
+      <button 
+        class="control-btn" 
+        :class="{ active: isFlagMode }"
+        @click="isFlagMode = true"
+      >
+        🚩 {{ t('games.minesweeper.flag') }}
+      </button>
     </div>
 
     <SuccessCounter :value="`${score}/${WINNING_STREAK}`" :show="score > 0" />
@@ -58,6 +74,7 @@ const score = ref(0);
 const board = ref<Cell[][]>([]);
 const isGameStarted = ref(false);
 const remainingCells = ref(0);
+const isFlagMode = ref(false);
 
 function createBoard(): Cell[][] {
   const newBoard: Cell[][] = Array(BOARD_SIZE).fill(null).map(() =>
@@ -180,6 +197,14 @@ function startGame() {
   isGameStarted.value = true;
 }
 
+function handleCellClick(row: number, col: number) {
+  if (isFlagMode.value) {
+    toggleFlag(row, col);
+  } else {
+    revealCell(row, col);
+  }
+}
+
 onMounted(() => {
   startGame();
 });
@@ -246,5 +271,28 @@ onMounted(() => {
 .score {
   font-size: 18px;
   margin-top: 10px;
+}
+
+.controls {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.control-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: transparent;
+  color: var(--white-color);
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--dark-color);
+  }
 }
 </style> 

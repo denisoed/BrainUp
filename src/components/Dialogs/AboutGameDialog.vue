@@ -8,8 +8,13 @@
 				<div class="about-game-dialog_content-rules mb-md" v-html="$t(`games.${game}.about.rule2`)" />
 				<div
 					v-if="$t(`games.${game}.about.rule3`) !== `games.${game}.about.rule3`"
-					class="about-game-dialog_content-rules mb-md" 
+					class="about-game-dialog_content-rules mb-sm" 
 					v-html="$t(`games.${game}.about.rule3`)" 
+				/>
+				<div
+					v-if="$t(`games.${game}.about.rule4`) !== `games.${game}.about.rule4`"
+					class="about-game-dialog_content-rules mb-sm" 
+					v-html="$t(`games.${game}.about.rule4`)" 
 				/>
 				<div class="about-game-dialog_content-descr" v-html="$t(`games.${game}.about.descr`)" />
 				<Button
