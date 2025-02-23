@@ -56,7 +56,7 @@ const tabs = computed(() => [
 ]);
 
 const cards = [
-  { to: '', locked: true, class: '', icon: Abstract4, title: t('home.cards.breath'), width: 50 },
+  { to: '/game/breath', class: '', icon: Abstract4, title: t('home.cards.breath'), width: 50 },
   { to: '', locked: true, class: '', icon: Abstract2, title: t('home.cards.sleep'), width: 50 },
   { to: '/game/mathSprint', class: '', icon: MathSprintIcon, title: t('home.cards.mathSprint'), width: 80 },
   { to: '/buy-premium', class: 'abstract-vip', icon: AbstractVip, title: '', width: 20 },

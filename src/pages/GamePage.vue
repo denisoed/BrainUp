@@ -16,6 +16,7 @@ import MathSprintGame from '@/components/Games/MathSprintGame.vue';
 import TongueTwisterGame from '@/components/Games/TongueTwisterGame.vue';
 import AboutGameDialog from '@/components/Dialogs/AboutGameDialog.vue';
 import SequenceGame from '@/components/Games/SequenceGame.vue';
+import BreathGame from '@/components/Games/BreathGame.vue';
 import BackBtn from '@/components/BackBtn.vue';
 import {
   openModal
@@ -28,7 +29,8 @@ const GAMES = {
   numbers: NumbersGame,
   mathSprint: MathSprintGame,
   tongueTwister: TongueTwisterGame,
-  sequence: SequenceGame
+  sequence: SequenceGame,
+  breath: BreathGame
 };
 
 const game = computed(() => GAMES[route.params.game as keyof typeof GAMES]);
@@ -53,6 +55,7 @@ onMounted(() => {
     position: absolute;
     top: 20px;
     right: 16px;
+    z-index: 2;
   }
 }
 </style>
