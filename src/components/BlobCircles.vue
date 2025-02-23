@@ -7,7 +7,7 @@
 </template>
 
 <style lang="scss" scoped>
-$opacity: 1;
+$opacity: 0.5;
 $color1: var(--primary-rgb);
 $color2: var(--primary-rgb);
 $color3: var(--primary-rgb);
@@ -31,17 +31,17 @@ $color3: var(--primary-rgb);
   
   &.a {
     animation: blob1 8s linear infinite alternate;
-    box-shadow: rgba($color1,$opacity) 0 0 300px 10px, rgba($color1, $opacity) 0 0 30px 0 inset;
+    box-shadow: rgba($color1, $opacity) 0 0 300px 10px, rgba($color1, $opacity) 0 0 30px 0 inset;
   }
   
   &.b {
     animation: blob2 9s linear infinite alternate;
-    box-shadow: rgba($color2, $opacity) 0 0 300px 5px, rgba($color2,$opacity) 0 0 20px 0 inset;
+    box-shadow: rgba($color2, $opacity) 0 0 300px 5px, rgba($color2, $opacity) 0 0 20px 0 inset;
   }
 
    &.c {
     animation: blob2 10s linear infinite alternate;
-    box-shadow: rgba($color3, $opacity) 0 0 300px 0, rgba($color3,$opacity) 0 0 10px 0 inset;
+    box-shadow: rgba($color3, $opacity) 0 0 300px 0, rgba($color3, $opacity) 0 0 10px 0 inset;
   }
 }
 

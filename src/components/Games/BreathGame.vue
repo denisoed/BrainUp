@@ -107,7 +107,6 @@ const metronomeStartTimer = ref<number | null>(null);
 const circleRef = ref();
 const innerCircleRef = ref();
 
-const beforeStartMetronome = new PlayAudio('before-start-metronome.mp3');
 const bgMusicPlayer = new PlayAudio('music.mp3', {
   volume: 0.2,
   loop: true
@@ -116,12 +115,16 @@ const breatheAudioController = new BreatheAudioController('inhale2.mp3', 'exhale
 
 
 function changeCircles() {
-  circleRef.value.style.transform = `scale(${scale.value})`;
-  innerCircleRef.value.style.transform = `translate(-50%, -50%) scale(${innerScale.value})`;
+  requestAnimationFrame(() => {
+    if (circleRef.value && innerCircleRef.value) {
+      circleRef.value.style.transform = `scale(${scale.value})`;
+      innerCircleRef.value.style.transform = `translate(-50%, -50%) scale(${innerScale.value})`;
+    }
+  });
 }
 
-function calculateStep(speed) {
-  return (0.5 / (speed * 60));
+function calculateStep(speed: number) {
+  return (0.5 / (speed * 120));
 }
 
 function handleInhaleStep(currentCycle) {
@@ -222,17 +225,20 @@ const toggleAnimation = () => {
     isAnimating.value = true;
     bgMusicPlayer.play();
     breatheAudioController.playInhale(breathingConfig.cycles[0].inhale.speed);
-    intervalId.value = setInterval(animateBreathing, 1000 / 60); // 60 FPS
+    intervalId.value = setInterval(animateBreathing, 1000 / 120);
   }
 };
 
 function runMetronome(callback: () => any) {
-  beforeStartMetronome.play();
   setTimeout(() => {
-    metronomeStartTimer.value -= 1;
+    if (metronomeStartTimer.value !== null) {
+      metronomeStartTimer.value -= 1;
+    }
   }, 1000);
   setTimeout(() => {
-    metronomeStartTimer.value -= 1;
+    if (metronomeStartTimer.value !== null) {
+      metronomeStartTimer.value -= 1;
+    }
     callback();
   }, 2000);
 }
@@ -370,6 +376,7 @@ onUnmounted(() => {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(1);
+  transition: transform 0.016s linear;
 
   .cycle-counter {
     color: var(--white-color);
@@ -378,8 +385,9 @@ onUnmounted(() => {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%) scale(1);
+    transform: translate(-50%, -50%);
     opacity: 0.8;
+    transition: transform 0.016s linear;
   }
 }
 
