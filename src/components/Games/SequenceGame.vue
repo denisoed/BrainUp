@@ -1,10 +1,16 @@
 <template>
   <div class="sequence-game flex column items-center justify-center">
-    <div class="timer">⏳ {{ t('games.time') }}: <span>{{ timeLeft.toFixed(1) }}</span></div>
-    <div class="score">🏆 {{ t('games.score') }}: <span>{{ score }}/{{ WINNING_STREAK }}</span></div>
+    
+    <template v-if="isStarted">
+      <div class="stats">
+        <div class="timer">⏳ {{ t('games.time') }}: <span>{{ timeLeft.toFixed(1) }}</span></div>
+        <div class="score">🏆 {{ t('games.score') }}: <span>{{ score }}/{{ WINNING_STREAK }}</span></div>
+      </div>
+      <ProgressBar :progress="(timeLeft / INITIAL_TIME) * 100" />
+    </template>
 
     <div v-if="isStarted">
-      <div class="cards mb-lg mt-lg">
+      <div class="cards mb-md mt-md">
         <div
           v-for="(card, index) in displayCards"
           :key="index"
@@ -54,6 +60,7 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
+import ProgressBar from '@/components/Games/ProgressBar.vue';
 
 const { t } = useI18n();
 
@@ -222,7 +229,6 @@ onUnmounted(() => {
   font-size: 24px;
   text-align: center;
   line-height: 1.4;
-  padding: 20px;
   background: var(--card-bg);
   border-radius: 12px;
 }
@@ -237,7 +243,7 @@ onUnmounted(() => {
 
 .card {
   position: relative;
-  width: calc(33% - 8px);
+  width: calc(33% - 5px);
   aspect-ratio: 1/1;
   font-size: 24px;
   cursor: pointer;
@@ -297,9 +303,16 @@ onUnmounted(() => {
   }
 }
 
+.stats {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
 .timer, .score {
   font-size: 18px;
-  margin-top: 10px;
 }
 
 .start-button {

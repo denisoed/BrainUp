@@ -1,7 +1,13 @@
 <template>
   <div class="tongue-twister-game flex column items-center justify-center">
-    <div class="timer" v-if="isStarted">⏳ {{ t('games.time') }}: <span>{{ timeLeft.toFixed(1) }}</span></div>
-    <div class="score">🏆 {{ t('games.score') }}: <span>{{ score }}</span></div>
+    
+    <template v-if="isStarted">
+      <div class="stats">
+        <div class="timer">⏳ {{ t('games.time') }}: <span>{{ timeLeft.toFixed(1) }}</span></div>
+        <div class="score">🏆 {{ t('games.score') }}: <span>{{ score }}/{{ WINNING_STREAK }}</span></div>
+      </div>
+      <ProgressBar :progress="(timeLeft / TIME_LIMIT) * 100" />
+    </template>
 
     <div 
       class="tongue-twister mt-lg mb-lg"
@@ -43,10 +49,11 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
+import ProgressBar from '@/components/Games/ProgressBar.vue';
 
 const { t } = useI18n();
 
-const INITIAL_TIME = 5;
+const TIME_LIMIT = 5;
 const WINNING_STREAK = 15;
 
 const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
@@ -56,7 +63,7 @@ let analyser;
 let dataArray;
 let animationFrame;
 
-const timeLeft = ref(INITIAL_TIME);
+const timeLeft = ref(TIME_LIMIT);
 const score = ref(0);
 const isStarted = ref(false);
 const currentTwister = ref('');
@@ -161,7 +168,7 @@ function getRandomTwister() {
 
 function startTimer() {
   clearInterval(timerInterval);
-  timeLeft.value = INITIAL_TIME;
+  timeLeft.value = TIME_LIMIT;
   timerInterval = setInterval(() => {
     if (timeLeft.value > 0.1) {
       timeLeft.value -= 0.1;
@@ -302,7 +309,6 @@ onUnmounted(() => {
 <style scoped lang="scss">
 .tongue-twister-game {
   height: calc(100vh - 100px);
-  padding: 20px;
 }
 
 .tongue-twister {
@@ -324,9 +330,16 @@ onUnmounted(() => {
   }
 }
 
+.stats {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
 .timer, .score {
   font-size: 18px;
-  margin-top: 10px;
 }
 
 .mic-status {

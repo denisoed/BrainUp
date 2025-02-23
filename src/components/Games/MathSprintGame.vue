@@ -1,8 +1,11 @@
 <template>
   <div class="math-sprint-game flex column items-center justify-center">
-    <div class="timer">⏳ {{ t('games.time') }}: <span>{{ timeLeft.toFixed(1) }}</span></div>
-    <div class="score">🏆 {{ t('games.score') }}: <span>{{ score }}/{{ WINNING_STREAK }}</span></div>
-    <div class="buttons mb-lg mt-lg">
+    <div class="stats">
+      <div class="timer">⏳ {{ t('games.time') }}: <span>{{ timeLeft.toFixed(1) }}</span></div>
+      <div class="score">🏆 {{ t('games.score') }}: <span>{{ score }}/{{ WINNING_STREAK }}</span></div>
+    </div>
+    <ProgressBar :progress="(timeLeft / TIME_LIMIT) * 100" />
+    <div class="buttons mb-md mt-md">
       <div
         v-for="(answer, index) in answers"
         :key="index"
@@ -21,13 +24,14 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
+import ProgressBar from '@/components/Games/ProgressBar.vue';
 
 const { t } = useI18n();
 
-const INITIAL_TIME = 3;
+const TIME_LIMIT = 3;
 const WINNING_STREAK = 15;
 
-const timeLeft = ref(INITIAL_TIME);
+const timeLeft = ref(TIME_LIMIT);
 const score = ref(0);
 const question = ref('');
 const correctAnswer = ref(0);
@@ -37,7 +41,7 @@ let timerInterval;
 
 function startTimer() {
   clearInterval(timerInterval);
-  timeLeft.value = INITIAL_TIME;
+  timeLeft.value = TIME_LIMIT;
   timerInterval = setInterval(() => {
     timeLeft.value -= 0.1;
     if (timeLeft.value <= 0) {
@@ -48,6 +52,8 @@ function startTimer() {
 }
 
 function resetGame() {
+  clearInterval(timerInterval);
+  timeLeft.value = TIME_LIMIT;
   score.value = 0;
   correctStreak.value = 0;
   generateQuestion();
@@ -75,8 +81,10 @@ function checkAnswer(selectedAnswer) {
     score.value++;
     correctStreak.value++;
     if (correctStreak.value >= WINNING_STREAK) {
+      clearInterval(timerInterval);
       return;
     }
+    timeLeft.value = TIME_LIMIT;
     generateQuestion();
   } else {
     resetGame();
@@ -88,7 +96,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  resetGame();
+  timeLeft.value = TIME_LIMIT;
   clearInterval(timerInterval);
 });
 </script>
@@ -113,7 +121,7 @@ onUnmounted(() => {
 }
 
 .btn {
-  width: calc(33% - 8px);
+  width: calc(33% - 5px);
   aspect-ratio: 1/1;
   font-size: 24px;
   cursor: pointer;
@@ -127,8 +135,15 @@ onUnmounted(() => {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.stats {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
 .timer, .score {
   font-size: 18px;
-  margin-top: 10px;
 }
 </style>

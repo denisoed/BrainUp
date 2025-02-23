@@ -188,13 +188,11 @@ onMounted(() => {
 <style scoped lang="scss">
 .minesweeper-game {
   height: calc(100vh - 100px);
-  padding: 20px;
 }
 
 .game-board {
   background: var(--card-bg);
   border-radius: 12px;
-  padding: 20px;
   max-width: 400px;
   width: 100%;
 }
