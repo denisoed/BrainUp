@@ -170,18 +170,21 @@ function checkWinCondition() {
   );
 
   if (allSafeCellsRevealed) {
-    score.value++;
-    if (score.value < WINNING_STREAK) {
-      setTimeout(() => {
-        startGame();
-      }, 1000);
-    }
+    handleGameOver(true);
   }
 }
 
 function handleGameOver(won: boolean) {
   if (won) {
     score.value++;
+    // Показываем все мины после победы
+    board.value.forEach(row => {
+      row.forEach(cell => {
+        if (cell.isMine) {
+          cell.isRevealed = true;
+        }
+      });
+    });
     if (score.value < WINNING_STREAK) {
       setTimeout(startGame, 1000);
     }
