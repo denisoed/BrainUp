@@ -29,7 +29,7 @@ import ProgressBar from '@/components/Games/ProgressBar.vue';
 
 const { t } = useI18n();
 
-const TIME_LIMIT = 3;
+const TIME_LIMIT = 1;
 const WINNING_STREAK = 15;
 const colors = [
   { name: t('games.colors.listColors.red'), color: 'red' },
