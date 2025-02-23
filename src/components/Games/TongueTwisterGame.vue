@@ -167,12 +167,7 @@ function startTimer() {
       timeLeft.value -= 0.1;
     }
     if (timeLeft.value <= 0.1) {
-      clearInterval(timerInterval);
-      timeLeft.value = 0;
-      score.value = 0;
-      clearInterval(timerInterval);
-      isStarted.value = false;
-      recognition.stop();
+      handleGameEnd(false);
     }
   }, 100);
 }
