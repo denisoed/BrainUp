@@ -1,5 +1,5 @@
 <template>
-  <div class="item-page page">
+  <div class="item-page">
 
     <!-- Info 1 -->
     <div class="info">
@@ -124,7 +124,7 @@ function changeCircles() {
 }
 
 function calculateStep(speed: number) {
-  return (0.5 / (speed * 120));
+  return (0.5 / (speed * 60));
 }
 
 function handleInhaleStep(currentCycle) {
@@ -275,7 +275,7 @@ onUnmounted(() => {
 
 <style lang="scss" scoped>
 .item-page {
-  height: 100%;
+  height: calc(100vh - 100px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -328,7 +328,7 @@ onUnmounted(() => {
   justify-content: center;
   flex-direction: column;
   z-index: 2;
-  margin-bottom: 80px;
+  margin-bottom: 50px;
 
   .label {
     font-size: 14px;
