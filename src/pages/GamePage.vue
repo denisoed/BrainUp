@@ -17,6 +17,7 @@ import TongueTwisterGame from '@/components/Games/TongueTwisterGame.vue';
 import AboutGameDialog from '@/components/Dialogs/AboutGameDialog.vue';
 import SequenceGame from '@/components/Games/SequenceGame.vue';
 import BreathGame from '@/components/Games/BreathGame.vue';
+import MinesweeperGame from '@/components/Games/MinesweeperGame.vue';
 import BackBtn from '@/components/BackBtn.vue';
 import {
   openModal
@@ -30,7 +31,8 @@ const GAMES = {
   mathSprint: MathSprintGame,
   tongueTwister: TongueTwisterGame,
   sequence: SequenceGame,
-  breath: BreathGame
+  breath: BreathGame,
+  minesweeper: MinesweeperGame
 };
 
 const game = computed(() => GAMES[route.params.game as keyof typeof GAMES]);

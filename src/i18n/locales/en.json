@@ -17,7 +17,8 @@
       "breath": "Breathing",
       "numbers": "Numbers",
       "tongueTwister": "Tongue Twisters",
-      "sequence": "Sequence"
+      "sequence": "Sequence",
+      "minesweeper": "Minesweeper"
     }
   },
   "games": {
@@ -117,6 +118,21 @@
         "rules": "Rules:",
         "rule1": "<span>1.</span> Choose the type of breathing and start the training.",
         "rule2": "<span>2.</span> Follow the instructions and perform the exercises.",
+        "btn": "Start"
+      }
+    },
+    "minesweeper": {
+      "start": "Start Game",
+      "restart": "Start Again",
+      "title": "Minesweeper",
+      "about": {
+        "title": "<span>Game:</span> Minesweeper",
+        "descr": "<span>Benefit:</span> Develops logical thinking, improves decision-making skills and attention to detail.",
+        "rules": "Rules:",
+        "rule1": "<span>1.</span> Click on cells to reveal what's hidden underneath. Avoid mines! 💣",
+        "rule2": "<span>2.</span> Numbers show how many mines are in adjacent cells. 🔢",
+        "rule3": "<span>3.</span> Right-click to place flags where you think mines are. 🚩",
+        "rule4": "<span>4.</span> Clear all safe cells to win! Score resets on hitting a mine. 🏆",
         "btn": "Start"
       }
     }

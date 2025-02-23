@@ -42,6 +42,7 @@ import NumbersIcon from '@/assets/abstracts/numbers.svg';
 import AbstractVip from '@/assets/abstracts/vip.svg';
 import TongueTwisterIcon from '@/assets/abstracts/tongueTwister.svg';
 import SequenceIcon from '@/assets/abstracts/sequence.svg';
+import MinesweeperIcon from '@/assets/abstracts/minesweeper.svg';
 
 const { t } = useI18n();
 
@@ -75,6 +76,13 @@ const cards = [
     icon: SequenceIcon,
     title: t('home.cards.sequence'),
     width: 40
+  },
+  {
+    to: '/game/minesweeper',
+    class: '',
+    icon: MinesweeperIcon,
+    title: t('home.cards.minesweeper'),
+    width: 100
   }
 ]
 
