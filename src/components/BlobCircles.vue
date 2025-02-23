@@ -8,9 +8,9 @@
 
 <style lang="scss" scoped>
 $opacity: 1;
-$color1: #efedff;
-$color2: #d9d9ff;
-$color3: #c3c2dd;
+$color1: var(--primary-rgb);
+$color2: var(--primary-rgb);
+$color3: var(--primary-rgb);
 
 .rings {
   width: 100%;
