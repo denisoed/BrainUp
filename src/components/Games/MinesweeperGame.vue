@@ -59,9 +59,9 @@ import SuccessCounter from '@/components/Games/SuccessCounter.vue';
 
 const { t } = useI18n();
 
-const BOARD_SIZE = 8;
-const MINES_COUNT = 10;
-const WINNING_STREAK = 15;
+const BOARD_SIZE = 10;
+const MINES_COUNT = 15;
+const WINNING_STREAK = 5;
 
 interface Cell {
   isMine: boolean;
@@ -160,12 +160,22 @@ function toggleFlag(row: number, col: number) {
   const cell = board.value[row][col];
   if (!cell.isRevealed) {
     cell.isFlagged = !cell.isFlagged;
+    checkWinCondition();
   }
 }
 
 function checkWinCondition() {
-  if (remainingCells.value === MINES_COUNT) {
-    handleGameOver(true);
+  const allSafeCellsRevealed = board.value.every(row =>
+    row.every(cell => cell.isMine || (!cell.isMine && cell.isRevealed))
+  );
+
+  if (allSafeCellsRevealed) {
+    score.value++;
+    if (score.value < WINNING_STREAK) {
+      setTimeout(() => {
+        startGame();
+      }, 1000);
+    }
   }
 }
 
