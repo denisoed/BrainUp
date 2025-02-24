@@ -4,9 +4,9 @@
       <div class="container">
         <h1 v-html="$t('home.title')" />
       </div>
-      <div class="home-page_menu-btn">
-        <img src="@/assets/burger-menu-right.svg" alt="Back" />
-      </div>
+      <router-link to="/" class="home-page_menu-btn">
+        <img src="@/assets/burger-menu-right.svg" alt="Menu" />
+      </router-link>
     </div>
     <div class="container home-page_tabs mt-lg">
       <Tabs v-model="tab" :tabs="tabs" />

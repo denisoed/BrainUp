@@ -1,14 +1,15 @@
 import { createI18n } from 'vue-i18n';
 import en from '@/i18n/locales/en.json'; 
 import ru from '@/i18n/locales/ru.json'; 
+import { LOCALE_LOCAL_STORAGE_KEY } from '@/config';
 
-const locale = window?.Telegram?.WebApp?.initDataUnsafe?.user?.language_code || 'en';
+const locale = window.localStorage.getItem(LOCALE_LOCAL_STORAGE_KEY) || window?.Telegram?.WebApp?.initDataUnsafe?.user?.language_code || 'en';
 
 const i18n = createI18n({ 
   locale,
-  fallbackLocale: 'en', 
-  messages: { ru, en }, 
-  legacy: false 
+  fallbackLocale: 'en',
+  messages: { ru, en },
+  legacy: false
 });
 
 export default i18n;

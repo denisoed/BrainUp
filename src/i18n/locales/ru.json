@@ -191,5 +191,11 @@
         "description": "39.99$ / год"
       }
     }
+  },
+  "settings": {
+    "title": "Настройки",
+    "language": {
+      "title": "Язык"
+    }
   }
 }

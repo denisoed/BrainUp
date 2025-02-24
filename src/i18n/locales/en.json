@@ -191,5 +191,11 @@
         "description": "$39.99 / year"
       }
     }
+  },
+  "settings": {
+    "title": "Settings",
+    "language": {
+      "title": "Language"
+    }
   }
 }

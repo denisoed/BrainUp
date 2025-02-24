@@ -7,7 +7,7 @@ const routes = [
   { path: '/', component: HomePage, meta: { layout: 'MainLayout' }},
   { path: '/list', component: HomePage, meta: { layout: 'MainLayout' }},
   { path: '/activity', component: HomePage, meta: { layout: 'MainLayout' }},
-  { path: '/settings', component: HomePage, meta: { layout: 'MainLayout' }},
+  { path: '/settings', component: () => import('@/pages/SettingsPage.vue'), meta: { layout: 'MainLayout' }},
   { path: '/game/:game', component: GamePage, meta: { layout: 'MainLayout' }},
   { 
     path: '/buy-premium', 
