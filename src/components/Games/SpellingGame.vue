@@ -1,40 +1,25 @@
 <template>
   <div class="spelling-game flex column items-center justify-center">
-    <template v-if="isStarted">
-      <div class="stats">
-        <div class="timer">⏳ {{ t('games.time') }}: <span>{{ timeLeft.toFixed(1) }}</span></div>
-        <div class="score">🏆 {{ t('games.score') }}: <span>{{ score }}/{{ WINNING_STREAK }}</span></div>
-      </div>
-      <ProgressBar :progress="(timeLeft / TIME_LIMIT) * 100" />
-      
-      <div class="words mb-md mt-md">
-        <div
-          v-for="(word, index) in displayWords"
-          :key="index"
-          class="word"
-          :class="{
-            'word--success': showSuccess && word === wrongWord,
-            'word--error': showError && word === selectedWord
-          }"
-          @click="checkAnswer(word)"
-        >
-          {{ word }}
-        </div>
-      </div>
-    </template>
-
-    <template v-else>
-      <div class="spelling-title mt-lg mb-lg">
-        {{ t('games.spelling.title') }}
-      </div>
-      <button 
-        class="start-button"
-        @click="startGame"
+    <div class="stats">
+      <div class="timer">⏳ {{ t('games.time') }}: <span>{{ timeLeft.toFixed(1) }}</span></div>
+      <div class="score">🏆 {{ t('games.score') }}: <span>{{ score }}/{{ WINNING_STREAK }}</span></div>
+    </div>
+    <ProgressBar :progress="(timeLeft / TIME_LIMIT) * 100" />
+    
+    <div class="words mb-md mt-md">
+      <div
+        v-for="(word, index) in displayWords"
+        :key="index"
+        class="word"
+        :class="{
+          'word--success': showSuccess && word === wrongWord,
+          'word--error': showError && word === selectedWord
+        }"
+        @click="checkAnswer(word)"
       >
-        {{ t('games.spelling.start') }}
-      </button>
-    </template>
-
+        {{ word }}
+      </div>
+    </div>
     <SuccessCounter :value="`${score}/${WINNING_STREAK}`" :show="score > 0" />
   </div>
 </template>
@@ -233,10 +218,11 @@ function resetGame() {
 
 onMounted(() => {
   resetGame();
+  startGame();
 });
 
 onUnmounted(() => {
-  clearInterval(timerInterval);
+  resetGame();
 });
 </script>
 
@@ -264,7 +250,7 @@ onUnmounted(() => {
 }
 
 .word {
-  width: calc(50% - 5px);
+  flex: 1;
   font-size: 20px;
   cursor: pointer;
   border-radius: 12px;
