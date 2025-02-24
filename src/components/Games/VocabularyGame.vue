@@ -32,7 +32,7 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
 import ProgressBar from '@/components/Games/ProgressBar.vue';
-import { middleVocabulary } from '@/data/vocabulary';
+import { middleVocabulary, type VocabularyItem } from '@/data/vocabulary';
 
 const { t } = useI18n();
 
@@ -49,9 +49,9 @@ const correctWord = ref('');
 const currentTranslation = ref('');
 const displayWords = ref<string[]>([]);
 
-let timerInterval: ReturnType<typeof setInterval>;
+let timerInterval: ReturnType<typeof setInterval> | null = null;
 
-function shuffleArray(array: any[]) {
+function shuffleArray<T>(array: T[]): T[] {
   const newArray = [...array];
   for (let i = newArray.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -62,8 +62,7 @@ function shuffleArray(array: any[]) {
 
 function generateWords() {
   // Get random words
-  const sortedWords = middleVocabulary.sort(() => Math.random() - 0.5);
-  const shuffledWords = shuffleArray(sortedWords);
+  const shuffledWords = shuffleArray<VocabularyItem>(middleVocabulary);
   const selectedWords = shuffledWords.slice(0, 4);
   
   // Select one word as correct answer
@@ -76,12 +75,17 @@ function generateWords() {
 }
 
 function startTimer() {
-  clearInterval(timerInterval);
+  if (timerInterval) {
+    clearInterval(timerInterval);
+  }
   timeLeft.value = TIME_LIMIT;
   timerInterval = setInterval(() => {
     timeLeft.value -= 0.1;
     if (timeLeft.value <= 0) {
-      clearInterval(timerInterval);
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
       handleTimeout();
     }
   }, 100);
@@ -100,7 +104,10 @@ function checkAnswer(word: string) {
   
   selectedWord.value = word;
   showResults.value = true;
-  clearInterval(timerInterval);
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
 
   if (word === correctWord.value) {
     score.value++;
@@ -133,7 +140,10 @@ function startGame() {
 }
 
 function resetGame() {
-  clearInterval(timerInterval);
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
   isStarted.value = false;
   score.value = 0;
   showResults.value = false;
@@ -147,6 +157,23 @@ onMounted(() => {
 
 onUnmounted(() => {
   resetGame();
+});
+
+// Expose for testing
+defineExpose({
+  timeLeft,
+  score,
+  isStarted,
+  showResults,
+  selectedWord,
+  correctWord,
+  currentTranslation,
+  displayWords,
+  startNewRound,
+  checkAnswer,
+  resetGame,
+  TIME_LIMIT,
+  WINNING_STREAK
 });
 </script>
 
@@ -188,7 +215,7 @@ onUnmounted(() => {
 }
 
 .translation {
-  font-size: 32px;
+  font-size: 24px;
   font-weight: bold;
   color: var(--primary);
   margin: 20px 0;
