@@ -8,7 +8,8 @@
       "sleep": "Sleep",
       "vision": "Vision",
       "breath": "Breathing",
-      "logic": "Logic"
+      "logic": "Logic",
+      "speech": "Speech"
     },
     "cards": {
       "mathSprint": "Math Sprint",

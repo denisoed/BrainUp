@@ -124,7 +124,7 @@ function changeCircles() {
 }
 
 function calculateStep(speed: number) {
-  return (0.5 / (speed * 60));
+  return (0.5 / (speed * 120));
 }
 
 function handleInhaleStep(currentCycle) {
@@ -380,7 +380,7 @@ onUnmounted(() => {
 
   .cycle-counter {
     color: var(--white-color);
-    font-size: 60px;
+    font-size: 50px;
     font-weight: bold;
     position: absolute;
     top: 50%;

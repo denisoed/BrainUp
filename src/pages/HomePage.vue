@@ -13,7 +13,7 @@
     </div>
     <div class="container home-page_cards mt-md">
       <CardComp
-        v-for="(card, index) in cards"
+        v-for="(card, index) in filteredCards"
         :key="index"
         :title="card.title"
         :to="card.to"
@@ -47,14 +47,32 @@ import SpellingIcon from '@/assets/abstracts/spelling.svg';
 
 const { t } = useI18n();
 
+const gameCategories = {
+  breath: ['breath'],
+  focus: ['mathSprint', 'colors', 'numbers'],
+  memory: ['sequence', 'spelling'],
+  logic: ['minesweeper'],
+  speech: ['tongueTwister'],
+} as const;
+
+// Получаем количество уникальных игр в каждой категории
+const getCategoryCount = (category: keyof typeof gameCategories) => {
+  return new Set(gameCategories[category]).size;
+};
+
+// Получаем все уникальные игры
+const getAllGamesCount = () => {
+  const allGames = Object.values(gameCategories).flat();
+  return new Set(allGames).size;
+};
+
 const tabs = computed(() => [
-  { name: 'all', count: 59, title: t('home.tabs.all') },
-  { name: 'focus',  count: 6, title: t('home.tabs.focus') },
-  { name: 'memory', count: 3, title: t('home.tabs.memory') },
-  { name: 'sleep', count: 5, title: t('home.tabs.sleep') },
-  { name: 'vision', count: 7, title: t('home.tabs.vision') },
-  { name: 'breath', count: 4, title: t('home.tabs.breath') },
-  { name: 'logic', count: 6, title: t('home.tabs.logic') },
+  { name: 'all', count: getAllGamesCount(), title: t('home.tabs.all') },
+  { name: 'focus', count: getCategoryCount('focus'), title: t('home.tabs.focus') },
+  { name: 'memory', count: getCategoryCount('memory'), title: t('home.tabs.memory') },
+  { name: 'logic', count: getCategoryCount('logic'), title: t('home.tabs.logic') },
+  { name: 'breath', count: getCategoryCount('breath'), title: t('home.tabs.breath') },
+  { name: 'speech', count: getCategoryCount('speech'), title: t('home.tabs.speech') },
 ]);
 
 const cards = [
@@ -96,6 +114,17 @@ const cards = [
 ]
 
 const tab = ref('all');
+
+const filteredCards = computed(() => {
+  if (tab.value === 'all') {
+    return cards;
+  }
+  
+  return cards.filter(card => {
+    const gamePath = card.to.split('/').pop();
+    return gameCategories[tab.value as keyof typeof gameCategories]?.includes(gamePath as any);
+  });
+});
 
 function getCardWidth(width: number) {
   if (width === 100) {
