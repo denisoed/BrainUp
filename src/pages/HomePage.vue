@@ -32,7 +32,7 @@ import { useI18n } from 'vue-i18n';
 
 import Tabs from '@/components/Tabs/index.vue';
 import CardComp from '@/components/CardComp.vue';
-// import Abstract1 from '@/assets/abstracts/1.svg';
+import Abstract1 from '@/assets/abstracts/1.svg';
 import Abstract2 from '@/assets/abstracts/2.svg';
 import Abstract3 from '@/assets/abstracts/3.svg';
 import Abstract4 from '@/assets/abstracts/4.svg';
@@ -50,7 +50,7 @@ const { t } = useI18n();
 const gameCategories = {
   breath: ['breath'],
   focus: ['mathSprint', 'colors', 'numbers'],
-  memory: ['sequence', 'spelling'],
+  memory: ['sequence', 'spelling', 'vocabulary'],
   logic: ['minesweeper'],
   speech: ['tongueTwister'],
 } as const;
@@ -110,7 +110,14 @@ const cards = [
     icon: SpellingIcon,
     title: t('home.cards.spelling'),
     width: 60
-  } 
+  },
+  {
+    to: '/game/vocabulary',
+    class: '',
+    icon: Abstract1,
+    title: t('home.cards.vocabulary'),
+    width: 100
+  }
 ]
 
 const tab = ref('all');

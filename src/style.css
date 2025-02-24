@@ -78,10 +78,6 @@ button:hover {
   border-color: #646cff;
 }
 
-.card {
-  padding: 2em;
-}
-
 a.disabled {
   pointer-events: none;
   color: #ccc;

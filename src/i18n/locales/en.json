@@ -20,7 +20,8 @@
       "tongueTwister": "Tongue Twisters",
       "sequence": "Sequence",
       "minesweeper": "Minesweeper",
-      "spelling": "Spelling"
+      "spelling": "Spelling",
+      "vocabulary": "Vocabulary"
     }
   },
   "games": {
@@ -150,6 +151,22 @@
         "rule1": "<span>1.</span> Look at 4 words and find the one with a spelling mistake. 🔍",
         "rule2": "<span>2.</span> You have 10 seconds to find and click on the incorrect word. ⏳",
         "rule3": "<span>3.</span> You get a point for each correct answer. Score resets on error! 🏆",
+        "btn": "Start"
+      }
+    },
+    "vocabulary": {
+      "rules": {
+        "title": "Learn English Words",
+        "description": "Choose the correct English word that matches the Russian translation. You have 5 seconds for each word. Get 15 correct answers in a row to win!",
+        "start": "Start Game"
+      },
+      "about": {
+        "title": "<span>Game:</span> Vocabulary",
+        "descr": "<span>Benefit:</span> Expands English vocabulary, improves word recognition and translation speed.",
+        "rules": "Rules:",
+        "rule1": "<span>1.</span> Look at the Russian word and find its correct English translation among the cards. 📚",
+        "rule2": "<span>2.</span> You have 5 seconds to choose the correct translation. ⏳",
+        "rule3": "<span>3.</span> Get 15 correct answers in a row to win! Score resets on error. 🏆",
         "btn": "Start"
       }
     }
