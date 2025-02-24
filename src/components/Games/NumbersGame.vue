@@ -92,7 +92,7 @@ onUnmounted(() => {
 }
 
 .target-text {
-  font-size: 56px;
+  font-size: 36px;
   font-weight: bold;
   color: var(--primary);
 }
