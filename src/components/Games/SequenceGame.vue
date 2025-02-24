@@ -9,7 +9,7 @@
       <ProgressBar :progress="(timeLeft / INITIAL_TIME) * 100" />
     </template>
 
-    <div v-if="isStarted">
+    <template v-if="isStarted">
       <div class="cards mb-md mt-md">
         <div
           v-for="(card, index) in displayCards"
@@ -39,7 +39,7 @@
       <div class="sequence-status sequence-status--reproduce" v-else>
         {{ t('games.sequence.reproduce') }}
       </div>
-    </div>
+    </template>
     <template v-else>
       <div class="sequence-title mt-lg mb-lg">
         {{ t('games.sequence.title') }}
@@ -64,8 +64,8 @@ import ProgressBar from '@/components/Games/ProgressBar.vue';
 
 const { t } = useI18n();
 
-const INITIAL_TIME = 5;
-const SHOW_SEQUENCE_TIME = 5;
+const INITIAL_TIME = 4;
+const SHOW_SEQUENCE_TIME = 4;
 const WINNING_STREAK = 15;
 
 const timeLeft = ref(INITIAL_TIME);
@@ -182,7 +182,6 @@ function startNewRound() {
     }
   }, 100);
 
-  // По истечении времени запоминания переходим к фазе воспроизведения
   clearTimeout(memorizeTimeout);
   memorizeTimeout = setTimeout(() => {
     isShowingSequence.value = false;
