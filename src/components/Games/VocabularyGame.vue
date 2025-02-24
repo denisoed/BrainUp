@@ -32,7 +32,7 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
 import ProgressBar from '@/components/Games/ProgressBar.vue';
-import { vocabulary } from '@/data/vocabulary';
+import { middleVocabulary } from '@/data/vocabulary';
 
 const { t } = useI18n();
 
@@ -62,7 +62,8 @@ function shuffleArray(array: any[]) {
 
 function generateWords() {
   // Get random words
-  const shuffledWords = shuffleArray(vocabulary);
+  const sortedWords = middleVocabulary.sort(() => Math.random() - 0.5);
+  const shuffledWords = shuffleArray(sortedWords);
   const selectedWords = shuffledWords.slice(0, 4);
   
   // Select one word as correct answer

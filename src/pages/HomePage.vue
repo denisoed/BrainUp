@@ -44,6 +44,7 @@ import TongueTwisterIcon from '@/assets/abstracts/tongueTwister.svg';
 import SequenceIcon from '@/assets/abstracts/sequence.svg';
 import MinesweeperIcon from '@/assets/abstracts/minesweeper.svg';
 import SpellingIcon from '@/assets/abstracts/spelling.svg';
+import VocabularyIcon from '@/assets/abstracts/vocabulary.svg';
 
 const { t } = useI18n();
 
@@ -114,7 +115,7 @@ const cards = [
   {
     to: '/game/vocabulary',
     class: '',
-    icon: Abstract1,
+    icon: VocabularyIcon,
     title: t('home.cards.vocabulary'),
     width: 100
   }
