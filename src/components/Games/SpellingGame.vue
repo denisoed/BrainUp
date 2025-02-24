@@ -37,7 +37,12 @@ const WINNING_STREAK = 15;
 
 // Русские слова
 const correctWordsRu = [
-  'абсолютный', 'аккуратный', 'великолепный', 'грамматика',
+  'автобус', 'билет', 'ворота', 'голова', 
+  'дерево', 'ежевика', 'жираф', 'забор',
+  'иголка', 'капуста', 'лимон', 'магазин',
+  'небо', 'окно', 'письмо', 'работа',
+  'собака', 'трава', 'улица', 'фрукты',
+  'абсолютный', 'аккуратный', 'великолепный', 'гармония',
   'дискуссия', 'интеллигент', 'компьютер', 'лаборатория',
   'металлический', 'оппонент', 'параллельный', 'профессор',
   'режиссёр', 'симметрия', 'территория', 'университет',
@@ -49,11 +54,29 @@ const correctWordsRu = [
   'массажист', 'программа', 'рассчитать', 'терраса',
   'аккордеон', 'бассейн', 'грамматика', 'иллюстрация',
   'коллекция', 'миллиметр', 'параллель', 'пассивный',
-  'перрон', 'теннис'
+  'перрон', 'теннис',
+  'аккомпанемент', 'аплодисменты', 'ассистент', 'баллотироваться',
+  'беспрецедентный', 'велосипедист', 'галлюцинация', 'грамматический',
+  'дезинфекция', 'дилетантский', 'дискриминация', 'жонглировать',
+  'иллюминация', 'иммунитет', 'интеллектуал', 'каллиграфия',
+  'классификация', 'коллоквиум', 'коммуникация', 'компромиссный',
+  'конгрессмен', 'контрастный', 'конференция', 'корреспондент',
+  'кристаллизация', 'лаборантский', 'массажистка', 'металлический',
+  'модернизация', 'наваждение', 'оппозиция', 'ориентация',
+  'пассажирский', 'перспектива', 'пессимистка', 'прерогатива',
+  'привилегия', 'приоритет', 'прогрессивный', 'пропаганда',
+  'профессия', 'процессуальный', 'репрессивный', 'рецензия',
+  'сентиментальный', 'симметричный', 'стипендия', 'суггестия',
+  'тенденция', 'терраса'
 ];
 
 const wrongWordsRu = [
-  'абалютный', 'акуратный', 'виликолепный', 'граматика',
+  'афтобус', 'белет', 'варота', 'галава',
+  'дериво', 'ижевика', 'жыраф', 'зобор',
+  'иголька', 'копуста', 'лемон', 'могазин',
+  'неба', 'акно', 'песьмо', 'робота',
+  'сабака', 'трова', 'улеца', 'фрукти',
+  'абсалютный', 'акуратный', 'виликолепный', 'гормония',
   'дискусия', 'интелигент', 'компютер', 'лаборотория',
   'металический', 'опонент', 'паралельный', 'професор',
   'режисёр', 'симетрия', 'територия', 'универститет',
@@ -65,15 +88,32 @@ const wrongWordsRu = [
   'масажист', 'програма', 'расчитать', 'тераса',
   'акордеон', 'басеин', 'граматика', 'илюстрация',
   'колекция', 'милиметр', 'паралель', 'пасивный',
-  'перон', 'тенис'
+  'перон', 'тенис',
+  'акомпанемент', 'оплодисменты', 'асистент', 'балотироваться',
+  'беспрецендентный', 'велосепедист', 'галюцинация', 'граматический',
+  'дезынфекция', 'дилитантский', 'дискреминация', 'жонглеровать',
+  'илюминация', 'имунитет', 'интелектуал', 'калиграфия',
+  'класификация', 'колоквиум', 'комуникация', 'компромисный',
+  'конгресмен', 'контрасный', 'конфиренция', 'кореспондент',
+  'кристализация', 'лаборанский', 'масажистка', 'металический',
+  'модернезация', 'наваждение', 'опозиция', 'ориентация',
+  'пасажирский', 'перспиктива', 'песимистка', 'прирогатива',
+  'привелегия', 'преоритет', 'прогресивный', 'пропоганда',
+  'професия', 'процесуальный', 'репресивный', 'рицензия',
+  'сентементальный', 'симетричный', 'стипендия', 'сугестия',
+  'тенденция', 'тераса'
 ];
 
 // English words
 const correctWordsEn = [
+  'apple', 'book', 'chair', 'door',
+  'eight', 'fish', 'green', 'house',
+  'juice', 'king', 'light', 'mouse',
+  'night', 'paper', 'queen', 'river',
+  'smile', 'table', 'water', 'young',
   'accommodation', 'achievement', 'acquaintance', 'beginning',
-  'believe', 'business', 'calendar', 'colleague',
-  'commitment', 'committee', 'completely', 'conscious',
-  'definitely', 'disappear', 'disappoint', 'embarrass',
+  'believe', 'business', 'calendar', 'college',
+  'commerce', 'construct', 'discover', 'emphasize',
   'environment', 'excellent', 'exercise', 'experience',
   'familiar', 'foreign', 'government', 'guarantee',
   'happened', 'immediately', 'independent', 'intelligence',
@@ -82,10 +122,28 @@ const correctWordsEn = [
   'occasion', 'occurrence', 'parliament', 'permanent',
   'possession', 'preferred', 'presence', 'privilege',
   'pronunciation', 'psychology', 'questionnaire', 'receive',
-  'recommend', 'reference', 'relevant', 'restaurant'
+  'recommend', 'reference', 'relevant', 'restaurant',
+  'abbreviation', 'accessible', 'accidentally', 'accommodate',
+  'acknowledgment', 'acquaintance', 'algorithm', 'allegiance',
+  'ambassador', 'ammunition', 'appearance', 'appropriate',
+  'assassination', 'attendance', 'beautiful', 'beneficial',
+  'boundary', 'bulletin', 'campaign', 'category',
+  'cemetery', 'characteristic', 'colleague', 'commission',
+  'commitment', 'competition', 'conscience', 'conscious',
+  'consensus', 'consistent', 'convenient', 'correspondence',
+  'curriculum', 'deceive', 'defendant', 'dependent',
+  'description', 'desperate', 'development', 'difference',
+  'dilemma', 'disappear', 'discipline', 'embarrass',
+  'equipment', 'equivalent', 'especially', 'exaggerate',
+  'excellent', 'existence', 'extension', 'familiar'
 ];
 
 const wrongWordsEn = [
+  'appel', 'booc', 'chare', 'dor',
+  'eigth', 'fich', 'gren', 'hause',
+  'juce', 'kign', 'lite', 'mowse',
+  'nite', 'papre', 'qween', 'rivr',
+  'smyle', 'tabel', 'warter', 'yung',
   'accomodation', 'achievment', 'acquantance', 'begining',
   'beleive', 'busines', 'calender', 'colleage',
   'commitmen', 'commitee', 'completly', 'concious',
@@ -98,7 +156,20 @@ const wrongWordsEn = [
   'ocassion', 'occurence', 'parlament', 'permanant',
   'posession', 'prefered', 'presance', 'priviledge',
   'pronounciation', 'psycology', 'questionaire', 'recieve',
-  'recomend', 'referance', 'relevent', 'resturant'
+  'recomend', 'referance', 'relevent', 'resturant',
+  'abreviation', 'accessable', 'accidentaly', 'accomodate',
+  'acknowledgement', 'acknowlegement', 'algoritm', 'alegiance',
+  'ambasador', 'amunition', 'appearence', 'apropriate',
+  'assasination', 'attendence', 'beutiful', 'benificial',
+  'boundry', 'bullitin', 'campain', 'catagory',
+  'cemetary', 'caracteristic', 'collegue', 'comission',
+  'comitment', 'compitition', 'concience', 'concious',
+  'consencus', 'consistant', 'conveniant', 'correspondance',
+  'curiculum', 'decieve', 'defendend', 'dependant',
+  'discription', 'desparate', 'developement', 'diffrence',
+  'dilema', 'dissapear', 'disipline', 'embarass',
+  'equiptment', 'equivelent', 'especialy', 'exagerate',
+  'excelent', 'existance', 'extention', 'familar'
 ];
 
 // Выбор массива слов в зависимости от языка
