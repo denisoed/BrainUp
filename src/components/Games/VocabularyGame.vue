@@ -32,11 +32,12 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
 import ProgressBar from '@/components/Games/ProgressBar.vue';
+import { vocabulary } from '@/data/vocabulary';
 
 const { t } = useI18n();
 
 const TIME_LIMIT = 5;
-const WINNING_STREAK = 15;
+const WINNING_STREAK = 50;
 
 // Game state
 const timeLeft = ref(TIME_LIMIT);
@@ -49,30 +50,6 @@ const currentTranslation = ref('');
 const displayWords = ref<string[]>([]);
 
 let timerInterval: ReturnType<typeof setInterval>;
-
-// Dictionary of words
-const vocabulary = [
-  { en: 'house', ru: 'дом' },
-  { en: 'cat', ru: 'кошка' },
-  { en: 'dog', ru: 'собака' },
-  { en: 'tree', ru: 'дерево' },
-  { en: 'book', ru: 'книга' },
-  { en: 'table', ru: 'стол' },
-  { en: 'chair', ru: 'стул' },
-  { en: 'window', ru: 'окно' },
-  { en: 'door', ru: 'дверь' },
-  { en: 'car', ru: 'машина' },
-  { en: 'sun', ru: 'солнце' },
-  { en: 'moon', ru: 'луна' },
-  { en: 'water', ru: 'вода' },
-  { en: 'food', ru: 'еда' },
-  { en: 'friend', ru: 'друг' },
-  { en: 'phone', ru: 'телефон' },
-  { en: 'computer', ru: 'компьютер' },
-  { en: 'flower', ru: 'цветок' },
-  { en: 'bird', ru: 'птица' },
-  { en: 'fish', ru: 'рыба' }
-];
 
 function shuffleArray(array: any[]) {
   const newArray = [...array];
@@ -186,7 +163,7 @@ onUnmounted(() => {
 
 .card {
   width: 100%;
-  font-size: 24px;
+  font-size: 20px;
   cursor: pointer;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -226,56 +203,5 @@ onUnmounted(() => {
 
 .timer, .score {
   font-size: 18px;
-}
-
-.about {
-  padding: 20px;
-  text-align: center;
-  max-width: 600px;
-  margin: 0 auto;
-
-  h1 {
-    font-size: 24px;
-    color: var(--white-color);
-    margin-bottom: 20px;
-
-    :deep(span) {
-      color: var(--primary);
-    }
-  }
-
-  p {
-    color: var(--white-color);
-    opacity: 0.8;
-    line-height: 1.5;
-
-    :deep(span) {
-      color: var(--primary);
-    }
-  }
-}
-
-.rules {
-  text-align: left;
-  background: var(--card-bg);
-  border-radius: 12px;
-  padding: 20px;
-
-  &-title {
-    font-size: 18px;
-    color: var(--white-color);
-    margin-bottom: 16px;
-  }
-
-  &-item {
-    color: var(--white-color);
-    opacity: 0.8;
-    margin-bottom: 12px;
-    line-height: 1.5;
-
-    :deep(span) {
-      color: var(--primary);
-    }
-  }
 }
 </style> 
