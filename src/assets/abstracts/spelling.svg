@@ -1,0 +1,38 @@
+<svg width="170" height="170" viewBox="0 0 170 170" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Основная книга -->
+  <path d="M30 40C30 30 40 25 85 25C130 25 140 30 140 40V130C140 140 130 145 85 145C40 145 30 140 30 130V40Z" 
+    stroke="yellow" 
+    stroke-width="10" 
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    fill="none" />
+    
+  <!-- Страницы книги -->
+  <path d="M35 45C35 38 42 35 85 35C128 35 135 38 135 45" 
+    stroke="yellow" 
+    stroke-width="5" 
+    stroke-linecap="round"
+    fill="none" />
+    
+  <!-- Линии текста (символизируют слова) -->
+  <path d="M45 60H125" 
+    stroke="yellow" 
+    stroke-width="8" 
+    stroke-linecap="round" />
+    
+  <path d="M45 80H125" 
+    stroke="yellow" 
+    stroke-width="8" 
+    stroke-linecap="round" />
+    
+  <!-- Подчеркнутая линия (символизирует ошибку) -->
+  <path d="M45 100H125" 
+    stroke="#FF6B6B" 
+    stroke-width="8" 
+    stroke-linecap="round" />
+    
+  <path d="M45 120H125" 
+    stroke="yellow" 
+    stroke-width="8" 
+    stroke-linecap="round" />
+</svg> 

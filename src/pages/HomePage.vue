@@ -43,6 +43,7 @@ import AbstractVip from '@/assets/abstracts/vip.svg';
 import TongueTwisterIcon from '@/assets/abstracts/tongueTwister.svg';
 import SequenceIcon from '@/assets/abstracts/sequence.svg';
 import MinesweeperIcon from '@/assets/abstracts/minesweeper.svg';
+import SpellingIcon from '@/assets/abstracts/spelling.svg';
 
 const { t } = useI18n();
 
@@ -82,8 +83,16 @@ const cards = [
     class: '',
     icon: MinesweeperIcon,
     title: t('home.cards.minesweeper'),
-    width: 100
-  }
+    width: 40
+  },
+  
+  {
+    to: '/game/spelling',
+    class: '',
+    icon: SpellingIcon,
+    title: t('home.cards.spelling'),
+    width: 60
+  } 
 ]
 
 const tab = ref('all');
