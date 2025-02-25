@@ -198,6 +198,20 @@
     },
     "profile": {
       "title": "Профиль"
+    },
+    "theme": {
+      "title": "Тема",
+      "dark": "Темная",
+      "light": "Светлая"
+    },
+    "notifications": {
+      "title": "Уведомления",
+      "reminders": "Ежедневные напоминания"
+    },
+    "about": {
+      "title": "О приложении",
+      "version": "Версия",
+      "developer": "Разработчик"
     }
   }
 }

@@ -198,6 +198,20 @@
     },
     "profile": {
       "title": "Profile"
+    },
+    "theme": {
+      "title": "Theme",
+      "dark": "Dark",
+      "light": "Light"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "reminders": "Daily Reminders"
+    },
+    "about": {
+      "title": "About App",
+      "version": "Version",
+      "developer": "Developer"
     }
   }
 }

@@ -13,13 +13,55 @@
             <h2>{{ $t('settings.profile.title') }}</h2>
           </div>
           <div class="user-profile">
-            <div class="user-avatar">
-              <img :src="userPhoto" :alt="userName" />
-            </div>
+            <UserAvatar
+              :src="userPhoto"
+              :alt="userName"
+              :name="userName"
+            />
             <div class="user-info">
               <h3 class="user-name">{{ userName }}</h3>
               <p class="user-username">@{{ userUsername }}</p>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Theme Section -->
+      <div class="settings-section">
+        <div class="settings-block">
+          <div class="settings-block_header">
+            <h2>{{ $t('settings.theme.title') }}</h2>
+          </div>
+          <div class="settings-options">
+            <button 
+              class="theme-btn" 
+              :class="{ active: currentTheme === 'dark' }"
+              @click="changeTheme('dark')"
+            >
+              {{ $t('settings.theme.dark') }}
+            </button>
+            <button 
+              class="theme-btn" 
+              :class="{ active: currentTheme === 'light' }"
+              @click="changeTheme('light')"
+            >
+              {{ $t('settings.theme.light') }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notifications Section -->
+      <div class="settings-section">
+        <div class="settings-block">
+          <div class="settings-block_header">
+            <h2>{{ $t('settings.notifications.title') }}</h2>
+          </div>
+          <div class="settings-toggle">
+            <span>{{ $t('settings.notifications.reminders') }}</span>
+            <SwitchToggle
+              v-model="notifications.reminders"
+            />
           </div>
         </div>
       </div>
@@ -48,15 +90,37 @@
           </div>
         </div>
       </div>
+
+      <!-- App Info Section -->
+      <div class="settings-section">
+        <div class="settings-block">
+          <div class="settings-block_header">
+            <h2>{{ $t('settings.about.title') }}</h2>
+          </div>
+          <div class="app-info">
+            <div class="info-item">
+              <span class="label">{{ $t('settings.about.version') }}:</span>
+              <span class="value">{{ appVersion }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">{{ $t('settings.about.developer') }}:</span>
+              <span class="value">denisoed</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, reactive, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import BackBtn from '@/components/BackBtn.vue';
+import SwitchToggle from '@/components/UI/SwitchToggle.vue';
+import UserAvatar from '@/components/UI/UserAvatar.vue';
 import { LOCALE_LOCAL_STORAGE_KEY } from '@/config';
+import pkg from '../../package.json';
 
 const { locale } = useI18n();
 
@@ -64,6 +128,12 @@ const currentLocale = computed(() => locale.value);
 const userPhoto = ref('');
 const userName = ref('');
 const userUsername = ref('');
+const currentTheme = ref('dark');
+const notifications = reactive({
+  reminders: false
+});
+
+const appVersion = pkg.version;
 
 onMounted(() => {
   // @ts-ignore - Telegram Web App API
@@ -74,11 +144,21 @@ onMounted(() => {
     userName.value = `${user.first_name} ${user.last_name || ''}`.trim();
     userUsername.value = user.username || '';
   }
+  
+  // Load saved theme
+  const savedTheme = localStorage.getItem('theme') || 'dark';
+  changeTheme(savedTheme);
 });
 
 function changeLanguage(lang: string) {
   locale.value = lang;
   localStorage.setItem(LOCALE_LOCAL_STORAGE_KEY, lang);
+}
+
+function changeTheme(theme: string) {
+  currentTheme.value = theme;
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('theme', theme);
 }
 </script>
 
@@ -159,19 +239,6 @@ function changeLanguage(lang: string) {
   padding: 8px 0;
 }
 
-.user-avatar {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  overflow: hidden;
-  
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-}
-
 .user-info {
   .user-name {
     color: var(--white-color);
@@ -185,6 +252,55 @@ function changeLanguage(lang: string) {
     opacity: 0.7;
     font-size: 14px;
     margin: 0;
+  }
+}
+
+.theme-btn {
+  @extend .language-btn;
+}
+
+.settings-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  color: var(--white-color);
+}
+
+.statistics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  padding: 8px 0;
+}
+
+.stat-item {
+  text-align: center;
+  
+  .stat-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--primary);
+    margin-bottom: 4px;
+  }
+  
+  .stat-label {
+    font-size: 14px;
+    color: var(--white-color);
+    opacity: 0.7;
+  }
+}
+
+.app-info {
+  .info-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    color: var(--white-color);
+    
+    .label {
+      opacity: 0.7;
+    }
   }
 }
 </style> 
