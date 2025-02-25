@@ -1,36 +1,33 @@
 <template>
-  <div class="progress-bar">
-    <div 
-      class="progress-fill"
-      :style="{ width: `${progress}%` }"
-    />
+  <div class="progress-container">
+    <div class="progress-bar" :style="{ width: `${progress}%`, backgroundColor: getColor() }"></div>
   </div>
 </template>
 
 <script setup lang="ts">
-defineProps({
-  progress: {
-    type: Number,
-    required: true,
-    validator: (value: number) => value >= 0 && value <= 100
-  }
-});
+const props = defineProps<{
+  progress: number;
+}>();
+
+function getColor() {
+  if (props.progress > 60) return '#4CAF50';
+  if (props.progress > 30) return '#FFC107';
+  return '#F44336';
+}
 </script>
 
 <style scoped lang="scss">
-.progress-bar {
+.progress-container {
   width: 100%;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
-  margin: 8px 0;
+  height: 8px;
+  background-color: var(--card-bg);
+  border-radius: 4px;
   overflow: hidden;
+  margin: 8px 0;
 }
 
-.progress-fill {
+.progress-bar {
   height: 100%;
-  background: var(--primary);
-  border-radius: 3px;
-  transition: width 0.1s linear;
+  transition: width 0.1s linear, background-color 0.3s ease;
 }
 </style> 
