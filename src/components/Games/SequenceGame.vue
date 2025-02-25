@@ -3,8 +3,8 @@
     
     <template v-if="isStarted">
       <div class="stats">
-        <div class="timer">⏳ {{ t('games.time') }}: <span>{{ timeLeft.toFixed(1) }}</span></div>
-        <div class="score">🏆 {{ t('games.score') }}: <span>{{ score }}/{{ WINNING_STREAK }}</span></div>
+        <div class="timer">⏳ {{ $t('games.time') }}: <span>{{ timeLeft.toFixed(1) }}</span></div>
+        <div class="score">🏆 {{ $t('games.score') }}: <span>{{ score }}/{{ WINNING_STREAK }}</span></div>
       </div>
       <ProgressBar :progress="(timeLeft / INITIAL_TIME) * 100" />
     </template>
@@ -34,21 +34,21 @@
       </div>
 
       <div class="sequence-status sequence-status--memorize" v-if="isShowingSequence">
-        {{ t('games.sequence.memorize') }}
+        {{ $t('games.sequence.memorize') }}
       </div>
       <div class="sequence-status sequence-status--reproduce" v-else>
-        {{ t('games.sequence.reproduce') }}
+        {{ $t('games.sequence.reproduce') }}
       </div>
     </template>
     <template v-else>
       <div class="sequence-title mt-lg mb-lg">
-        {{ t('games.sequence.title') }}
+        {{ $t('games.sequence.title') }}
       </div>
       <button 
         class="start-button"
         @click="startGame"
       >
-        {{ t('games.sequence.about.btn') }}
+        {{ $t('games.sequence.about.btn') }}
       </button>
     </template>
 
@@ -58,11 +58,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
-import { useI18n } from 'vue-i18n';
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
 import ProgressBar from '@/components/Games/ProgressBar.vue';
-
-const { t } = useI18n();
 
 const INITIAL_TIME = 4;
 const SHOW_SEQUENCE_TIME = 4;

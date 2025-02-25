@@ -76,7 +76,7 @@ const tabs = computed(() => [
   { name: 'speech', count: getCategoryCount('speech'), title: t('home.tabs.speech') },
 ]);
 
-const cards = [
+const cards = computed(() => [
   { to: '/game/breath', class: '', icon: Abstract4, title: t('home.cards.breath'), width: 50 },
   { to: '', locked: true, class: '', icon: Abstract2, title: t('home.cards.sleep'), width: 50 },
   { to: '/game/mathSprint', class: '', icon: MathSprintIcon, title: t('home.cards.mathSprint'), width: 80 },
@@ -119,16 +119,16 @@ const cards = [
     title: t('home.cards.vocabulary'),
     width: 100
   }
-]
+]);
 
 const tab = ref('all');
 
 const filteredCards = computed(() => {
   if (tab.value === 'all') {
-    return cards;
+    return cards.value;
   }
   
-  return cards.filter(card => {
+  return cards.value.filter(card => {
     const gamePath = card.to.split('/').pop();
     return gameCategories[tab.value as keyof typeof gameCategories]?.includes(gamePath as any);
   });

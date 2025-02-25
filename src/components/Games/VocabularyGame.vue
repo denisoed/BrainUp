@@ -1,8 +1,8 @@
 <template>
   <div class="vocabulary-game flex column items-center justify-center">
     <div class="stats">
-      <div class="timer">⏳ {{ t('games.time') }}: <span>{{ timeLeft.toFixed(1) }}</span></div>
-      <div class="score">🏆 {{ t('games.score') }}: <span>{{ score }}/{{ WINNING_STREAK }}</span></div>
+      <div class="timer">⏳ {{ $t('games.time') }}: <span>{{ timeLeft.toFixed(1) }}</span></div>
+      <div class="score">🏆 {{ $t('games.score') }}: <span>{{ score }}/{{ WINNING_STREAK }}</span></div>
     </div>
     <ProgressBar :progress="(timeLeft / TIME_LIMIT) * 100" />
 
@@ -29,12 +29,9 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
-import { useI18n } from 'vue-i18n';
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
 import ProgressBar from '@/components/Games/ProgressBar.vue';
 import { middleVocabulary, type VocabularyItem } from '@/data/vocabulary';
-
-const { t } = useI18n();
 
 const TIME_LIMIT = 5;
 const WINNING_STREAK = 50;

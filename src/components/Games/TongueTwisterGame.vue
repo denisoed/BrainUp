@@ -3,8 +3,8 @@
     
     <template v-if="isStarted">
       <div class="stats">
-        <div class="timer">⏳ {{ t('games.time') }}: <span>{{ timeLeft.toFixed(1) }}</span></div>
-        <div class="score">🏆 {{ t('games.score') }}: <span>{{ score }}/{{ WINNING_STREAK }}</span></div>
+        <div class="timer">⏳ {{ $t('games.time') }}: <span>{{ timeLeft.toFixed(1) }}</span></div>
+        <div class="score">🏆 {{ $t('games.score') }}: <span>{{ score }}/{{ WINNING_STREAK }}</span></div>
       </div>
       <ProgressBar :progress="(timeLeft / TIME_LIMIT) * 100" />
     </template>
@@ -16,7 +16,7 @@
         'error': showErrorColor
       }"
     >
-      {{ isStarted ? currentTwister : t('games.tongueTwister.ready') }}
+      {{ isStarted ? currentTwister : $t('games.tongueTwister.ready') }}
     </div>
 
     <canvas 
@@ -31,14 +31,14 @@
       class="mic-button mt-md" 
       @click="startGame"
     >
-      🎤 {{ t('games.tongueTwister.start') }}
+      🎤 {{ $t('games.tongueTwister.start') }}
     </button>
 
     <div 
       v-else 
       class="mic-status listening mt-md"
     >
-      🎤 {{ t('games.tongueTwister.listening') }}
+      🎤 {{ $t('games.tongueTwister.listening') }}
     </div>
 
     <SuccessCounter :value="`${score}/${WINNING_STREAK}`" :show="score > 0" />

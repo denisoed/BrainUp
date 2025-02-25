@@ -1,8 +1,8 @@
 <template>
   <div class="spelling-game flex column items-center justify-center">
     <div class="stats">
-      <div class="timer">⏳ {{ t('games.time') }}: <span>{{ timeLeft.toFixed(1) }}</span></div>
-      <div class="score">🏆 {{ t('games.score') }}: <span>{{ score }}/{{ WINNING_STREAK }}</span></div>
+      <div class="timer">⏳ {{ $t('games.time') }}: <span>{{ timeLeft.toFixed(1) }}</span></div>
+      <div class="score">🏆 {{ $t('games.score') }}: <span>{{ score }}/{{ WINNING_STREAK }}</span></div>
     </div>
     <ProgressBar :progress="(timeLeft / TIME_LIMIT) * 100" />
     

@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeMount, onMounted, onUnmounted, ref } from 'vue';
+import { computed, onBeforeMount, onMounted, onUnmounted, ref } from 'vue';
 import PlayAudio from '@/core/audio.js';
 import BreatheAudioController from '@/core/breatheAudioController.ts';
 import { useRoute } from 'vue-router';
@@ -42,7 +42,7 @@ import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 
-const LIST_BREATHING = {
+const LIST_BREATHING = computed(() => ({
   ['antistress']: {
     title: t('games.breath.types.antistress.title'),
     description: t('games.breath.types.antistress.description'),
@@ -87,11 +87,11 @@ const LIST_BREATHING = {
       }
     ]
   }
-};
+}));
 
 const route = useRoute();
 
-const breathingConfig = LIST_BREATHING[route.params.type as keyof typeof LIST_BREATHING || 'antistress'];
+const breathingConfig = LIST_BREATHING.value[route.params.type as keyof typeof LIST_BREATHING.value || 'antistress'];
 
 const currentCycleIndex = ref(0);
 const currentRepeatCount = ref(0);
@@ -112,7 +112,6 @@ const bgMusicPlayer = new PlayAudio('music.mp3', {
   loop: true
 });
 const breatheAudioController = new BreatheAudioController('inhale2.mp3', 'exhale.mp3');
-
 
 function changeCircles() {
   requestAnimationFrame(() => {

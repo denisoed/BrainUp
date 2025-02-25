@@ -43,19 +43,20 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import BackBtn from '@/components/BackBtn.vue';
 import AbstractVip from '@/assets/abstracts/vip.svg';
 
 const { t } = useI18n();
 
-const features = [
+const features = computed(() => [
   { icon: '🎯', text: t('premium.features.allGames') },
   { icon: '⚡', text: t('premium.features.newContent') },
   { icon: '💎', text: t('premium.features.exclusive') }
-];
+]);
 
-const plans = [
+const plans = computed(() => [
   { 
     title: t('premium.plans.monthly.title'),
     price: '$4.99',
@@ -70,7 +71,7 @@ const plans = [
     icon: AbstractVip,
     featured: true
   }
-];
+]);
 
 function selectPlan(plan: any) {
   console.log('Selected plan:', plan);

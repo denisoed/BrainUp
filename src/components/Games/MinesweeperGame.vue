@@ -1,6 +1,6 @@
 <template>
   <div class="minesweeper-game flex column items-center justify-center">
-    <div class="score">🏆 {{ t('games.score') }}: <span>{{ score }}/{{ WINNING_STREAK }}</span></div>
+    <div class="score">🏆 {{ $t('games.score') }}: <span>{{ score }}/{{ WINNING_STREAK }}</span></div>
 
     <div class="game-board mt-lg mb-lg">
       <div class="grid">
@@ -37,14 +37,14 @@
         :class="{ active: !isFlagMode }"
         @click="isFlagMode = false"
       >
-        👁️ {{ t('games.minesweeper.reveal') }}
+        👁️ {{ $t('games.minesweeper.reveal') }}
       </button>
       <button 
         class="control-btn" 
         :class="{ active: isFlagMode }"
         @click="isFlagMode = true"
       >
-        🚩 {{ t('games.minesweeper.flag') }}
+        🚩 {{ $t('games.minesweeper.flag') }}
       </button>
     </div>
 
@@ -54,10 +54,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { useI18n } from 'vue-i18n';
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
-
-const { t } = useI18n();
 
 const BOARD_SIZE = 10;
 const MINES_COUNT = 15;

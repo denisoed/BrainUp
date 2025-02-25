@@ -1,8 +1,8 @@
 <template>
   <div class="numbers-game flex column items-center justify-center">
     <div class="stats">
-      <div class="timer">⏳ {{ t('games.time') }}: <span>{{ timeLeft.toFixed(1) }}</span></div>
-      <div class="score">🏆 {{ t('games.score') }}: <span>{{ score }}/{{ WINNING_STREAK }}</span></div>
+      <div class="timer">⏳ {{ $t('games.time') }}: <span>{{ timeLeft.toFixed(1) }}</span></div>
+      <div class="score">🏆 {{ $t('games.score') }}: <span>{{ score }}/{{ WINNING_STREAK }}</span></div>
     </div>
     <ProgressBar :progress="(timeLeft / TIME_LIMIT) * 100" />
     <div class="buttons mb-md mt-md">
@@ -21,12 +21,9 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
-import { useI18n } from 'vue-i18n';
 
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
 import ProgressBar from '@/components/Games/ProgressBar.vue';
-
-const { t } = useI18n();
 
 const TIME_LIMIT = 3;
 const WINNING_STREAK = 15;

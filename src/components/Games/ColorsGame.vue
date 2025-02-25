@@ -31,7 +31,7 @@ const { t } = useI18n();
 
 const TIME_LIMIT = 1;
 const WINNING_STREAK = 15;
-const colors = [
+const colors = computed(() => [
   { name: t('games.colors.listColors.red'), color: 'red' },
   { name: t('games.colors.listColors.blue'), color: 'blue' },
   { name: t('games.colors.listColors.green'), color: 'green' },
@@ -41,7 +41,7 @@ const colors = [
   { name: t('games.colors.listColors.pink'), color: 'pink' },
   { name: t('games.colors.listColors.white'), color: 'white' },
   { name: t('games.colors.listColors.gray'), color: 'gray' },
-];
+]);
 
 const timeLeft = ref(TIME_LIMIT);
 const score = ref(0);
@@ -56,7 +56,7 @@ const currentWord = computed(() => currentWordObj.value.name);
 const currentTextColor = computed(() => currentTextColorObj.value.color);
 
 function getRandomColor() {
-  return colors[Math.floor(Math.random() * colors.length)];
+  return colors.value[Math.floor(Math.random() * colors.value.length)];
 }
 
 function startTimer() {
@@ -80,7 +80,7 @@ function resetGame() {
 function generateColorTask() {
   currentWordObj.value = getRandomColor();
   currentTextColorObj.value = getRandomColor();
-  randomColors.value = [...colors].sort(() => Math.random() - 0.5);
+  randomColors.value = [...colors.value].sort(() => Math.random() - 0.5);
   startTimer();
 }
 
