@@ -6,7 +6,7 @@
     <router-link to="/list">
       <ListIcon />
     </router-link>
-    <router-link to="/activity">
+    <router-link to="/leaderboard">
       <ActivityIcon />
     </router-link>
     <router-link to="/settings">

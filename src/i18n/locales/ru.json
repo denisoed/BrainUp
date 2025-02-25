@@ -213,5 +213,19 @@
       "version": "Версия",
       "developer": "Разработчик"
     }
+  },
+  "leaderboard": {
+    "title": "Таблица <br><span>лидеров</span>",
+    "achievements": {
+      "tournament_winner": "🏆 Победитель турнира",
+      "games_played": "⭐ 100 игр сыграно"
+    },
+    "stats": {
+      "games": "🎮 {count} игр",
+      "win_rate": "📈 {rate}% побед"
+    },
+    "current_user": {
+      "you": "Вы"
+    }
   }
 }

@@ -213,5 +213,19 @@
       "version": "Version",
       "developer": "Developer"
     }
+  },
+  "leaderboard": {
+    "title": "Leader <br><span>board</span>",
+    "achievements": {
+      "tournament_winner": "🏆 Tournament Winner",
+      "games_played": "⭐ 100 Games Played"
+    },
+    "stats": {
+      "games": "🎮 {count} games",
+      "win_rate": "📈 {rate}% wins"
+    },
+    "current_user": {
+      "you": "You"
+    }
   }
 }
