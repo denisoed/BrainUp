@@ -53,7 +53,7 @@ import ProgressBar from '@/components/Games/ProgressBar.vue';
 
 const { t } = useI18n();
 
-const TIME_LIMIT = 5;
+const TIME_LIMIT = 7;
 const WINNING_STREAK = 15;
 
 const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
@@ -67,6 +67,7 @@ const timeLeft = ref(TIME_LIMIT);
 const score = ref(0);
 const isStarted = ref(false);
 const currentTwister = ref('');
+const isUpdatingTwister = ref(false);
 let timerInterval;
 
 const showSuccessColor = ref(false);
@@ -86,7 +87,7 @@ const twistersRu = [
   'Стоит поп на копне, колпак на попе, копна под попом, поп под колпаком.',
   'Везёт Сенька Саньку с Сонькой на санках',
   'У осы не усы не усищи а усики',
-  'Шестнадцать шли мышей и шесть нашли грошей',
+  '16 шли мышей и шесть нашли грошей',
   'Цапля чахла цапля сохла цапля сдохла',
   'Протокол про протокол протоколом запротоколировали',
   'Летели лебеди с лебедятами',
@@ -180,6 +181,9 @@ function startTimer() {
 }
 
 function handleGameEnd(success) {
+  if (isUpdatingTwister.value) return;
+  isUpdatingTwister.value = true;
+  
   if (success) {
     showSuccessColor.value = true;
     score.value++;
@@ -188,16 +192,15 @@ function handleGameEnd(success) {
     score.value = 0;
   }
   
+  recognition.stop();
+  
   setTimeout(() => {
     showSuccessColor.value = false;
     showErrorColor.value = false;
-    recognition.stop();
     currentTwister.value = getRandomTwister();
     startTimer();
-    
-    setTimeout(() => {
-      recognition.start();
-    }, 100);
+    isUpdatingTwister.value = false;
+    recognition.start();
   }, 500);
 }
 
@@ -285,6 +288,8 @@ recognition.onresult = (event) => {
 recognition.onend = () => {
   if (!isStarted.value) {
     recognition.stop();
+  } else if (!isUpdatingTwister.value) {
+    recognition.start();
   }
 };
 
