@@ -13,7 +13,7 @@
         <!-- Second Place -->
         <div class="winner-card winner-card--second">
           <div class="avatar-wrapper">
-            <div class="winner-position">2</div>
+            <div class="winner-position">🥈</div>
             <UserAvatar
               :src="topWinners[1].avatar"
               :alt="topWinners[1].firstName"
@@ -33,7 +33,7 @@
         <!-- First Place -->
         <div class="winner-card winner-card--first">
           <div class="avatar-wrapper">
-            <div class="winner-position">1</div>
+            <div class="winner-position">🥇</div>
             <UserAvatar
               :src="topWinners[0].avatar"
               :alt="topWinners[0].firstName"
@@ -53,7 +53,7 @@
         <!-- Third Place -->
         <div class="winner-card winner-card--third">
           <div class="avatar-wrapper">
-            <div class="winner-position">3</div>
+            <div class="winner-position">🥉</div>
             <UserAvatar
               :src="topWinners[2].avatar"
               :alt="topWinners[2].firstName"
@@ -68,18 +68,6 @@
             </div>
             <div class="winner-score">{{ topWinners[2].score }}</div>
           </div>
-        </div>
-      </div>
-
-      <div class="winner-achievements" v-if="topWinners[0].achievements">
-        <div class="achievement-tags">
-          <span 
-            v-for="(achievement, idx) in topWinners[0].achievements" 
-            :key="idx" 
-            class="achievement-tag"
-          >
-            {{ $t(`leaderboard.${achievement}`) }}
-          </span>
         </div>
       </div>
 
@@ -136,7 +124,6 @@ import { ref } from 'vue';
 import BackBtn from '@/components/BackBtn.vue';
 import UserAvatar from '@/components/UI/UserAvatar.vue';
 
-// Расширяем интерфейс игрока
 interface Player {
   firstName: string;
   lastName: string;
@@ -144,11 +131,9 @@ interface Player {
   avatar: string;
   gamesPlayed?: number;
   winRate?: number;
-  achievements?: string[];
   position: number;
 }
 
-// Обновляем информацию о текущем пользователе
 const currentUser = ref<Player>({
   firstName: 'current_user.you',
   lastName: '',
@@ -159,7 +144,6 @@ const currentUser = ref<Player>({
   winRate: 65
 });
 
-// Обновляем данные игроков с i18n ключами для достижений
 const topWinners = ref<Player[]>([
   {
     firstName: 'John',
@@ -168,7 +152,6 @@ const topWinners = ref<Player[]>([
     avatar: '',
     gamesPlayed: 156,
     winRate: 78,
-    achievements: ['achievements.tournament_winner', 'achievements.games_played'],
     position: 1
   },
   {
@@ -250,7 +233,7 @@ const otherPlayers = ref([
   justify-content: center;
   align-items: flex-end;
   gap: 16px;
-  margin: 40px 0 60px;
+  margin: 40px 0;
   padding: 0 16px;
 }
 
@@ -379,22 +362,6 @@ const otherPlayers = ref([
     width: 16px;
     height: 16px;
   }
-}
-
-.winner-achievements {
-  text-align: center;
-  margin-top: -20px;
-  margin-bottom: 20px;
-}
-
-.achievement-tag {
-  display: inline-block;
-  padding: 4px 12px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  margin: 4px;
-  font-size: 12px;
-  color: var(--white-color);
 }
 
 .current-user-card {
