@@ -75,12 +75,12 @@
         <div class="player-position">#{{ currentUser.position }}</div>
         <UserAvatar
           :src="currentUser.avatar"
-          :alt="$t('leaderboard.current_user.you')"
-          :name="$t('leaderboard.current_user.you')"
+          :alt="currentUser.firstName || $t('leaderboard.current_user.you')"
+          :name="currentUser.firstName || $t('leaderboard.current_user.you')"
         />
         <div class="player-info">
           <div class="player-name">
-            {{ $t('leaderboard.current_user.you') }}
+            {{ currentUser.firstName || $t('leaderboard.current_user.you') }}
             <div class="player-stats">
               {{ $t('leaderboard.stats.games', { count: currentUser.gamesPlayed }) }}
             </div>
@@ -120,7 +120,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import BackBtn from '@/components/BackBtn.vue';
 import UserAvatar from '@/components/UI/UserAvatar.vue';
 
@@ -135,7 +135,7 @@ interface Player {
 }
 
 const currentUser = ref<Player>({
-  firstName: 'current_user.you',
+  firstName: '',
   lastName: '',
   score: '1,245',
   avatar: '',
@@ -207,6 +207,77 @@ const otherPlayers = ref([
     position: 8
   }
 ]);
+
+// Функция для получения данных пользователя из Telegram Mini App API
+const getTelegramUserData = () => {
+  if (window.Telegram && window.Telegram.WebApp) {
+    const tgUser = window.Telegram.WebApp.initDataUnsafe?.user;
+    
+    if (tgUser) {
+      // Обновляем данные текущего пользователя
+      currentUser.value = {
+        ...currentUser.value,
+        firstName: tgUser.first_name || '',
+        lastName: tgUser.last_name || '',
+        avatar: tgUser.photo_url || '',
+      };
+    }
+  }
+};
+
+// Функция для получения игровой статистики пользователя с сервера
+const fetchUserGameStats = async () => {
+  try {
+    // Здесь должен быть запрос к вашему API для получения статистики
+    // Пример:
+    // const response = await fetch('/api/user/stats');
+    // const data = await response.json();
+    // 
+    // currentUser.value = {
+    //   ...currentUser.value,
+    //   score: data.score,
+    //   position: data.position,
+    //   gamesPlayed: data.gamesPlayed,
+    //   winRate: data.winRate
+    // };
+    
+    // Временная заглушка для демонстрации
+    console.log('Fetching user game stats...');
+  } catch (error) {
+    console.error('Error fetching user stats:', error);
+  }
+};
+
+onMounted(() => {
+  // Получаем данные пользователя из Telegram Mini App API
+  getTelegramUserData();
+  
+  // Получаем игровую статистику пользователя
+  fetchUserGameStats();
+});
+
+// Добавляем определение типа для window.Telegram
+declare global {
+  interface Window {
+    Telegram?: {
+      WebApp: {
+        initDataUnsafe?: {
+          user?: {
+            id?: number;
+            first_name?: string;
+            last_name?: string;
+            username?: string;
+            photo_url?: string;
+            language_code?: string;
+          }
+        };
+        ready(): void;
+        expand(): void;
+        close(): void;
+      }
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
