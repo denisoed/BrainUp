@@ -195,6 +195,9 @@
     "title": "Настройки",
     "language": {
       "title": "Язык"
+    },
+    "profile": {
+      "title": "Профиль"
     }
   }
 }

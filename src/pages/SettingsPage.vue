@@ -6,6 +6,25 @@
     </div>
 
     <div class="container settings-page_content mt-lg">
+      <!-- User Profile Section -->
+      <div class="settings-section">
+        <div class="settings-block">
+          <div class="settings-block_header">
+            <h2>{{ $t('settings.profile.title') }}</h2>
+          </div>
+          <div class="user-profile">
+            <div class="user-avatar">
+              <img :src="userPhoto" :alt="userName" />
+            </div>
+            <div class="user-info">
+              <h3 class="user-name">{{ userName }}</h3>
+              <p class="user-username">@{{ userUsername }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Language Section -->
       <div class="settings-section">
         <div class="settings-block">
           <div class="settings-block_header">
@@ -34,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import BackBtn from '@/components/BackBtn.vue';
 import { LOCALE_LOCAL_STORAGE_KEY } from '@/config';
@@ -42,6 +61,20 @@ import { LOCALE_LOCAL_STORAGE_KEY } from '@/config';
 const { locale } = useI18n();
 
 const currentLocale = computed(() => locale.value);
+const userPhoto = ref('');
+const userName = ref('');
+const userUsername = ref('');
+
+onMounted(() => {
+  // @ts-ignore - Telegram Web App API
+  const tg = window.Telegram.WebApp;
+  if (tg.initDataUnsafe?.user) {
+    const user = tg.initDataUnsafe.user;
+    userPhoto.value = user.photo_url || '';
+    userName.value = `${user.first_name} ${user.last_name || ''}`.trim();
+    userUsername.value = user.username || '';
+  }
+});
 
 function changeLanguage(lang: string) {
   locale.value = lang;
@@ -64,7 +97,7 @@ function changeLanguage(lang: string) {
 }
 
 .settings-section {
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .settings-block {
@@ -116,6 +149,42 @@ function changeLanguage(lang: string) {
     background: var(--primary);
     border-color: var(--primary);
     color: var(--dark-color);
+  }
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 0;
+}
+
+.user-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  overflow: hidden;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.user-info {
+  .user-name {
+    color: var(--white-color);
+    font-size: 18px;
+    margin: 0 0 4px 0;
+    font-weight: 600;
+  }
+
+  .user-username {
+    color: var(--white-color);
+    opacity: 0.7;
+    font-size: 14px;
+    margin: 0;
   }
 }
 </style> 
