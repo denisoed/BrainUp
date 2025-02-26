@@ -100,7 +100,10 @@
           <div class="app-info">
             <div class="info-item">
               <span class="label">{{ $t('settings.about.version') }}:</span>
-              <span class="value">{{ appVersion }}</span>
+              <div class="value-wrapper">
+                <span class="alpha-badge">alpha</span>
+                <span class="value">{{ appVersion }}</span>
+              </div>
             </div>
             <div class="info-item">
               <span class="label">{{ $t('settings.about.developer') }}:</span>
@@ -300,6 +303,21 @@ function changeTheme(theme: string) {
     
     .label {
       opacity: 0.7;
+    }
+
+    .value-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .alpha-badge {
+      background-color: #FFD700;
+      color: var(--dark-color);
+      padding: 0 6px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
     }
   }
 }

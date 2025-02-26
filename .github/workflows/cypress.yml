@@ -1,0 +1,82 @@
+name: Cypress Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      # при падении тестов в одном браузере, тесты в других браузерах продолжат выполняться
+      fail-fast: false
+      matrix:
+        # параллельный запуск в разных браузерах
+        browsers: [chrome, firefox]
+        
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      - name: Start application in background
+        run: |
+          npm run preview &
+          sleep 10
+
+      - name: Run Cypress tests
+        id: cypress
+        uses: cypress-io/github-action@v6
+        with:
+          browser: ${{ matrix.browsers }}
+          command: npm run test:e2e:ci
+          wait-on: 'http://localhost:4173'
+          wait-on-timeout: 120
+        env:
+          CYPRESS_BASE_URL: http://localhost:4173
+        continue-on-error: true
+
+      - name: Upload Cypress screenshots
+        uses: actions/upload-artifact@v4
+        if: failure() || steps.cypress.outcome == 'failure'
+        with:
+          name: cypress-screenshots-${{ matrix.browsers }}
+          path: cypress/screenshots
+          if-no-files-found: ignore
+
+      - name: Upload Cypress videos
+        uses: actions/upload-artifact@v4
+        if: failure() || steps.cypress.outcome == 'failure'
+        with:
+          name: cypress-videos-${{ matrix.browsers }}
+          path: cypress/videos
+          if-no-files-found: ignore
+
+      - name: Upload Cypress reports
+        uses: actions/upload-artifact@v4
+        if: failure() || steps.cypress.outcome == 'failure'
+        with:
+          name: cypress-reports-${{ matrix.browsers }}
+          path: cypress/reports
+          if-no-files-found: ignore
+
+      # Завершаем job с ошибкой, если тесты упали
+      - name: Check Cypress tests status
+        if: steps.cypress.outcome == 'failure'
+        run: exit 1 
