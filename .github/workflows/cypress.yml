@@ -52,30 +52,6 @@ jobs:
           CYPRESS_BASE_URL: http://localhost:4173
         continue-on-error: true
 
-      - name: Upload Cypress screenshots
-        uses: actions/upload-artifact@v4
-        if: failure() || steps.cypress.outcome == 'failure'
-        with:
-          name: cypress-screenshots-${{ matrix.browsers }}
-          path: cypress/screenshots
-          if-no-files-found: ignore
-
-      - name: Upload Cypress videos
-        uses: actions/upload-artifact@v4
-        if: failure() || steps.cypress.outcome == 'failure'
-        with:
-          name: cypress-videos-${{ matrix.browsers }}
-          path: cypress/videos
-          if-no-files-found: ignore
-
-      - name: Upload Cypress reports
-        uses: actions/upload-artifact@v4
-        if: failure() || steps.cypress.outcome == 'failure'
-        with:
-          name: cypress-reports-${{ matrix.browsers }}
-          path: cypress/reports
-          if-no-files-found: ignore
-
       # Завершаем job с ошибкой, если тесты упали
       - name: Check Cypress tests status
         if: steps.cypress.outcome == 'failure'

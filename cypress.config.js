@@ -14,13 +14,9 @@ export default defineConfig({
       html: true,
       json: true
     },
-    video: true,
-    videoCompression: 32,
-    videosFolder: 'cypress/videos',
-    screenshotsFolder: 'cypress/screenshots',
-    screenshotOnRunFailure: true,
-    trashAssetsBeforeRuns: true,
-    videoUploadOnPasses: false
+    video: false,
+    screenshotOnRunFailure: false,
+    trashAssetsBeforeRuns: true
   },
   component: {
     devServer: {
