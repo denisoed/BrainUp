@@ -45,12 +45,13 @@ import SequenceIcon from '@/assets/abstracts/sequence.svg';
 import MinesweeperIcon from '@/assets/abstracts/minesweeper.svg';
 import SpellingIcon from '@/assets/abstracts/spelling.svg';
 import VocabularyIcon from '@/assets/abstracts/vocabulary.svg';
+import GridSequenceIcon from '@/assets/abstracts/gridSequence.svg';
 
 const { t } = useI18n();
 
 const gameCategories = {
   breath: ['breath'],
-  focus: ['mathSprint', 'colors', 'numbers'],
+  focus: ['mathSprint', 'colors', 'numbers', 'gridSequence'],
   memory: ['sequence', 'spelling', 'vocabulary'],
   logic: ['minesweeper'],
   speech: ['tongueTwister'],
@@ -98,13 +99,19 @@ const cards = computed(() => [
     width: 40
   },
   {
+    to: '/game/gridSequence',
+    class: '',
+    icon: GridSequenceIcon,
+    title: t('home.cards.gridSequence'),
+    width: 100
+  },
+  {
     to: '/game/minesweeper',
     class: '',
     icon: MinesweeperIcon,
     title: t('home.cards.minesweeper'),
     width: 40
   },
-  
   {
     to: '/game/spelling',
     class: '',

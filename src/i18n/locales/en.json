@@ -21,7 +21,8 @@
       "sequence": "Sequence",
       "minesweeper": "Minesweeper",
       "spelling": "Spelling",
-      "vocabulary": "Vocabulary"
+      "vocabulary": "Vocabulary",
+      "gridSequence": "Grid Sequence"
     }
   },
   "games": {
@@ -166,6 +167,18 @@
         "rule1": "<span>1.</span> Look at the Russian word and find its correct English translation among the cards. 📚",
         "rule2": "<span>2.</span> You have 5 seconds to choose the correct translation. ⏳",
         "rule3": "<span>3.</span> Get 15 correct answers in a row to win! Score resets on error. 🏆",
+        "btn": "Start"
+      }
+    },
+    "gridSequence": {
+      "level": "Level",
+      "about": {
+        "title": "<span>Game:</span> Grid Sequence",
+        "descr": "<span>Benefit:</span> Develops multitasking skills, visual scanning, and sequential processing abilities.",
+        "rules": "Rules:",
+        "rule1": "<span>1.</span> Click on the numbers in ascending order (from smallest to largest) as quickly as possible. 🔢",
+        "rule2": "<span>2.</span> The grid size increases as you progress through levels. 📈",
+        "rule3": "<span>3.</span> Make a mistake or run out of time, and you'll have to start over! ⏳",
         "btn": "Start"
       }
     }
