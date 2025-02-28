@@ -55,19 +55,19 @@ interface Block {
 const TIME_LIMIT = 10;
 const WINNING_STREAK = 20;
 const BLOCKS_COUNT = 3;
-const CORRECT_ANSWERS_COUNT = 2; // Всегда должно быть 2 правильных ответа
-const BASE_FALL_SPEED = 0.2; // Базовая скорость падения
-const INITIAL_BLOCK_COLOR = '#757575'; // Серый цвет для всех падающих блоков
-const CORRECT_COLOR = '#4CAF50'; // Зеленый цвет для правильного ответа
-const ERROR_COLOR = '#FF5252'; // Красный цвет для неправильного ответа
-const BLOCK_WIDTH = 20;
+const CORRECT_ANSWERS_COUNT = 2;
+const BASE_FALL_SPEED = 0.2;
+const INITIAL_BLOCK_COLOR = '#757575';
+const CORRECT_COLOR = '#4CAF50';
+const ERROR_COLOR = '#FF5252';
+const BLOCK_WIDTH = 15;
 const BLOCK_HEIGHT = 15;
 const MIN_VERTICAL_GAP = 20;
 const CONTAINER_WIDTH = 100;
 const CONTAINER_HEIGHT = 100;
 const TARGET_FPS = 120;
 const FRAME_TIME = 1000 / TARGET_FPS;
-const FEEDBACK_DURATION = 1000; // Время показа сообщения об ошибке в мс
+const FEEDBACK_DURATION = 1000;
 
 // Game state
 const timeLeft = ref(TIME_LIMIT);
@@ -125,17 +125,13 @@ function doBlocksOverlap(block1: Block, block2: Block): boolean {
 
 // Find a valid position for a new block
 function findValidPosition(blockIndex: number): { x: number, y: number } {
-  // Разделим контейнер на секции по количеству блоков
   const sectionWidth = CONTAINER_WIDTH / BLOCKS_COUNT;
   
-  // Вычисляем границы секции для текущего блока
   const sectionStart = sectionWidth * blockIndex;
   const sectionEnd = sectionStart + sectionWidth - BLOCK_WIDTH;
   
-  // Случайная позиция X в пределах секции
   const x = sectionStart + Math.random() * (sectionEnd - sectionStart);
   
-  // Случайная начальная высота над контейнером
   const y = -BLOCK_HEIGHT - Math.random() * MIN_VERTICAL_GAP;
   
   return { x, y };
@@ -147,21 +143,17 @@ function initializeBlocks() {
   correctAnswersNeeded.value = CORRECT_ANSWERS_COUNT;
   correctAnswersGiven.value = 0;
 
-  // Создаем массив индексов для случайного распределения блоков
   const indices = Array.from({ length: BLOCKS_COUNT }, (_, i) => i);
-  // Перемешиваем индексы
   for (let i = indices.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [indices[i], indices[j]] = [indices[j], indices[i]];
   }
 
-  // Создаем блоки с правильными ответами
   for (let i = 0; i < CORRECT_ANSWERS_COUNT; i++) {
     const block = createBlock(true, indices[i]);
     fallingBlocks.value.push(block);
   }
 
-  // Создаем блоки с неправильными ответами
   for (let i = CORRECT_ANSWERS_COUNT; i < BLOCKS_COUNT; i++) {
     const block = createBlock(false, indices[i]);
     fallingBlocks.value.push(block);
@@ -193,10 +185,9 @@ function checkAnswer(block: Block) {
   block.isClicked = true;
 
   if (block.displayedAnswer === block.correctAnswer) {
-    block.color = CORRECT_COLOR; // Зеленый цвет для правильного ответа
+    block.color = CORRECT_COLOR;
     correctAnswersGiven.value++;
 
-    // Проверяем, все ли правильные ответы даны
     if (correctAnswersGiven.value === correctAnswersNeeded.value) {
       score.value++;
       
@@ -205,15 +196,13 @@ function checkAnswer(block: Block) {
         return;
       }
 
-      // Начинаем новый раунд, сохраняя очки
       setTimeout(() => resetGameAfterSuccess(), 500);
     }
   } else {
-    block.color = ERROR_COLOR; // Красный цвет для неправильного ответа
+    block.color = ERROR_COLOR;
     showError.value = true;
     correctAnswersGiven.value = 0;
     
-    // Показываем все правильные ответы
     fallingBlocks.value.forEach(b => {
       if (b.isCorrect) {
         b.color = CORRECT_COLOR;
@@ -226,7 +215,7 @@ function checkAnswer(block: Block) {
 
     errorTimeout = setTimeout(() => {
       showError.value = false;
-      resetGameAfterError(); // Сбрасываем игру с обнулением очков
+      resetGameAfterError();
     }, FEEDBACK_DURATION);
   }
 }
@@ -237,13 +226,11 @@ function updateBlocks() {
 
   fallingBlocks.value = fallingBlocks.value.map(block => {
     if (block.y >= CONTAINER_HEIGHT - block.height) {
-      // Если правильный блок достиг дна и не был кликнут
       if (block.isCorrect && !block.isClicked) {
         block.color = ERROR_COLOR;
         showError.value = true;
         correctAnswersGiven.value = 0;
         
-        // Показываем все правильные ответы
         fallingBlocks.value.forEach(b => {
           if (b.isCorrect) {
             b.color = CORRECT_COLOR;
@@ -279,7 +266,6 @@ function startTimer() {
     timeLeft.value -= 0.1;
     if (timeLeft.value <= 0) {
       showError.value = true;
-      // Показываем все правильные ответы перед сбросом
       fallingBlocks.value.forEach(block => {
         if (block.isCorrect) {
           block.color = CORRECT_COLOR;
@@ -292,7 +278,7 @@ function startTimer() {
       
       errorTimeout = setTimeout(() => {
         showError.value = false;
-        resetGameAfterError(); // Сбрасываем игру и очки когда время вышло
+        resetGameAfterError();
       }, FEEDBACK_DURATION);
     }
   }, 100);
@@ -302,15 +288,11 @@ function startTimer() {
 function animate(currentTime: number) {
   if (!isGameActive.value) return;
 
-  // Вычисляем время, прошедшее с последнего кадра
   const deltaTime = currentTime - lastFrameTime.value;
 
-  // Проверяем, прошло ли достаточно времени для следующего кадра
   if (deltaTime >= FRAME_TIME) {
-    // Обновляем время последнего кадра
     lastFrameTime.value = currentTime - (deltaTime % FRAME_TIME);
     
-    // Обновляем позиции блоков
     updateBlocks();
   }
 
@@ -340,7 +322,7 @@ function stopGame() {
 function resetGameAfterError() {
   stopGame();
   showError.value = false;
-  score.value = 0; // Сбрасываем очки только при ошибке
+  score.value = 0;
   startGame();
 }
 
