@@ -2,9 +2,7 @@
   <div class="home-page">
     <!-- Welcome Section -->
     <div class="welcome-section container">
-      <h1 class="welcome-title">
-        {{ $t('home.welcome', { name: userName }) }}
-      </h1>
+      <h1 class="welcome-title" v-html="$t('home.welcome', { name: userName })" />
       <p class="welcome-subtitle">{{ $t('home.subtitle') }}</p>
     </div>
 
@@ -207,11 +205,15 @@ onMounted(() => {
 .welcome-section {
   margin-bottom: 24px;
 
-  .welcome-title {
-    font-size: 28px;
+  :deep(h1) {
+    font-size: 32px;
     color: var(--white-color);
-    margin: 0;
     font-weight: bold;
+    margin: 0;
+
+    span {
+      color: var(--primary);
+    }
   }
   
   .welcome-subtitle {

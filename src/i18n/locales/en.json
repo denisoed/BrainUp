@@ -25,7 +25,7 @@
       "vocabulary": "Vocabulary",
       "gridSequence": "Grid Sequence"
     },
-    "welcome": "Hi, {name}!",
+    "welcome": "Hi, <span>{name}</span>!",
     "subtitle": "Ready for today's training?",
     "goals": {
       "title": "Daily Goals",
