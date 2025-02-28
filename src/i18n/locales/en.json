@@ -12,6 +12,7 @@
       "speech": "Speech"
     },
     "cards": {
+      "mathBlocks": "Math Blocks",
       "mathSprint": "Math Sprint",
       "sleep": "Sleep",
       "colors": "Colors",
@@ -179,6 +180,17 @@
         "rule1": "<span>1.</span> Click on the numbers in ascending order (from smallest to largest) as quickly as possible. 🔢",
         "rule2": "<span>2.</span> The grid size increases as you progress through levels. 📈",
         "rule3": "<span>3.</span> Make a mistake or run out of time, and you'll have to start over! ⏳",
+        "btn": "Start"
+      }
+    },
+    "mathBlocks": {
+      "about": {
+        "title": "<span>Game:</span> Math Blocks",
+        "descr": "<span>Benefit:</span> Develops multitasking abilities, quick mathematical thinking, and decision-making under time pressure.",
+        "rules": "Rules:",
+        "rule1": "<span>1.</span> Math blocks with equations will fall from the top. Click on blocks with correct answers! 🧮",
+        "rule2": "<span>2.</span> Watch out for incorrect equations - clicking them or letting correct ones reach the bottom will reset your score! ⚠️",
+        "rule3": "<span>3.</span> Get 20 correct answers in a row to win! 🏆",
         "btn": "Start"
       }
     }
