@@ -1,9 +1,14 @@
 <template>
   <div class="home-page">
     <!-- Welcome Section -->
-    <div class="welcome-section container">
-      <h1 class="welcome-title" v-html="$t('home.welcome', { name: userName })" />
-      <p class="welcome-subtitle">{{ $t('home.subtitle') }}</p>
+    <div class="container">
+      <div class="welcome-section">
+        <h1 class="welcome-title" v-html="$t('home.welcome', { name: userName })" />
+        <p class="welcome-subtitle">{{ $t('home.subtitle') }}</p>
+      </div>
+      <router-link to="/list" class="home-page_menu-btn">
+        <img src="@/assets/burger-menu-right.svg" alt="Menu" />
+      </router-link>
     </div>
 
     <!-- Training Cards Slider -->
@@ -27,6 +32,11 @@
             <span>PRO</span>
           </div>
         </div>
+        <router-link to="/list" class="all-games-card">
+          <div class="all-games-card_content">
+            <h3 class="card-title">{{ $t('home.more') }}</h3>
+          </div>
+        </router-link>
       </div>
     </div>
 
@@ -137,7 +147,7 @@ const trainingCards = ref([
     icon: SequenceIcon,
     route: '/game/sequence',
     premium: true
-  }
+  },
 ]);
 
 function onCardClick(card: any) {
@@ -200,6 +210,21 @@ onMounted(() => {
 <style lang="scss" scoped>
 .home-page {
   padding-bottom: 20px;
+
+  &_menu-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 2;
+    width: 60px;
+    background: transparent;
+    padding: 20px 16px;
+    
+    img {
+      width: 100%;
+      display: block;
+    }
+  }
 }
 
 .welcome-section {
@@ -295,6 +320,23 @@ onMounted(() => {
 
 .daily-training {
   margin-top: 24px;
+}
+
+.all-games-card {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 20px;
+
+  .card-title {
+    color: var(--white-color);
+    font-size: 16px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
 }
 
 .training-card {

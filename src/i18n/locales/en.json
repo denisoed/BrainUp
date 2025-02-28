@@ -27,6 +27,7 @@
     },
     "welcome": "Hi, <span>{name}</span>!",
     "subtitle": "Ready for today's training?",
+    "more": "More",
     "goals": {
       "title": "Daily Goals",
       "focus": "Improve Focus",

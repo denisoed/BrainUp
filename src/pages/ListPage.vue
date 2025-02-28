@@ -1,12 +1,7 @@
 <template>
   <div class="home-page flex column">
-    <div class="flex">
-      <div class="container">
-        <h1 v-html="$t('home.title')" />
-      </div>
-      <router-link to="/" class="home-page_menu-btn">
-        <img src="@/assets/burger-menu-right.svg" alt="Menu" />
-      </router-link>
+    <div class="container">
+      <h1 v-html="$t('home.title')" />
     </div>
     <div class="container home-page_tabs mt-lg">
       <Tabs v-model="tab" :tabs="tabs" />
@@ -170,21 +165,6 @@ function getCardWidth(width: number) {
     }
   }
 
-  &_menu-btn {
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 2;
-    width: 60px;
-    background: transparent;
-    padding: 20px 16px;
-    
-    img {
-      width: 100%;
-      display: block;
-    }
-  }
-  
   &_tabs {
     max-width: 100%;
     overflow: auto;
