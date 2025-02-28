@@ -3,10 +3,11 @@ import { createMemoryHistory, createRouter } from 'vue-router'
 import HomePage from '@/pages/HomePage.vue'
 import GamePage from '@/pages/GamePage.vue'
 import LeaderboardPage from '@/pages/LeaderboardPage.vue'
+import ListPage from '@/pages/ListPage.vue'
 
 const routes = [
   { path: '/', component: HomePage, meta: { layout: 'MainLayout' }},
-  { path: '/list', component: HomePage, meta: { layout: 'MainLayout' }},
+  { path: '/list', component: ListPage, meta: { layout: 'MainLayout' }},
   { path: '/leaderboard', component: LeaderboardPage, meta: { layout: 'MainLayout' }},
   { path: '/settings', component: () => import('@/pages/SettingsPage.vue'), meta: { layout: 'MainLayout' }},
   { path: '/game/:game', component: GamePage, meta: { layout: 'MainLayout' }},

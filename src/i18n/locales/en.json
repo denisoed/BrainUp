@@ -24,6 +24,24 @@
       "spelling": "Spelling",
       "vocabulary": "Vocabulary",
       "gridSequence": "Grid Sequence"
+    },
+    "welcome": "Hi, {name}!",
+    "subtitle": "Ready for today's training?",
+    "goals": {
+      "title": "Daily Goals",
+      "focus": "Improve Focus",
+      "memory": "Train Memory",
+      "logic": "Logic Practice"
+    },
+    "training": {
+      "title": "Daily Training Set",
+      "time": "{minutes} min",
+      "start": "Start Training",
+      "exercises": {
+        "focus": "Focus Exercise",
+        "puzzle": "Logic Puzzle",
+        "speech": "Speech Practice"
+      }
     }
   },
   "games": {
@@ -252,5 +270,11 @@
     "current_user": {
       "you": "You"
     }
+  },
+  "nav": {
+    "home": "Home",
+    "stats": "Stats",
+    "blog": "Blog",
+    "settings": "Settings"
   }
 }
