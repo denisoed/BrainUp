@@ -1,10 +1,35 @@
 <template>
   <div class="home-page">
+    <!-- Welcome Section -->
     <div class="welcome-section container">
       <h1 class="welcome-title">
         {{ $t('home.welcome', { name: userName }) }}
       </h1>
       <p class="welcome-subtitle">{{ $t('home.subtitle') }}</p>
+    </div>
+
+    <!-- Training Cards Slider -->
+    <div class="training-cards container">
+      <div class="training-cards_scroll">
+        <div 
+          v-for="card in trainingCards" 
+          :key="card.id"
+          class="training-card-item"
+          :class="{ 'training-card-item--premium': card.premium }"
+          @click="onCardClick(card)"
+        >
+          <div class="card-icon">
+            <img :src="card.icon" :alt="card.title">
+          </div>
+          <div class="card-content">
+            <h3 class="card-title">{{ card.title }}</h3>
+            <p class="card-description" v-html="card.description" />
+          </div>
+          <div v-if="card.premium" class="premium-badge">
+            <span>PRO</span>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Daily Goals -->
@@ -62,9 +87,68 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
+import MathSprintIcon from '@/assets/abstracts/mathSprint.svg';
+import ColorsIcon from '@/assets/abstracts/colors.svg';
+import NumbersIcon from '@/assets/abstracts/numbers.svg';
+import TongueTwisterIcon from '@/assets/abstracts/tongueTwister.svg';
+import SequenceIcon from '@/assets/abstracts/sequence.svg';
 
 const { t } = useI18n();
+const router = useRouter();
 const userName = ref('');
+
+// Training cards data
+const trainingCards = ref([
+  {
+    id: 1,
+    title: t('home.cards.mathSprint'),
+    description: t('games.mathSprint.about.descr'),
+    icon: MathSprintIcon,
+    route: '/game/mathSprint',
+    premium: false
+  },
+  {
+    id: 2,
+    title: t('home.cards.colors'),
+    description: t('games.colors.about.descr'),
+    icon: ColorsIcon,
+    route: '/game/colors',
+    premium: false
+  },
+  {
+    id: 3,
+    title: t('home.cards.numbers'),
+    description: t('games.numbers.about.descr'),
+    icon: NumbersIcon,
+    route: '/game/numbers',
+    premium: true
+  },
+  {
+    id: 4,
+    title: t('home.cards.tongueTwister'),
+    description: t('games.tongueTwister.about.descr'),
+    icon: TongueTwisterIcon,
+    route: '/game/tongueTwister',
+    premium: false
+  },
+  {
+    id: 5,
+    title: t('home.cards.sequence'),
+    description: t('games.sequence.about.descr'),
+    icon: SequenceIcon,
+    route: '/game/sequence',
+    premium: true
+  }
+]);
+
+function onCardClick(card: any) {
+  if (card.premium) {
+    router.push('/buy-premium');
+  } else {
+    router.push(card.route);
+  }
+}
 
 // Daily goals data
 const dailyGoals = ref([
@@ -117,7 +201,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .home-page {
-  padding-bottom: 70px; // Space for bottom navigation
+  padding-bottom: 20px;
 }
 
 .welcome-section {
@@ -136,7 +220,6 @@ onMounted(() => {
     margin: 8px 0 0;
   }
 }
-
 
 .section-header {
   display: flex;
@@ -272,6 +355,98 @@ onMounted(() => {
   
   &:hover {
     transform: translateY(-2px);
+  }
+}
+
+.training-cards {
+  margin: 24px 0;
+  
+  &_scroll {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 16px;
+    -webkit-overflow-scrolling: touch; // Для плавного скролла на iOS
+    
+    // Скрываем скроллбар
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+}
+
+.training-card-item {
+  flex: 0 0 calc(70% - 8px); // Размер карточки (2.5 карточки на экране)
+  scroll-snap-align: start;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  box-sizing: border-box;
+  
+  &:hover {
+    transform: translateY(-4px);
+  }
+  
+  &--premium {
+    background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.2), rgba(var(--primary-rgb), 0.1));
+    border: 1px solid var(--primary);
+  }
+  
+  .card-icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 12px;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+  
+  .card-content {
+    position: relative;
+    z-index: 1;
+  }
+  
+  .card-title {
+    color: var(--white-color);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: normal;
+    margin: 0 0 8px;
+  }
+  
+  :deep(.card-description) {
+    color: var(--gray-color);
+    font-size: 12px;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    span {
+      color: var(--white-color);
+    }
+  }
+  
+  .premium-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--primary);
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--dark-color);
   }
 }
 </style>
