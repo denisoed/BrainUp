@@ -34,7 +34,6 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
-import type { Component } from 'vue';
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
 import ProgressBar from '@/components/Games/ProgressBar.vue';
 
@@ -57,8 +56,10 @@ const TIME_LIMIT = 10;
 const WINNING_STREAK = 20;
 const BLOCKS_COUNT = 3;
 const CORRECT_ANSWERS_COUNT = 2; // Всегда должно быть 2 правильных ответа
-const FALL_SPEED = 0.2;
-const BLOCK_COLORS = ['#4CAF50', '#2196F3', '#FFC107'];
+const BASE_FALL_SPEED = 0.2; // Базовая скорость падения
+const INITIAL_BLOCK_COLOR = '#757575'; // Серый цвет для всех падающих блоков
+const CORRECT_COLOR = '#4CAF50'; // Зеленый цвет для правильного ответа
+const ERROR_COLOR = '#FF5252'; // Красный цвет для неправильного ответа
 const BLOCK_WIDTH = 20;
 const BLOCK_HEIGHT = 15;
 const MIN_VERTICAL_GAP = 20;
@@ -67,7 +68,6 @@ const CONTAINER_HEIGHT = 100;
 const TARGET_FPS = 120;
 const FRAME_TIME = 1000 / TARGET_FPS;
 const FEEDBACK_DURATION = 1000; // Время показа сообщения об ошибке в мс
-const ERROR_COLOR = '#FF5252'; // Цвет для неправильного ответа
 
 // Game state
 const timeLeft = ref(TIME_LIMIT);
@@ -124,37 +124,21 @@ function doBlocksOverlap(block1: Block, block2: Block): boolean {
 }
 
 // Find a valid position for a new block
-function findValidPosition(): { x: number, y: number } {
-  let attempts = 0;
-  const maxAttempts = 50;
-
-  while (attempts < maxAttempts) {
-    // Ограничиваем позицию по горизонтали, чтобы блок не выходил за границы
-    const x = Math.max(0, Math.min(Math.random() * (CONTAINER_WIDTH - BLOCK_WIDTH), CONTAINER_WIDTH - BLOCK_WIDTH));
-    const y = -BLOCK_HEIGHT - Math.random() * MIN_VERTICAL_GAP;
-    
-    const newBlock = { x, y, width: BLOCK_WIDTH, height: BLOCK_HEIGHT };
-    
-    const hasOverlap = fallingBlocks.value.some(block => 
-      doBlocksOverlap(newBlock as Block, block)
-    );
-
-    if (!hasOverlap) {
-      return { x, y };
-    }
-    
-    attempts++;
-  }
-
-  const highestBlock = fallingBlocks.value.reduce((highest, block) => 
-    block.y < highest ? block.y : highest, 0);
+function findValidPosition(blockIndex: number): { x: number, y: number } {
+  // Разделим контейнер на секции по количеству блоков
+  const sectionWidth = CONTAINER_WIDTH / BLOCKS_COUNT;
   
-  // Убеждаемся, что блок не выходит за границы по горизонтали
-  const x = Math.max(0, Math.min(Math.random() * (CONTAINER_WIDTH - BLOCK_WIDTH), CONTAINER_WIDTH - BLOCK_WIDTH));
-  return {
-    x,
-    y: highestBlock - BLOCK_HEIGHT - MIN_VERTICAL_GAP
-  };
+  // Вычисляем границы секции для текущего блока
+  const sectionStart = sectionWidth * blockIndex;
+  const sectionEnd = sectionStart + sectionWidth - BLOCK_WIDTH;
+  
+  // Случайная позиция X в пределах секции
+  const x = sectionStart + Math.random() * (sectionEnd - sectionStart);
+  
+  // Случайная начальная высота над контейнером
+  const y = -BLOCK_HEIGHT - Math.random() * MIN_VERTICAL_GAP;
+  
+  return { x, y };
 }
 
 // Initialize blocks
@@ -163,29 +147,31 @@ function initializeBlocks() {
   correctAnswersNeeded.value = CORRECT_ANSWERS_COUNT;
   correctAnswersGiven.value = 0;
 
+  // Создаем массив индексов для случайного распределения блоков
+  const indices = Array.from({ length: BLOCKS_COUNT }, (_, i) => i);
+  // Перемешиваем индексы
+  for (let i = indices.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [indices[i], indices[j]] = [indices[j], indices[i]];
+  }
+
   // Создаем блоки с правильными ответами
   for (let i = 0; i < CORRECT_ANSWERS_COUNT; i++) {
-    const block = createBlock(true);
+    const block = createBlock(true, indices[i]);
     fallingBlocks.value.push(block);
   }
 
   // Создаем блоки с неправильными ответами
   for (let i = CORRECT_ANSWERS_COUNT; i < BLOCKS_COUNT; i++) {
-    const block = createBlock(false);
+    const block = createBlock(false, indices[i]);
     fallingBlocks.value.push(block);
-  }
-
-  // Перемешиваем массив блоков
-  for (let i = fallingBlocks.value.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [fallingBlocks.value[i], fallingBlocks.value[j]] = [fallingBlocks.value[j], fallingBlocks.value[i]];
   }
 }
 
 // Create new falling block
-function createBlock(isCorrect: boolean): Block {
+function createBlock(isCorrect: boolean, index: number): Block {
   const { expression, correctAnswer, displayedAnswer } = generateMathExpression(isCorrect);
-  const position = findValidPosition();
+  const position = findValidPosition(index);
   
   return {
     ...position,
@@ -194,7 +180,7 @@ function createBlock(isCorrect: boolean): Block {
     expression,
     displayedAnswer,
     correctAnswer,
-    color: BLOCK_COLORS[Math.floor(Math.random() * BLOCK_COLORS.length)],
+    color: INITIAL_BLOCK_COLOR,
     isCorrect,
     isClicked: false
   };
@@ -207,7 +193,7 @@ function checkAnswer(block: Block) {
   block.isClicked = true;
 
   if (block.displayedAnswer === block.correctAnswer) {
-    block.color = '#4CAF50'; // Зеленый цвет для правильного ответа
+    block.color = CORRECT_COLOR; // Зеленый цвет для правильного ответа
     correctAnswersGiven.value++;
 
     // Проверяем, все ли правильные ответы даны
@@ -223,14 +209,14 @@ function checkAnswer(block: Block) {
       setTimeout(() => resetGameAfterSuccess(), 500);
     }
   } else {
-    block.color = ERROR_COLOR;
+    block.color = ERROR_COLOR; // Красный цвет для неправильного ответа
     showError.value = true;
     correctAnswersGiven.value = 0;
     
     // Показываем все правильные ответы
     fallingBlocks.value.forEach(b => {
       if (b.isCorrect) {
-        b.color = '#4CAF50';
+        b.color = CORRECT_COLOR;
       }
     });
     
@@ -260,7 +246,7 @@ function updateBlocks() {
         // Показываем все правильные ответы
         fallingBlocks.value.forEach(b => {
           if (b.isCorrect) {
-            b.color = '#4CAF50';
+            b.color = CORRECT_COLOR;
           }
         });
         
@@ -270,18 +256,18 @@ function updateBlocks() {
         
         errorTimeout = setTimeout(() => {
           showError.value = false;
-          resetGameAfterError(); // Сбрасываем игру с обнулением очков
+          resetGameAfterError();
         }, FEEDBACK_DURATION);
       }
       return block;
     } else {
       allBlocksAtBottom = false;
-      return { ...block, y: block.y + FALL_SPEED };
+      return { ...block, y: block.y + BASE_FALL_SPEED };
     }
   });
 
   if (allBlocksAtBottom) {
-    resetGameAfterError(); // Сбрасываем игру с обнулением очков
+    resetGameAfterError();
   }
 }
 
@@ -292,7 +278,22 @@ function startTimer() {
   timerInterval = setInterval(() => {
     timeLeft.value -= 0.1;
     if (timeLeft.value <= 0) {
-      stopGame();
+      showError.value = true;
+      // Показываем все правильные ответы перед сбросом
+      fallingBlocks.value.forEach(block => {
+        if (block.isCorrect) {
+          block.color = CORRECT_COLOR;
+        }
+      });
+      
+      if (errorTimeout) {
+        clearTimeout(errorTimeout);
+      }
+      
+      errorTimeout = setTimeout(() => {
+        showError.value = false;
+        resetGameAfterError(); // Сбрасываем игру и очки когда время вышло
+      }, FEEDBACK_DURATION);
     }
   }, 100);
 }
@@ -352,7 +353,7 @@ function resetGameAfterSuccess() {
 
 // Lifecycle hooks
 onMounted(() => {
-  score.value = 0; // Инициализируем очки только при первом запуске
+  score.value = 0;
   startGame();
 });
 
@@ -370,7 +371,7 @@ onUnmounted(() => {
 
 .game-container {
   width: 100%;
-  height: 70vh;
+  height: 50vh;
   position: relative;
   overflow: hidden;
   background-color: rgba(255, 255, 255, 0.05);
@@ -391,15 +392,17 @@ onUnmounted(() => {
   transform: translate(-50%, -50%);
   background-color: rgba(255, 82, 82, 0.9);
   color: white;
-  padding: 16px 32px;
+  padding: 8px 16px;
   border-radius: 8px;
-  font-size: 24px;
+  font-size: 22px;
+  line-height: normal;
   z-index: 10;
+  text-align: center;
 }
 
 .math-block {
   position: absolute;
-  padding: 0 8px;
+  padding: 8px;
   text-align: center;
   border-radius: 8px;
   cursor: pointer;
@@ -408,6 +411,7 @@ onUnmounted(() => {
   color: var(--white-color);
   transition: transform 0.2s, background-color 0.3s;
   user-select: none;
+  line-height: normal;
 
   &:hover {
     transform: scale(1.05);

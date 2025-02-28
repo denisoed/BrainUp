@@ -125,14 +125,14 @@ const cards = computed(() => [
     class: '',
     icon: VocabularyIcon,
     title: t('home.cards.vocabulary'),
-    width: 100
+    width: 60
   },
   {
     to: '/game/mathBlocks',
     class: '',
     icon: MathBlocksIcon,
     title: t('home.cards.mathBlocks'),
-    width: 100
+    width: 40
   }
 ]);
 
