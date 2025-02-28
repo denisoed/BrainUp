@@ -88,7 +88,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
-import MathSprintIcon from '@/assets/abstracts/mathSprint.svg';
+import MinesweeperIcon from '@/assets/abstracts/minesweeper.svg';
 import ColorsIcon from '@/assets/abstracts/colors.svg';
 import NumbersIcon from '@/assets/abstracts/numbers.svg';
 import TongueTwisterIcon from '@/assets/abstracts/tongueTwister.svg';
@@ -102,10 +102,10 @@ const userName = ref('');
 const trainingCards = ref([
   {
     id: 1,
-    title: t('home.cards.mathSprint'),
-    description: t('games.mathSprint.about.descr'),
-    icon: MathSprintIcon,
-    route: '/game/mathSprint',
+    title: t('home.cards.minesweeper'),
+    description: t('games.minesweeper.about.descr'),
+    icon: MinesweeperIcon,
+    route: '/game/minesweeper',
     premium: false
   },
   {
