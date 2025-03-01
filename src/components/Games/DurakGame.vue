@@ -25,7 +25,7 @@
       <div class="playing-field">
         <!-- Deck and trump card -->
         <div class="deck-area">
-          <div class="deck" v-if="deck.length">
+          <div class="deck flex items-center justify-center" v-if="deck.length">
             <div class="card card-back"><span>🂠</span></div>
             <div class="trump-card card" v-if="trumpCard">
               <span :data-suit="trumpCard.suit">{{ getCardSymbol(trumpCard) }}</span>
@@ -547,7 +547,7 @@ onMounted(() => {
 .turn-indicator {
   background: rgba(255, 255, 255, 0.1);
   padding: 8px 16px;
-  border-radius: 8px;
+  border-radius: 4px;
   color: var(--white-color);
   font-weight: 500;
 }
@@ -599,14 +599,30 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   min-height: 150px;
-  padding: 20px;
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 4px;
 }
 
 .deck-area {
   position: relative;
-  width: 80px;
+
+  .deck {
+    .card {
+      min-width: auto;
+      height: auto;
+    }
+    
+    .trump-card {
+      z-index: 2;
+      padding: 8px 4px;
+    }
+
+    .card-back {
+      font-size: 44px;
+      line-height: normal;
+      z-index: 1;
+    }
+  }
 }
 
 .battle-area {
@@ -623,10 +639,8 @@ onMounted(() => {
 
     .attack-card,
     .defense-card {
-      // min-width: 45px;
-      // height: 90px;
       border: 2px solid var(--border-color);
-      border-radius: 8px;
+      border-radius: 4px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -634,7 +648,7 @@ onMounted(() => {
       background: white;
       color: black;
       z-index: 1;
-      padding: 8px 5px;
+      padding: 8px 4px;
 
       // Add red color for hearts and diamonds
       &:has(span[data-suit="♥"]),
@@ -656,7 +670,7 @@ onMounted(() => {
   min-width: 45px;
   height: 90px;
   border: 2px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -683,11 +697,6 @@ onMounted(() => {
 }
 
 .trump-card {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%) rotate(90deg);
-
   &.card {
     background: white;
     
@@ -707,7 +716,7 @@ onMounted(() => {
 .control-btn {
   padding: 10px 20px;
   border: none;
-  border-radius: 8px;
+  border-radius: 4px;
   background: var(--primary-color);
   color: white;
   cursor: pointer;
