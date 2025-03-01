@@ -150,8 +150,8 @@ function sortCards(cards: Card[]): Card[] {
     if (aIsTrump && !bIsTrump) return -1; // Козыри идут в начало (слева)
     if (!aIsTrump && bIsTrump) return 1;
     
-    // Если обе карты козырные или обе не козырные, сортируем по рангу
-    return a.rank - b.rank;
+    // Если обе карты козырные или обе не козырные, сортируем по рангу по убыванию
+    return b.rank - a.rank; // Изменили порядок на убывающий
   });
 }
 
@@ -498,36 +498,10 @@ function handleGameOver() {
     if (score.value < WINNING_STREAK) {
       setTimeout(startGame, 2000);
     }
-  } else if (opponentCards.value.length === 0 && playerCards.value.length > 0) {
-    // Игрок проиграл (стал дураком)
+  } else {
+    // В любом другом случае (проигрыш или ничья) - сбрасываем очки
     score.value = 0;
     setTimeout(startGame, 2000);
-  } else if (deck.value.length === 0 && 
-             playerCards.value.length === 1 && 
-             opponentCards.value.length === 1) {
-    // Особый случай: у обоих по одной карте
-    if (isPlayerTurn.value) {
-      // Если ход игрока и компьютер не может отбиться - игрок выиграл
-      const playerCard = playerCards.value[0];
-      const opponentCard = opponentCards.value[0];
-      if (!canBeat(opponentCard, playerCard)) {
-        score.value++;
-      } else {
-        score.value = 0;
-      }
-    } else {
-      // Если ход компьютера и игрок не может отбиться - игрок проиграл
-      const playerCard = playerCards.value[0];
-      const opponentCard = opponentCards.value[0];
-      if (!canBeat(playerCard, opponentCard)) {
-        score.value = 0;
-      } else {
-        score.value++;
-      }
-    }
-    if (score.value < WINNING_STREAK) {
-      setTimeout(startGame, 2000);
-    }
   }
 }
 
@@ -591,26 +565,11 @@ onMounted(() => {
 .opponent-cards {
   display: flex;
   justify-content: center;
-  gap: 0;
-  min-height: 120px;
   position: relative;
-  padding: 20px 60px;
 
   .card {
-    position: absolute;
-    width: 120px;
-    height: 180px;
-    font-size: 2.4em;
-    transform-origin: center 120%;
-    transition: transform 0.3s ease;
-
-    @for $i from 1 through 10 {
-      &:nth-child(#{$i}) {
-        $rotation: ($i - 5) * 5deg;
-        transform: rotate($rotation);
-        z-index: $i;
-      }
-    }
+    min-width: auto;
+    height: auto;
   }
 }
 
@@ -655,6 +614,42 @@ onMounted(() => {
   gap: 20px;
   flex-grow: 1;
   justify-content: center;
+
+  .card-pair {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    position: relative;
+
+    .attack-card,
+    .defense-card {
+      // min-width: 45px;
+      // height: 90px;
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4em;
+      background: white;
+      color: black;
+      z-index: 1;
+      padding: 8px 5px;
+
+      // Add red color for hearts and diamonds
+      &:has(span[data-suit="♥"]),
+      &:has(span[data-suit="♦"]) {
+        color: red;
+      }
+    }
+
+    .defense-card {
+      position: absolute;
+      top: 40px;
+      left: 10px;
+      z-index: 2;
+    }
+  }
 }
 
 .card {
@@ -685,12 +680,6 @@ onMounted(() => {
   &:has(span[data-suit="♦"]) {
     color: red;
   }
-}
-
-.card-pair {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
 }
 
 .trump-card {
