@@ -26,6 +26,7 @@ import BackBtn from '@/components/BackBtn.vue';
 import {
   openModal
 } from 'jenesius-vue-modal';
+import DurakGame from '@/components/Games/DurakGame.vue';
 
 const route = useRoute();
 
@@ -40,7 +41,8 @@ const GAMES = {
   spelling: SpellingGame,
   vocabulary: VocabularyGame,
   gridSequence: GridSequenceGame,
-  mathBlocks: MathBlocksGame
+  mathBlocks: MathBlocksGame,
+  durak: DurakGame
 };
 
 const game = computed(() => GAMES[route.params.game as keyof typeof GAMES]);

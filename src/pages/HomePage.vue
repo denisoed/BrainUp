@@ -416,6 +416,7 @@ onMounted(() => {
     &::-webkit-scrollbar {
       display: none;
     }
+
     scrollbar-width: none;
     -ms-overflow-style: none;
   }

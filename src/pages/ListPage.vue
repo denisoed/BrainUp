@@ -128,6 +128,13 @@ const cards = computed(() => [
     icon: MathBlocksIcon,
     title: t('home.cards.mathBlocks'),
     width: 40
+  },
+  {
+    to: '/game/durak',
+    class: '',
+    icon: Abstract1,
+    title: t('home.cards.durak'),
+    width: 100
   }
 ]);
 

@@ -212,6 +212,19 @@
         "rule3": "<span>3.</span> Get 20 correct answers in a row to win! 🏆",
         "btn": "Start"
       }
+    },
+    "durak": {
+      "about": {
+        "title": "<span>Game:</span> Durak",
+        "descr": "<span>Benefit:</span> Develops strategic thinking, decision-making skills, and memory.",
+        "rules": "Rules:",
+        "rule1": "<span>1.</span> Each player gets 6 cards. The last card determines the trump suit. 🃏",
+        "rule2": "<span>2.</span> Player with the lowest trump card starts. Beat cards with higher cards of the same suit or trumps. 🎯",
+        "rule3": "<span>3.</span> Win by getting rid of all your cards first! The last player with cards is the Durak (Fool). 🏆",
+        "btn": "Start"
+      },
+      "take": "Take",
+      "done": "Done"
     }
   },
   "premium": {
