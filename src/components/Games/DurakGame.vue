@@ -133,19 +133,35 @@ const takenCardsRanks = ref(new Set<number>());
 // Добавляем новое состояние для хранения козырной масти
 const trumpSuit = ref<string | null>(null);
 
+// Добавляем новые состояния
+const allCards = ref<Card[]>([]); // Все карты в игре
+const playedCards = ref<Card[]>([]); // Сыгранные карты
+const gameKozyr = ref<Card | null>(null); // Козырная карта для текущей игры
+
 function createDeck(): Card[] {
-  const newDeck: Card[] = [];
-  SUITS.forEach(suit => {
-    RANKS.forEach(rank => {
-      let value = rank.toString();
-      if (rank === 11) value = 'J';
-      if (rank === 12) value = 'Q';
-      if (rank === 13) value = 'K';
-      if (rank === 14) value = 'A';
-      newDeck.push({ rank, suit, value });
+  // Создаем все карты, если их еще нет
+  if (allCards.value.length === 0) {
+    SUITS.forEach(suit => {
+      RANKS.forEach(rank => {
+        let value = rank.toString();
+        if (rank === 11) value = 'J';
+        if (rank === 12) value = 'Q';
+        if (rank === 13) value = 'K';
+        if (rank === 14) value = 'A';
+        allCards.value.push({ rank, suit, value });
+      });
     });
-  });
-  return shuffleDeck(newDeck);
+  }
+  
+  // Создаем новую колоду из всех доступных карт
+  const shuffledDeck = shuffleDeck([...allCards.value]);
+  
+  // Отделяем и сохраняем козырную карту
+  gameKozyr.value = shuffledDeck.pop()!;
+  trumpCard.value = gameKozyr.value;
+  trumpSuit.value = gameKozyr.value.suit;
+  
+  return shuffledDeck; // Возвращаем колоду без козырной карты
 }
 
 function shuffleDeck(deck: Card[]): Card[] {
@@ -173,16 +189,12 @@ function sortCards(cards: Card[]): Card[] {
 }
 
 function dealCards() {
-  // Deal initial cards
+  // Просто раздаем карты игрокам из колоды
   for (let i = 0; i < CARDS_PER_PLAYER; i++) {
     if (deck.value.length > 0) playerCards.value.push(deck.value.pop()!);
     if (deck.value.length > 0) opponentCards.value.push(deck.value.pop()!);
   }
-  // Set trump card and remember trump suit
-  if (deck.value.length > 0) {
-    trumpCard.value = deck.value[deck.value.length - 1];
-    trumpSuit.value = trumpCard.value.suit;
-  }
+  
   // Sort player's cards
   playerCards.value = sortCards(playerCards.value);
 }
@@ -477,7 +489,12 @@ function handleTakeCards() {
 function handleDone() {
   if (!canDone.value) return;
   
-  // Если все карты отбиты, сбрасываем их
+  // Перемещаем все карты с поля в сыгранные
+  battleField.value.forEach(pair => {
+    if (pair.attackCard) moveCardToPlayed(pair.attackCard);
+    if (pair.defenseCard) moveCardToPlayed(pair.defenseCard);
+  });
+  
   battleField.value = [];
   replenishCards();
   
@@ -506,47 +523,48 @@ function handleDone() {
   }
 }
 
+function moveCardToPlayed(card: Card) {
+  // Добавляем карту в сыгранные
+  playedCards.value.push(card);
+  // Удаляем карту из всех возможных мест
+  playerCards.value = playerCards.value.filter(c => c !== card);
+  opponentCards.value = opponentCards.value.filter(c => c !== card);
+  deck.value = deck.value.filter(c => c !== card);
+}
+
 function replenishCards() {
   let needSort = false;
   
-  // Сначала раздаем все карты кроме козырной
-  while (playerCards.value.length < 6 && deck.value.length > 1) {
+  // Добираем карты до 6
+  while (playerCards.value.length < 6 && deck.value.length > 0) {
     playerCards.value.push(deck.value.pop()!);
     needSort = true;
   }
-  while (opponentCards.value.length < 6 && deck.value.length > 1) {
+  
+  while (opponentCards.value.length < 6 && deck.value.length > 0) {
     opponentCards.value.push(deck.value.pop()!);
   }
   
-  // Если осталась только козырная карта
-  if (deck.value.length === 1 && trumpCard.value) {
-    // Проверяем, что эта карта действительно козырная
-    if (deck.value[0] === trumpCard.value) {
-      // Определяем, кому нужно брать карты
-      const playerNeedsCards = playerCards.value.length < 6;
-      const opponentNeedsCards = opponentCards.value.length < 6;
-      
-      // Отдаем козырь только если:
-      // 1. Игроку нужны карты и его ход
-      // 2. Оппоненту нужны карты и его ход
-      if ((playerNeedsCards && isPlayerTurn.value) || 
-          (opponentNeedsCards && !isPlayerTurn.value)) {
-        const lastCard = deck.value.pop()!;
-        
-        if (isPlayerTurn.value) {
-          playerCards.value.push(lastCard);
-          needSort = true;
-        } else {
-          opponentCards.value.push(lastCard);
-        }
-        
-        // Убираем отображение козырной карты только после её взятия
-        trumpCard.value = null;
+  // Если колода закончилась, проверяем необходимость отдать козырную карту
+  if (deck.value.length === 0 && gameKozyr.value) {
+    const playerNeedsCards = playerCards.value.length < 6;
+    const opponentNeedsCards = opponentCards.value.length < 6;
+    
+    if ((playerNeedsCards && isPlayerTurn.value) || 
+        (opponentNeedsCards && !isPlayerTurn.value)) {
+      if (isPlayerTurn.value) {
+        playerCards.value.push(gameKozyr.value);
+        needSort = true;
+      } else {
+        opponentCards.value.push(gameKozyr.value);
       }
+      
+      // Убираем козырную карту из игры
+      gameKozyr.value = null;
+      trumpCard.value = null;
     }
   }
 
-  // Sort player's cards if new cards were added
   if (needSort) {
     playerCards.value = sortCards(playerCards.value);
   }
@@ -569,14 +587,14 @@ function handleGameOver() {
 }
 
 function startGame() {
+  // Очищаем все состояния
+  playedCards.value = [];
   deck.value = createDeck();
   playerCards.value = [];
   opponentCards.value = [];
   battleField.value = [];
-  trumpCard.value = null;
-  trumpSuit.value = null; // Сбрасываем козырную масть
   isGameActive.value = true;
-  
+
   dealCards();
   
   // Определяем, кто ходит первым по младшему козырю
