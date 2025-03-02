@@ -225,7 +225,8 @@
         "btn": "Start"
       },
       "take": "Take",
-      "done": "Done"
+      "done": "Done",
+      "finishThrowing": "Finish"
     }
   },
   "premium": {
