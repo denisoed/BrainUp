@@ -130,6 +130,9 @@ const RANKS = [6, 7, 8, 9, 10, 11, 12, 13, 14]; // 11=J, 12=Q, 13=K, 14=A
 // Добавим новое состояние для хранения рангов взятых карт
 const takenCardsRanks = ref(new Set<number>());
 
+// Добавляем новое состояние для хранения козырной масти
+const trumpSuit = ref<string | null>(null);
+
 function createDeck(): Card[] {
   const newDeck: Card[] = [];
   SUITS.forEach(suit => {
@@ -154,18 +157,18 @@ function shuffleDeck(deck: Card[]): Card[] {
   return newDeck;
 }
 
-// Функция сортировки карт
+// Обновляем функцию сортировки карт
 function sortCards(cards: Card[]): Card[] {
   return [...cards].sort((a, b) => {
-    const aIsTrump = a.suit === trumpCard.value?.suit;
-    const bIsTrump = b.suit === trumpCard.value?.suit;
+    const aIsTrump = a.suit === trumpSuit.value;
+    const bIsTrump = b.suit === trumpSuit.value;
     
     // Если одна карта козырная, а другая нет
     if (aIsTrump && !bIsTrump) return -1; // Козыри идут в начало (слева)
     if (!aIsTrump && bIsTrump) return 1;
     
     // Если обе карты козырные или обе не козырные, сортируем по рангу по убыванию
-    return b.rank - a.rank; // Изменили порядок на убывающий
+    return b.rank - a.rank;
   });
 }
 
@@ -175,9 +178,10 @@ function dealCards() {
     if (deck.value.length > 0) playerCards.value.push(deck.value.pop()!);
     if (deck.value.length > 0) opponentCards.value.push(deck.value.pop()!);
   }
-  // Set trump card but don't remove it from deck
+  // Set trump card and remember trump suit
   if (deck.value.length > 0) {
     trumpCard.value = deck.value[deck.value.length - 1];
+    trumpSuit.value = trumpCard.value.suit;
   }
   // Sort player's cards
   playerCards.value = sortCards(playerCards.value);
@@ -187,16 +191,16 @@ function getCardSymbol(card: Card): string {
   return `${card.value}${card.suit}`;
 }
 
-// Определяем, кто ходит первым
+// Обновляем функцию определения первого игрока
 function determineFirstPlayer(): boolean {
   // Ищем самый младший козырь у игрока
   const playerLowestTrump = playerCards.value
-    .filter(card => card.suit === trumpCard.value?.suit)
+    .filter(card => card.suit === trumpSuit.value)
     .sort((a, b) => a.rank - b.rank)[0];
 
   // Ищем самый младший козырь у компьютера
   const opponentLowestTrump = opponentCards.value
-    .filter(card => card.suit === trumpCard.value?.suit)
+    .filter(card => card.suit === trumpSuit.value)
     .sort((a, b) => a.rank - b.rank)[0];
 
   // Если у игрока нет козырей
@@ -231,18 +235,18 @@ function canPlayCard(card: Card): boolean {
     
     const ranks = new Set(allCards.map(c => c.rank));
     
-    // Проверяем количество карт у защищающегося
-    const defenderCards = isPlayerTurn.value ? opponentCards.value.length : playerCards.value.length;
+    // Определяем, кто сейчас защищается
+    const defenderCards = isPlayerTurn.value ? 
+      opponentCards.value.length :  // Если ходит игрок, защищается оппонент
+      playerCards.value.length;     // Если ходит оппонент, защищается игрок
     
     // Разрешаем подкидывать, если:
     // 1. Карта того же достоинства, что любая карта в игре
-    // 2. Количество карт на столе меньше количества карт у защищающегося
-    // 3. Все предыдущие карты отбиты (нет неотбитых карт)
-    const allCardsBeaten = battleField.value.every(pair => pair.defenseCard !== null);
+    // 2. Количество неотбитых карт на столе меньше количества карт у защищающегося
+    const unbeatenCards = battleField.value.filter(pair => !pair.defenseCard).length;
     
     return ranks.has(card.rank) && 
-           battleField.value.length < defenderCards &&
-           allCardsBeaten;
+           unbeatenCards < defenderCards;
   } else {
     // Защита - оставляем как есть
     const lastPair = battleField.value[battleField.value.length - 1];
@@ -253,8 +257,8 @@ function canPlayCard(card: Card): boolean {
 }
 
 function canBeat(defenderCard: Card, attackerCard: Card): boolean {
-  const isTrumpAttack = attackerCard.suit === trumpCard.value?.suit;
-  const isTrumpDefense = defenderCard.suit === trumpCard.value?.suit;
+  const isTrumpAttack = attackerCard.suit === trumpSuit.value;
+  const isTrumpDefense = defenderCard.suit === trumpSuit.value;
 
   // Если атакующая карта козырная
   if (isTrumpAttack) {
@@ -329,7 +333,8 @@ function handleCardClick(card: Card) {
 }
 
 function aiAttack() {
-  if (!isGameActive.value || battleField.value.length >= 6) {
+  // Проверяем только активность игры
+  if (!isGameActive.value) {
     handleDone();
     return;
   }
@@ -337,7 +342,7 @@ function aiAttack() {
   // Если поле пустое, ходим любой картой (предпочтительно не козырем)
   if (battleField.value.length === 0) {
     const nonTrumpCards = opponentCards.value
-      .filter(card => card.suit !== trumpCard.value?.suit)
+      .filter(card => card.suit !== trumpSuit.value)
       .sort((a, b) => a.rank - b.rank);
     
     const cardToPlay = nonTrumpCards.length > 0 ? nonTrumpCards[0] : opponentCards.value[0];
@@ -353,18 +358,27 @@ function aiAttack() {
     return;
   }
 
-  // Подкидываем карты того же достоинства
-  const ranks = battleField.value
-    .flatMap(pair => [pair.attackCard, pair.defenseCard])
-    .filter(card => card !== null)
-    .map(card => card!.rank);
+  // Собираем все ранги карт на столе (и атакующих, и отбивающих)
+  const allCards = battleField.value.flatMap(pair => [
+    pair.attackCard,
+    pair.defenseCard
+  ]).filter((c): c is Card => c !== null);
+  
+  const ranks = new Set(allCards.map(c => c.rank));
 
+  // Находим все возможные карты для подкидывания
   const possibleAttacks = opponentCards.value
-    .filter(card => ranks.includes(card.rank))
+    .filter(card => ranks.has(card.rank))
     .sort((a, b) => a.rank - b.rank);
 
-  // Проверяем, не превышает ли количество карт на столе количество карт у защищающегося
-  if (possibleAttacks.length > 0 && battleField.value.length < playerCards.value.length) {
+  // Проверяем:
+  // 1. Есть ли карты для подкидывания
+  // 2. Количество неотбитых карт меньше количества карт у игрока
+  const unbeatenCards = battleField.value.filter(pair => !pair.defenseCard).length;
+  const canAttack = possibleAttacks.length > 0 && 
+                    unbeatenCards < playerCards.value.length;
+
+  if (canAttack) {
     const attackCard = possibleAttacks[0];
     battleField.value.push({
       attackCard,
@@ -388,8 +402,8 @@ function aiDefend() {
     .filter(card => canBeat(card, lastPair.attackCard!))
     .sort((a, b) => {
       // Сначала пытаемся бить не козырями
-      const aIsTrump = a.suit === trumpCard.value?.suit;
-      const bIsTrump = b.suit === trumpCard.value?.suit;
+      const aIsTrump = a.suit === trumpSuit.value;
+      const bIsTrump = b.suit === trumpSuit.value;
       if (aIsTrump && !bIsTrump) return 1;
       if (!aIsTrump && bIsTrump) return -1;
       return a.rank - b.rank;
@@ -400,6 +414,15 @@ function aiDefend() {
     const defenseCard = possibleDefenses[0];
     lastPair.defenseCard = defenseCard;
     opponentCards.value = opponentCards.value.filter(c => c !== defenseCard);
+    
+    // Сохраняем ранги всех карт на столе для возможности подкидывания
+    const allCards = battleField.value.flatMap(pair => [
+      pair.attackCard,
+      pair.defenseCard
+    ]).filter((c): c is Card => c !== null);
+    
+    takenCardsRanks.value = new Set(allCards.map(c => c.rank));
+    
     isAttacking.value = true;
     isPlayerTurn.value = true;
     updateButtonStates();
@@ -483,31 +506,10 @@ function handleDone() {
   }
 }
 
-function endTurn() {
-  battleField.value = [];
-  replenishCards();
-  
-  // Check for game end
-  if (deck.value.length === 0 && 
-      (playerCards.value.length === 0 || opponentCards.value.length === 0)) {
-    handleGameOver();
-    return;
-  }
-
-  // Меняем ход на противоположный
-  isPlayerTurn.value = !isPlayerTurn.value;
-  isAttacking.value = true;
-  updateButtonStates();
-  
-  // Если ход соперника, запускаем его атаку
-  if (!isPlayerTurn.value) {
-    setTimeout(aiAttack, 1000);
-  }
-}
-
 function replenishCards() {
   let needSort = false;
-  // Replenish cards to 6 if possible
+  
+  // Сначала раздаем все карты кроме козырной
   while (playerCards.value.length < 6 && deck.value.length > 1) {
     playerCards.value.push(deck.value.pop()!);
     needSort = true;
@@ -516,18 +518,31 @@ function replenishCards() {
     opponentCards.value.push(deck.value.pop()!);
   }
   
-  // If only trump card remains, give it to the next player who needs cards
-  if (deck.value.length === 1) {
-    const lastCard = deck.value[0];
-    if (playerCards.value.length < 6 && isPlayerTurn.value) {
-      playerCards.value.push(lastCard);
-      deck.value = [];
-      trumpCard.value = null;
-      needSort = true;
-    } else if (opponentCards.value.length < 6 && !isPlayerTurn.value) {
-      opponentCards.value.push(lastCard);
-      deck.value = [];
-      trumpCard.value = null;
+  // Если осталась только козырная карта
+  if (deck.value.length === 1 && trumpCard.value) {
+    // Проверяем, что эта карта действительно козырная
+    if (deck.value[0] === trumpCard.value) {
+      // Определяем, кому нужно брать карты
+      const playerNeedsCards = playerCards.value.length < 6;
+      const opponentNeedsCards = opponentCards.value.length < 6;
+      
+      // Отдаем козырь только если:
+      // 1. Игроку нужны карты и его ход
+      // 2. Оппоненту нужны карты и его ход
+      if ((playerNeedsCards && isPlayerTurn.value) || 
+          (opponentNeedsCards && !isPlayerTurn.value)) {
+        const lastCard = deck.value.pop()!;
+        
+        if (isPlayerTurn.value) {
+          playerCards.value.push(lastCard);
+          needSort = true;
+        } else {
+          opponentCards.value.push(lastCard);
+        }
+        
+        // Убираем отображение козырной карты только после её взятия
+        trumpCard.value = null;
+      }
     }
   }
 
@@ -540,19 +555,14 @@ function replenishCards() {
 function handleGameOver() {
   isGameActive.value = false;
   
-  // Игрок выигрывает в двух случаях:
-  // 1. У игрока нет карт, а у компьютера остались
-  // 2. В колоде не осталось карт, и у игрока меньше карт, чем у компьютера
-  if (
-    (playerCards.value.length === 0 && opponentCards.value.length > 0) ||
-    (deck.value.length === 0 && playerCards.value.length < opponentCards.value.length)
-  ) {
+  // Игрок выигрывает только если у него нет карт, а у компьютера остались
+  if (playerCards.value.length === 0 && opponentCards.value.length > 0) {
     score.value++;
     if (score.value < WINNING_STREAK) {
       setTimeout(startGame, 2000);
     }
   } else {
-    // В случае проигрыша или ничьей сбрасываем очки
+    // В случае проигрыша сбрасываем очки
     score.value = 0;
     setTimeout(startGame, 2000);
   }
@@ -564,6 +574,7 @@ function startGame() {
   opponentCards.value = [];
   battleField.value = [];
   trumpCard.value = null;
+  trumpSuit.value = null; // Сбрасываем козырную масть
   isGameActive.value = true;
   
   dealCards();
