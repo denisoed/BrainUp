@@ -25,7 +25,7 @@
 					@click="onClose"
 				>
 					<div class="flex items-center gap-xs">
-						<span>{{ $t(`games.${game}.about.btn`) }}</span>
+						<span>{{ $t(`games.gotIt`) }}</span>
 					</div>
 				</Button>
 			</div>

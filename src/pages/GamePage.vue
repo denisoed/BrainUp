@@ -1,6 +1,9 @@
 <template>
   <div class="game-page">
-    <BackBtn class="game-page_back" @click="$router.back()" />
+    <div class="game-page_header">
+      <InfoBtn @click="onOpenAboutGameDialog" />
+      <BackBtn @click="$router.back()" />
+    </div>
     <div class="container">
       <component :is="game" />
     </div>
@@ -23,11 +26,11 @@ import VocabularyGame from '@/components/Games/VocabularyGame.vue';
 import GridSequenceGame from '@/components/Games/GridSequenceGame.vue';
 import MathBlocksGame from '@/components/Games/MathBlocksGame.vue';
 import BackBtn from '@/components/BackBtn.vue';
+import InfoBtn from '@/components/InfoBtn.vue';
 import {
   openModal
 } from 'jenesius-vue-modal';
 import DurakGame from '@/components/Games/DurakGame.vue';
-
 const route = useRoute();
 
 const GAMES = {
@@ -63,11 +66,36 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .game-page {
-  &_back {
+  &_header {
+    width: 100%;
     position: absolute;
+    left: 0;
     top: 20px;
-    right: 16px;
     z-index: 2;
+    padding: 0 16px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+  }
+
+  &_about-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: var(--white-color);
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
   }
 }
 </style>
