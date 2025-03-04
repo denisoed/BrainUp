@@ -9,7 +9,7 @@
     >
       <!-- Step 1 -->
       <div class="welcome-step">
-        <h1 class="welcome-title" v-html="$t('welcome.steps.step1.title')"></h1>
+        <h1 class="welcome-title" v-html="$t('welcome.steps.step1.title', { name: userName })"></h1>
         <p class="welcome-text" v-html="$t('welcome.steps.step1.text')"></p>
         <div class="welcome-image">
           <BrainIcon />
