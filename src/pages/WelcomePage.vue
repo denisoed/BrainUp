@@ -150,14 +150,10 @@ const nextStep = () => {
 }
 
 onMounted(() => {
-  try {
-    // Get user data from Telegram WebApp
-    const telegramUser = window.Telegram?.WebApp?.initDataUnsafe?.user
-    if (telegramUser) {
-      userName.value = telegramUser.first_name || ''
-    }
-  } catch (error) {
-    console.error('Failed to get Telegram user data:', error)
+  // Get user data from Telegram WebApp
+  if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
+    const user = window.Telegram.WebApp.initDataUnsafe.user;
+    userName.value = user.first_name || '';
   }
 })
 </script>
