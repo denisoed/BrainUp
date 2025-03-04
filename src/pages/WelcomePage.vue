@@ -3,9 +3,7 @@
     <div 
       class="welcome-slider" 
       :style="{ transform: `translateX(-${currentStep * 100}%)` }"
-      @touchstart="handleTouchStart"
-      @touchmove="handleTouchMove"
-      @touchend="handleTouchEnd"
+      v-touch:swipe="handleSwipe"
     >
       <!-- Step 1 -->
       <div class="welcome-step">
@@ -80,51 +78,15 @@ const userName = ref('')
 
 // Constants
 const TOTAL_STEPS = 3
-const MIN_SWIPE_DISTANCE = 30 // minimum swipe distance in pixels
-const MIN_SWIPE_SPEED = 0.5 // minimum swipe speed in pixels per millisecond
 
 const isLastStep = computed(() => currentStep.value === TOTAL_STEPS - 1)
 
 // Swipe handling
-const touchStart = ref({ x: 0, y: 0, time: 0 })
-const touchEnd = ref({ x: 0, y: 0, time: 0 })
-
-const handleTouchStart = (event: TouchEvent) => {
-  touchStart.value = {
-    x: event.touches[0].clientX,
-    y: event.touches[0].clientY,
-    time: Date.now()
-  }
-  touchEnd.value = { x: 0, y: 0, time: 0 }
-}
-
-const handleTouchMove = (event: TouchEvent) => {
-  touchEnd.value = {
-    x: event.touches[0].clientX,
-    y: event.touches[0].clientY,
-    time: Date.now()
-  }
-}
-
-const handleTouchEnd = () => {
-  const deltaX = touchStart.value.x - touchEnd.value.x
-  const deltaY = touchStart.value.y - touchEnd.value.y
-  const deltaTime = touchEnd.value.time - touchStart.value.time
-  const swipeSpeed = Math.abs(deltaX) / deltaTime
-
-  // Check if swipe is horizontal enough and meets minimum speed and distance requirements
-  if (
-    Math.abs(deltaX) > MIN_SWIPE_DISTANCE && 
-    Math.abs(deltaX) > Math.abs(deltaY) * 1.5 && 
-    swipeSpeed > MIN_SWIPE_SPEED
-  ) {
-    if (deltaX > 0 && currentStep.value < TOTAL_STEPS - 1) {
-      // Swipe left - next step
-      nextStep()
-    } else if (deltaX < 0 && currentStep.value > 0) {
-      // Swipe right - previous step
-      previousStep()
-    }
+const handleSwipe = (direction: string) => {
+  if (direction === 'left' && currentStep.value < TOTAL_STEPS - 1) {
+    nextStep()
+  } else if (direction === 'right' && currentStep.value > 0) {
+    previousStep()
   }
 }
 
@@ -173,8 +135,6 @@ onMounted(() => {
   display: flex;
   transition: transform 0.3s ease;
   flex: 1;
-  touch-action: none;
-  user-select: none;
 }
 
 .welcome-step {
