@@ -194,8 +194,11 @@ const dailyExercises = ref([
 ]);
 
 function startTraining() {
-  // Implement training start logic
-  console.log('Starting daily training...');
+  try {
+    router.push('/training');
+  } catch (error) {
+    console.error('Failed to start training:', error);
+  }
 }
 
 onMounted(() => {

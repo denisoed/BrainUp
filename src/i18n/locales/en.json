@@ -45,6 +45,16 @@
       }
     }
   },
+  "training": {
+    "title": "Training day",
+    "exerciseDescription": "Complete exercises to improve your skills",
+    "startExercise": "Start Exercise",
+    "exercises": {
+      "focus": "Focus Training",
+      "puzzle": "Logical Thinking",
+      "speech": "Speech Skills"
+    }
+  },
   "games": {
     "howToPlay": "How to play?",
     "time": "Time",

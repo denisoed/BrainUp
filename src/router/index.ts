@@ -7,6 +7,7 @@ import ListPage from '@/pages/ListPage.vue'
 import WelcomePage from '@/pages/WelcomePage.vue'
 import SettingsPage from '@/pages/SettingsPage.vue'
 import BuyPremiumPage from '@/pages/BuyPremiumPage.vue'
+import TrainingPage from '@/pages/TrainingPage.vue'
 import { HAS_SEEN_WELCOME_LOCAL_STORAGE_KEY } from '@/config'
 
 const routes = [
@@ -19,6 +20,12 @@ const routes = [
   { 
     path: '/buy-premium', 
     component: BuyPremiumPage,
+    meta: { layout: 'MainLayout' }
+  },
+  {
+    path: '/training',
+    name: 'Training',
+    component: TrainingPage,
     meta: { layout: 'MainLayout' }
   },
 ]
