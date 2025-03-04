@@ -9,28 +9,29 @@
     >
       <!-- Step 1 -->
       <div class="welcome-step">
-        <h1 class="welcome-title">{{ $t('welcome.steps.step1.title') }}</h1>
-        <p class="welcome-text">{{ $t('welcome.steps.step1.text') }}</p>
+        <h1 class="welcome-title" v-html="$t('welcome.steps.step1.title')"></h1>
+        <p class="welcome-text" v-html="$t('welcome.steps.step1.text')"></p>
         <div class="welcome-image">
-          <!-- You can add an illustration or icon here -->
+          <BrainIcon />
         </div>
       </div>
 
       <!-- Step 2 -->
       <div class="welcome-step">
-        <h2 class="welcome-title">{{ $t('welcome.steps.step2.title') }}</h2>
-        <p class="welcome-text">{{ $t('welcome.steps.step2.text') }}</p>
+        <h2 class="welcome-title" v-html="$t('welcome.steps.step2.title')"></h2>
+        <p class="welcome-text" v-html="$t('welcome.steps.step2.text')"></p>
         <div class="welcome-image">
-          <!-- You can add an illustration or icon here -->
+           <!-- You can add an illustration or icon here -->
         </div>
       </div>
 
       <!-- Step 3 -->
-      <div class="welcome-step">
-        <h2 class="welcome-title">{{ $t('welcome.steps.step3.title') }}</h2>
-        <p class="welcome-text">{{ $t('welcome.steps.step3.text') }}</p>
+      <div class="welcome-step welcome-step-3">
+        <h2 class="welcome-title" v-html="$t('welcome.steps.step3.title')"></h2>
+        <p class="welcome-text" v-html="$t('welcome.steps.step3.text')"></p>
         <div class="welcome-image">
           <!-- You can add an illustration or icon here -->
+          <GrowIcon />
         </div>
       </div>
     </div>
@@ -67,49 +68,61 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 import { HAS_SEEN_WELCOME_LOCAL_STORAGE_KEY } from '@/config'
+import BrainIcon from '@/components/Icons/BrainIcon.vue'
+import GrowIcon from '@/components/Icons/GrowIcon.vue'
 
 const router = useRouter()
-const { t } = useI18n()
 const currentStep = ref(0)
-const totalSteps = 3
+const userName = ref('')
 
-const isLastStep = computed(() => currentStep.value === totalSteps - 1)
+// Constants
+const TOTAL_STEPS = 3
+const MIN_SWIPE_DISTANCE = 30 // minimum swipe distance in pixels
+const MIN_SWIPE_SPEED = 0.5 // minimum swipe speed in pixels per millisecond
+
+const isLastStep = computed(() => currentStep.value === TOTAL_STEPS - 1)
 
 // Swipe handling
-const touchStart = ref({ x: 0, y: 0 })
-const touchEnd = ref({ x: 0, y: 0 })
-const minSwipeDistance = 50 // минимальное расстояние для свайпа
+const touchStart = ref({ x: 0, y: 0, time: 0 })
+const touchEnd = ref({ x: 0, y: 0, time: 0 })
 
 const handleTouchStart = (event: TouchEvent) => {
   touchStart.value = {
     x: event.touches[0].clientX,
-    y: event.touches[0].clientY
+    y: event.touches[0].clientY,
+    time: Date.now()
   }
-  touchEnd.value = { x: 0, y: 0 }
+  touchEnd.value = { x: 0, y: 0, time: 0 }
 }
 
 const handleTouchMove = (event: TouchEvent) => {
   touchEnd.value = {
     x: event.touches[0].clientX,
-    y: event.touches[0].clientY
+    y: event.touches[0].clientY,
+    time: Date.now()
   }
 }
 
 const handleTouchEnd = () => {
   const deltaX = touchStart.value.x - touchEnd.value.x
   const deltaY = touchStart.value.y - touchEnd.value.y
+  const deltaTime = touchEnd.value.time - touchStart.value.time
+  const swipeSpeed = Math.abs(deltaX) / deltaTime
 
-  // Проверяем, что свайп был достаточно длинным и более горизонтальный, чем вертикальный
-  if (Math.abs(deltaX) > minSwipeDistance && Math.abs(deltaX) > Math.abs(deltaY)) {
-    if (deltaX > 0 && currentStep.value < totalSteps - 1) {
-      // Свайп влево - следующий шаг
+  // Check if swipe is horizontal enough and meets minimum speed and distance requirements
+  if (
+    Math.abs(deltaX) > MIN_SWIPE_DISTANCE && 
+    Math.abs(deltaX) > Math.abs(deltaY) * 1.5 && 
+    swipeSpeed > MIN_SWIPE_SPEED
+  ) {
+    if (deltaX > 0 && currentStep.value < TOTAL_STEPS - 1) {
+      // Swipe left - next step
       nextStep()
     } else if (deltaX < 0 && currentStep.value > 0) {
-      // Свайп вправо - предыдущий шаг
+      // Swipe right - previous step
       previousStep()
     }
   }
@@ -135,9 +148,21 @@ const nextStep = () => {
     currentStep.value++
   }
 }
+
+onMounted(() => {
+  try {
+    // Get user data from Telegram WebApp
+    const telegramUser = window.Telegram?.WebApp?.initDataUnsafe?.user
+    if (telegramUser) {
+      userName.value = telegramUser.first_name || ''
+    }
+  } catch (error) {
+    console.error('Failed to get Telegram user data:', error)
+  }
+})
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .welcome-container {
   height: 100vh;
   display: flex;
@@ -163,6 +188,7 @@ const nextStep = () => {
   flex-direction: column;
   align-items: center;
   text-align: center;
+  position: relative;
 }
 
 .welcome-title {
@@ -176,17 +202,26 @@ const nextStep = () => {
   font-size: 1.1em;
   line-height: 1.6;
   margin-bottom: 32px;
+
+  :deep(span) {
+    color: var(--primary);
+  }
 }
 
-/* .welcome-image {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  max-width: 300px;
-  margin: 32px 0;
-} */
+.welcome-image {
+  width: 120%;
+  position: absolute;
+  top: 50%;
+  left: 30%;
+  opacity: 0.1;
+  z-index: -1;
+}
+
+.welcome-step-3 {
+  .welcome-image {
+    width: 65%;
+  }
+}
 
 .welcome-button {
   width: 100%;
@@ -199,6 +234,7 @@ const nextStep = () => {
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.2s ease;
+  z-index: 1;
 }
 
 .welcome-back-button {

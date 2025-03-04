@@ -296,16 +296,16 @@
   "welcome": {
     "steps": {
       "step1": {
-        "title": "Level Up Your Brain 🧠",
-        "text": "Games and exercises that make you smarter, faster, and sharper. Ready to challenge yourself? 🎯"
+        "title": "Hi, <span>{name}</span> 👋",
+        "text": "Welcome to <span>Brain Trainer</span> — it's your personal space for training logic, memory, and speech."
       },
       "step2": {
-        "title": "Train While Having Fun ⚡️",
-        "text": "Breathing practices, logic puzzles, memory training, and much more. Just 15 minutes a day — and you'll see the results! 💪"
+        "title": "Become Better 🎯",
+        "text": "Just 15 minutes a day for 30 days can bring huge results."
       },
       "step3": {
-        "title": "Become Your Best Self 🌟",
-        "text": "Compete with others, unlock new levels, track your progress. Start changing right now! 🚀"
+        "title": "Start Now 🌟",
+        "text": "Become the best version of yourself, using all the features of our app. <span>Ready?</span>"
       }
     },
     "buttons": {
