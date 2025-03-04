@@ -27,8 +27,8 @@
         <div class="deck-area">
           <div class="deck flex items-center justify-center" v-if="deck.length">
             <div class="card card-back"><span>🂠</span></div>
-            <div class="trump-card card" v-if="trumpCard">
-              <span :data-suit="trumpCard.suit">{{ getCardSymbol(trumpCard) }}</span>
+            <div class="trump-card card" v-if="gameKozyr">
+              <span :data-suit="gameKozyr.suit">{{ getCardSymbol(gameKozyr) }}</span>
             </div>
           </div>
         </div>
@@ -89,7 +89,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 
 const WINNING_STREAK = 3;
 const CARDS_PER_PLAYER = 6;
@@ -109,19 +109,30 @@ const score = ref(0);
 const deck = ref<Card[]>([]);
 const playerCards = ref<Card[]>([]);
 const opponentCards = ref<Card[]>([]);
-const trumpCard = ref<Card | null>(null);
+const trumpSuit = ref<string | null>(null);
 const battleField = ref<BattlePair[]>([]);
 const isPlayerTurn = ref(true);
 const isGameActive = ref(false);
 
 // Game state
 const isAttacking = ref(true);
-const canTakeCards = ref(false);
-const canDone = ref(false);
+const canTakeCards = computed(() => {
+  return !isAttacking.value && 
+         battleField.value.length > 0 && 
+         isGameActive.value;
+});
+const canDone = computed(() => {
+  return isGameActive.value && (
+    (isAttacking.value && battleField.value.length > 0 && !isOpponentTaking.value) ||
+    (!isAttacking.value && battleField.value.every(pair => pair.defenseCard))
+  );
+});
 
 // Add new ref for tracking if opponent is taking cards
 const isOpponentTaking = ref(false);
-const canFinishThrowing = ref(false);
+const canFinishThrowing = computed(() => {
+  return isOpponentTaking.value;
+});
 
 // Card suits and ranks
 const SUITS = ['♠', '♥', '♦', '♣'];
@@ -130,13 +141,10 @@ const RANKS = [6, 7, 8, 9, 10, 11, 12, 13, 14]; // 11=J, 12=Q, 13=K, 14=A
 // Добавим новое состояние для хранения рангов взятых карт
 const takenCardsRanks = ref(new Set<number>());
 
-// Добавляем новое состояние для хранения козырной масти
-const trumpSuit = ref<string | null>(null);
-
 // Добавляем новые состояния
 const allCards = ref<Card[]>([]); // Все карты в игре
 const playedCards = ref<Card[]>([]); // Сыгранные карты
-const gameKozyr = ref<Card | null>(null); // Козырная карта для текущей игры
+const gameKozyr = ref<Card | null>(null); // Козырная карта
 
 function createDeck(): Card[] {
   // Создаем все карты, если их еще нет
@@ -153,15 +161,13 @@ function createDeck(): Card[] {
     });
   }
   
-  // Создаем новую колоду из всех доступных карт
   const shuffledDeck = shuffleDeck([...allCards.value]);
   
-  // Отделяем и сохраняем козырную карту
+  // Отделяем козырную карту сразу при создании колоды
   gameKozyr.value = shuffledDeck.pop()!;
-  trumpCard.value = gameKozyr.value;
   trumpSuit.value = gameKozyr.value.suit;
   
-  return shuffledDeck; // Возвращаем колоду без козырной карты
+  return shuffledDeck;
 }
 
 function shuffleDeck(deck: Card[]): Card[] {
@@ -227,45 +233,29 @@ function determineFirstPlayer(): boolean {
 function canPlayCard(card: Card): boolean {
   if (!isGameActive.value || !isPlayerTurn.value) return false;
   
-  if (isAttacking.value) {
-    if (isOpponentTaking.value) {
-      // Проверяем ранг карты против сохраненных рангов взятых карт
-      return takenCardsRanks.value.has(card.rank) && 
-             battleField.value.length < opponentCards.value.length;
-    }
-    
-    // Если поле пустое, можно ходить любой картой
-    if (battleField.value.length === 0) {
-      return true;
-    }
-    
-    // Собираем все ранги карт на столе (и атакующих, и отбивающих)
-    const allCards = battleField.value.flatMap(pair => [
-      pair.attackCard,
-      pair.defenseCard
-    ]).filter((c): c is Card => c !== null);
-    
-    const ranks = new Set(allCards.map(c => c.rank));
-    
-    // Определяем, кто сейчас защищается
-    const defenderCards = isPlayerTurn.value ? 
-      opponentCards.value.length :  // Если ходит игрок, защищается оппонент
-      playerCards.value.length;     // Если ходит оппонент, защищается игрок
-    
-    // Разрешаем подкидывать, если:
-    // 1. Карта того же достоинства, что любая карта в игре
-    // 2. Количество неотбитых карт на столе меньше количества карт у защищающегося
-    const unbeatenCards = battleField.value.filter(pair => !pair.defenseCard).length;
-    
-    return ranks.has(card.rank) && 
-           unbeatenCards < defenderCards;
-  } else {
-    // Защита - оставляем как есть
+  if (!isAttacking.value) {
     const lastPair = battleField.value[battleField.value.length - 1];
-    if (!lastPair || !lastPair.attackCard) return false;
-    
-    return canBeat(card, lastPair.attackCard);
+    return lastPair?.attackCard ? canBeat(card, lastPair.attackCard) : false;
   }
+
+  // Если оппонент берет карты
+  if (isOpponentTaking.value) {
+    return takenCardsRanks.value.has(card.rank) && 
+           battleField.value.length < opponentCards.value.length;
+  }
+
+  // Если поле пустое
+  if (battleField.value.length === 0) return true;
+
+  // Собираем ранги карт на столе
+  const ranks = new Set(
+    battleField.value.flatMap(pair => [pair.attackCard, pair.defenseCard])
+      .filter((c): c is Card => c !== null)
+      .map(c => c.rank)
+  );
+
+  const unbeatenCards = battleField.value.filter(pair => !pair.defenseCard).length;
+  return ranks.has(card.rank) && unbeatenCards < opponentCards.value.length;
 }
 
 function canBeat(defenderCard: Card, attackerCard: Card): boolean {
@@ -284,63 +274,39 @@ function canBeat(defenderCard: Card, attackerCard: Card): boolean {
          (defenderCard.suit === attackerCard.suit && defenderCard.rank > attackerCard.rank);
 }
 
-// Computed properties for button states
-const updateButtonStates = () => {
-  // Can take cards when:
-  // 1. Player is defending
-  // 2. There are cards on the field
-  // 3. Game is active
-  canTakeCards.value = !isAttacking.value && 
-                       battleField.value.length > 0 && 
-                       isGameActive.value;
-
-  // Can press "Done" when:
-  // 1. Player is attacking and there are cards on the field
-  // 2. Player is defending and all attack cards are beaten
-  // 3. Game is active
-  canDone.value = isGameActive.value && (
-    (isAttacking.value && battleField.value.length > 0 && !isOpponentTaking.value) ||
-    (!isAttacking.value && battleField.value.every(pair => pair.defenseCard))
-  );
-  
-  // Показываем кнопку "Закончить подкидывание" только когда оппонент берет карты
-  canFinishThrowing.value = isOpponentTaking.value;
-};
-
 function handleCardClick(card: Card) {
-  if (!isGameActive.value || !canPlayCard(card)) return;
-
-  if (isAttacking.value) {
-    // Add new attack card
-    battleField.value.push({
-      attackCard: card,
-      defenseCard: null
-    });
-    playerCards.value = playerCards.value.filter(c => c !== card);
+  try {
+    if (!isGameActive.value || !canPlayCard(card)) return;
     
-    // Если оппонент не в процессе взятия карт, передаем ему ход
-    if (!isOpponentTaking.value) {
-      isAttacking.value = false;
-      isPlayerTurn.value = false;
-      updateButtonStates();
-      setTimeout(aiDefend, 1000);
-    } else {
-      // Иначе оставляем ход игроку для возможности подкинуть еще
-      updateButtonStates();
-    }
-  } else {
-    // Defending against AI's attack
-    const lastPair = battleField.value[battleField.value.length - 1];
-    if (lastPair && lastPair.attackCard && canBeat(card, lastPair.attackCard)) {
-      lastPair.defenseCard = card;
+    if (isAttacking.value) {
+      // Add new attack card
+      battleField.value.push({
+        attackCard: card,
+        defenseCard: null
+      });
       playerCards.value = playerCards.value.filter(c => c !== card);
-      isAttacking.value = true;
-      isPlayerTurn.value = false;
       
-      updateButtonStates();
-      // AI's turn to attack
-      setTimeout(aiAttack, 1000);
+      // Если оппонент не в процессе взятия карт, передаем ему ход
+      if (!isOpponentTaking.value) {
+        isAttacking.value = false;
+        isPlayerTurn.value = false;
+        setTimeout(aiDefend, 1000);
+      }
+    } else {
+      // Defending against AI's attack
+      const lastPair = battleField.value[battleField.value.length - 1];
+      if (lastPair && lastPair.attackCard && canBeat(card, lastPair.attackCard)) {
+        lastPair.defenseCard = card;
+        playerCards.value = playerCards.value.filter(c => c !== card);
+        isAttacking.value = true;
+        isPlayerTurn.value = false;
+        
+        setTimeout(aiAttack, 1000);
+      }
     }
+  } catch (error) {
+    console.error('Error handling card click:', error);
+    // Можно добавить пользовательское уведомление об ошибке
   }
 }
 
@@ -366,7 +332,6 @@ function aiAttack() {
     opponentCards.value = opponentCards.value.filter(c => c !== cardToPlay);
     isAttacking.value = false;
     isPlayerTurn.value = true;
-    updateButtonStates();
     return;
   }
 
@@ -399,7 +364,6 @@ function aiAttack() {
     opponentCards.value = opponentCards.value.filter(c => c !== attackCard);
     isAttacking.value = false;
     isPlayerTurn.value = true;
-    updateButtonStates();
   } else {
     handleDone();
   }
@@ -437,7 +401,6 @@ function aiDefend() {
     
     isAttacking.value = true;
     isPlayerTurn.value = true;
-    updateButtonStates();
   } else {
     // Не можем отбиться, берем карты
     takeCards('opponent');
@@ -445,39 +408,29 @@ function aiDefend() {
 }
 
 function takeCards(player: 'player' | 'opponent') {
+  // Получаем все карты с поля
   const cards = battleField.value.flatMap(pair => 
-    [pair.attackCard, pair.defenseCard].filter(card => card !== null)
-  ) as Card[];
+    [pair.attackCard, pair.defenseCard].filter((card): card is Card => card !== null)
+  );
 
   if (player === 'player') {
     playerCards.value.push(...cards);
-    // После того как игрок взял карты, ход остается у соперника для атаки
-    isPlayerTurn.value = false;
-    isAttacking.value = true;
-    // Сортируем карты игрока
     playerCards.value = sortCards(playerCards.value);
-    
-    battleField.value = [];
-    updateButtonStates();
-    replenishCards();
-    
-    // Запускаем атаку соперника
-    setTimeout(aiAttack, 1000);
-    return;
+    isPlayerTurn.value = false;
   } else {
-    // Сохраняем ранги взятых карт перед очисткой поля
-    takenCardsRanks.value = new Set(cards.map(card => card.rank));
-    
     opponentCards.value.push(...cards);
+    takenCardsRanks.value = new Set(cards.map(card => card.rank));
     isOpponentTaking.value = true;
     isPlayerTurn.value = true;
-    isAttacking.value = true;
-    
-    // Очищаем поле для новых подкидываний
-    battleField.value = [];
     canFinishThrowing.value = true;
-    updateButtonStates();
-    return;
+  }
+
+  isAttacking.value = true;
+  battleField.value = [];
+
+  if (player === 'player') {
+    replenishCards();
+    setTimeout(aiAttack, 1000);
   }
 }
 
@@ -515,8 +468,6 @@ function handleDone() {
     isAttacking.value = true;
   }
   
-  updateButtonStates();
-  
   // Если ход компьютера
   if (!isPlayerTurn.value) {
     setTimeout(aiAttack, 1000);
@@ -524,12 +475,20 @@ function handleDone() {
 }
 
 function moveCardToPlayed(card: Card) {
-  // Добавляем карту в сыгранные
+  // Проверяем наличие карты перед удалением
+  if (!card) return;
+  
   playedCards.value.push(card);
-  // Удаляем карту из всех возможных мест
-  playerCards.value = playerCards.value.filter(c => c !== card);
-  opponentCards.value = opponentCards.value.filter(c => c !== card);
-  deck.value = deck.value.filter(c => c !== card);
+  
+  // Используем Set для быстрого поиска карты
+  const cardKey = `${card.rank}-${card.suit}`;
+  const cardSet = new Set(playerCards.value.map(c => `${c.rank}-${c.suit}`));
+  
+  if (cardSet.has(cardKey)) {
+    playerCards.value = playerCards.value.filter(c => c !== card);
+  } else {
+    opponentCards.value = opponentCards.value.filter(c => c !== card);
+  }
 }
 
 function replenishCards() {
@@ -561,7 +520,7 @@ function replenishCards() {
       
       // Убираем козырную карту из игры
       gameKozyr.value = null;
-      trumpCard.value = null;
+      trumpSuit.value = null;
     }
   }
 
@@ -570,17 +529,21 @@ function replenishCards() {
   }
 }
 
-function handleGameOver() {
+function handleGameOver(): void {
+  console.log('Game over:', {
+    playerCards: playerCards.value.length,
+    opponentCards: opponentCards.value.length,
+    score: score.value
+  });
   isGameActive.value = false;
+  const playerWon = playerCards.value.length === 0;
   
-  // Игрок выигрывает только если у него нет карт, а у компьютера остались
-  if (playerCards.value.length === 0 && opponentCards.value.length > 0) {
+  if (playerWon) {
     score.value++;
     if (score.value < WINNING_STREAK) {
       setTimeout(startGame, 2000);
     }
   } else {
-    // В случае проигрыша сбрасываем очки
     score.value = 0;
     setTimeout(startGame, 2000);
   }
@@ -601,8 +564,6 @@ function startGame() {
   isPlayerTurn.value = determineFirstPlayer();
   isAttacking.value = true;
   
-  updateButtonStates();
-  
   // Если первым ходит компьютер
   if (!isPlayerTurn.value) {
     setTimeout(aiAttack, 1000);
@@ -622,8 +583,6 @@ function handleFinishThrowing() {
   // После подкидывания ход остается у игрока
   isPlayerTurn.value = true;
   isAttacking.value = true;
-  
-  updateButtonStates();
 }
 
 onMounted(() => {
