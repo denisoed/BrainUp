@@ -292,5 +292,26 @@
     "stats": "Stats",
     "blog": "Blog",
     "settings": "Settings"
+  },
+  "welcome": {
+    "steps": {
+      "step1": {
+        "title": "Level Up Your Brain 🧠",
+        "text": "Games and exercises that make you smarter, faster, and sharper. Ready to challenge yourself? 🎯"
+      },
+      "step2": {
+        "title": "Train While Having Fun ⚡️",
+        "text": "Breathing practices, logic puzzles, memory training, and much more. Just 15 minutes a day — and you'll see the results! 💪"
+      },
+      "step3": {
+        "title": "Become Your Best Self 🌟",
+        "text": "Compete with others, unlock new levels, track your progress. Start changing right now! 🚀"
+      }
+    },
+    "buttons": {
+      "back": "Back",
+      "next": "Next",
+      "start": "Let's Go!"
+    }
   }
 }

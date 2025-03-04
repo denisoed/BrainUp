@@ -396,10 +396,6 @@ onMounted(() => {
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.2s ease;
-  
-  &:hover {
-    transform: translateY(-2px);
-  }
 }
 
 .training-cards {
