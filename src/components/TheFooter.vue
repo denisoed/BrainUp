@@ -49,13 +49,16 @@ import SettingsIcon from '@/components/Icons/Settings.vue';
     justify-content: center;
     align-items: center;
     padding: 10px;
-    opacity: 0.5;
     border-radius: 12px;
     overflow: hidden;
 
     &:active {
       transform: scale(0.9);
-      opacity: 0.8;
+      :deep(svg) {
+        path {
+          fill: var(--primary);
+        }
+      }
     }
 
     img {
@@ -64,7 +67,12 @@ import SettingsIcon from '@/components/Icons/Settings.vue';
 
     &.router-link-exact-active {
       transform: scale(1.05);
-      opacity: 1;
+
+      :deep(svg) {
+        path {
+          fill: var(--primary);
+        }
+      }
 
       &::after {
         content: '';
