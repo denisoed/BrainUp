@@ -17,6 +17,7 @@
   "dependencies": {
     "@sentry/vue": "^8.20.0",
     "axios": "^1.7.2",
+    "canvas-confetti": "^1.9.3",
     "dayjs": "^1.11.13",
     "howler": "^2.2.4",
     "jenesius-vue-modal": "^1.11.9",

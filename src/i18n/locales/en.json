@@ -60,6 +60,13 @@
     "time": "Time",
     "score": "Score",
     "gotIt": "Got it",
+    "victory": {
+      "title": "Congratulations!",
+      "text": "You have successfully earned the required points! Keep practicing and improving your result.",
+      "earned": "Earned",
+      "continue": "Continue Training",
+      "close": "Close"
+    },
     "colors": {
       "about": {
         "title": "<span>Game:</span> Colors",

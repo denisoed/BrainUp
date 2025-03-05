@@ -309,7 +309,7 @@ canvas {
   align-items: flex-end !important;
   z-index: 2;
   background-color: transparent !important;
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(5px);
 }
 
 .modal-item {

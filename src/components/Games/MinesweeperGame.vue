@@ -55,6 +55,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
+import GameVictoryDialog from '@/components/Dialogs/GameVictoryDialog.vue';
+import {
+  openModal
+} from 'jenesius-vue-modal';
+import { useRouter } from 'vue-router';
 
 const BOARD_SIZE = 10;
 const MINES_COUNT = 15;
@@ -66,6 +71,8 @@ interface Cell {
   isFlagged: boolean;
   nearbyMines: number;
 }
+
+const { push } = useRouter();
 
 const score = ref(0);
 const board = ref<Cell[][]>([]);
@@ -199,6 +206,8 @@ function handleGameOver(won: boolean) {
     });
     if (score.value < WINNING_STREAK) {
       setTimeout(startGame, 1000);
+    } else {
+      onOpenGameVictoryDialog();
     }
   } else {
     // Reveal all mines
@@ -229,6 +238,16 @@ function handleCellClick(row: number, col: number) {
   } else {
     revealCell(row, col);
   }
+}
+
+async function onOpenGameVictoryDialog() {
+  const modal = await openModal(GameVictoryDialog, {
+    score: score.value,
+  })
+  modal.on('close', () => {
+    modal.close();
+    push('/list');
+  })
 }
 
 onMounted(() => {
