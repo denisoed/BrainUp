@@ -42,6 +42,11 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
 import ProgressBar from '@/components/Games/ProgressBar.vue';
+import GameVictoryDialog from '@/components/Dialogs/GameVictoryDialog.vue';
+import { openModal } from 'jenesius-vue-modal';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const TIME_LIMIT = 15;
 const WINNING_STREAK = 15;
@@ -114,7 +119,7 @@ function isCorrectSequence(number: number): boolean {
 function handleLevelComplete() {
   score.value++;
   if (score.value >= WINNING_STREAK) {
-    clearInterval(timerInterval);
+    onOpenGameVictoryDialog();
     return;
   }
 
@@ -137,6 +142,16 @@ function resetGame() {
   currentLevel.value = 1;
   gridSize.value = { ...MIN_GRID_SIZE };
   generateGrid();
+}
+
+async function onOpenGameVictoryDialog() {
+  const modal = await openModal(GameVictoryDialog, {
+    score: score.value,
+  })
+  modal.on('close', () => {
+    modal.close();
+    router.push('/list');
+  })
 }
 
 onMounted(() => {

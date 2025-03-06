@@ -21,9 +21,13 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
-
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
 import ProgressBar from '@/components/Games/ProgressBar.vue';
+import GameVictoryDialog from '@/components/Dialogs/GameVictoryDialog.vue';
+import { openModal } from 'jenesius-vue-modal';
+import { useRouter } from 'vue-router';
+
+const { push } = useRouter();
 
 const TIME_LIMIT = 3;
 const WINNING_STREAK = 15;
@@ -65,12 +69,23 @@ function checkAnswer(selectedNumber) {
     score.value++;
     correctStreak.value++;
     if (correctStreak.value >= WINNING_STREAK) {
+      onOpenGameVictoryDialog();
       return;
     }
     generateGrid();
   } else {
     resetGame();
   }
+}
+
+async function onOpenGameVictoryDialog() {
+  const modal = await openModal(GameVictoryDialog, {
+    score: score.value,
+  })
+  modal.on('close', () => {
+    modal.close();
+    push('/list');
+  })
 }
 
 onMounted(() => {

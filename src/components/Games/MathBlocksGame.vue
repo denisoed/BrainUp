@@ -36,6 +36,11 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
 import ProgressBar from '@/components/Games/ProgressBar.vue';
+import GameVictoryDialog from '@/components/Dialogs/GameVictoryDialog.vue';
+import { openModal } from 'jenesius-vue-modal';
+import { useRouter } from 'vue-router';
+
+const { push } = useRouter();
 
 // Types
 interface Block {
@@ -180,43 +185,34 @@ function createBlock(isCorrect: boolean, index: number): Block {
 
 // Check answer when block is clicked
 function checkAnswer(block: Block) {
-  if (!isGameActive.value || block.isClicked) return;
-
+  if (block.isClicked) return;
+  
   block.isClicked = true;
-
-  if (block.displayedAnswer === block.correctAnswer) {
+  if (block.isCorrect) {
     block.color = CORRECT_COLOR;
     correctAnswersGiven.value++;
+    score.value++;
+    
+    if (score.value >= WINNING_STREAK) {
+      onOpenGameVictoryDialog();
+      return;
+    }
 
-    if (correctAnswersGiven.value === correctAnswersNeeded.value) {
-      score.value++;
-      
-      if (score.value >= WINNING_STREAK) {
-        stopGame();
-        return;
-      }
-
-      setTimeout(() => resetGameAfterSuccess(), 500);
+    if (correctAnswersGiven.value >= correctAnswersNeeded.value) {
+      setTimeout(() => {
+        generateBlocks();
+        correctAnswersGiven.value = 0;
+      }, 500);
     }
   } else {
     block.color = ERROR_COLOR;
+    score.value = 0;
     showError.value = true;
-    correctAnswersGiven.value = 0;
-    
-    fallingBlocks.value.forEach(b => {
-      if (b.isCorrect) {
-        b.color = CORRECT_COLOR;
-      }
-    });
-    
-    if (errorTimeout) {
-      clearTimeout(errorTimeout);
-    }
-
-    errorTimeout = setTimeout(() => {
+    setTimeout(() => {
       showError.value = false;
-      resetGameAfterError();
-    }, FEEDBACK_DURATION);
+      generateBlocks();
+      correctAnswersGiven.value = 0;
+    }, 1000);
   }
 }
 
@@ -342,6 +338,17 @@ onMounted(() => {
 onUnmounted(() => {
   stopGame();
 });
+
+// Добавляем функцию для показа модального окна
+async function onOpenGameVictoryDialog() {
+  const modal = await openModal(GameVictoryDialog, {
+    score: score.value,
+  })
+  modal.on('close', () => {
+    modal.close();
+    push('/list');
+  })
+}
 </script>
 
 <style lang="scss" scoped>

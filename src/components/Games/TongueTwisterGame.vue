@@ -50,8 +50,12 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
 import ProgressBar from '@/components/Games/ProgressBar.vue';
+import GameVictoryDialog from '@/components/Dialogs/GameVictoryDialog.vue';
+import { openModal } from 'jenesius-vue-modal';
+import { useRouter } from 'vue-router';
 
 const { t } = useI18n();
+const { push } = useRouter();
 
 const TIME_LIMIT = 7;
 const WINNING_STREAK = 15;
@@ -180,28 +184,36 @@ function startTimer() {
   }, 100);
 }
 
-function handleGameEnd(success) {
-  if (isUpdatingTwister.value) return;
-  isUpdatingTwister.value = true;
-  
-  if (success) {
+function handleGameEnd(isCorrect) {
+  if (isCorrect) {
     showSuccessColor.value = true;
     score.value++;
+    if (score.value >= WINNING_STREAK) {
+      onOpenGameVictoryDialog();
+      return;
+    }
+    setTimeout(() => {
+      showSuccessColor.value = false;
+      updateTwister();
+    }, 1000);
   } else {
     showErrorColor.value = true;
     score.value = 0;
+    setTimeout(() => {
+      showErrorColor.value = false;
+      updateTwister();
+    }, 1000);
   }
-  
-  recognition.stop();
-  
-  setTimeout(() => {
-    showSuccessColor.value = false;
-    showErrorColor.value = false;
-    currentTwister.value = getRandomTwister();
-    startTimer();
-    isUpdatingTwister.value = false;
-    recognition.start();
-  }, 500);
+}
+
+async function onOpenGameVictoryDialog() {
+  const modal = await openModal(GameVictoryDialog, {
+    score: score.value,
+  })
+  modal.on('close', () => {
+    modal.close();
+    push('/list');
+  })
 }
 
 async function setupAudioVisualization() {

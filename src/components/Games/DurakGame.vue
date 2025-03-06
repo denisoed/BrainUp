@@ -90,6 +90,11 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
+import GameVictoryDialog from '@/components/Dialogs/GameVictoryDialog.vue';
+import { openModal } from 'jenesius-vue-modal';
+import { useRouter } from 'vue-router';
+
+const { push } = useRouter();
 
 const WINNING_STREAK = 3;
 const CARDS_PER_PLAYER = 6;
@@ -454,7 +459,7 @@ function handleDone() {
   // Проверяем окончание игры
   if (deck.value.length === 0 && 
       (playerCards.value.length === 0 || opponentCards.value.length === 0)) {
-    handleGameOver();
+    handleGameEnd(playerCards.value.length === 0);
     return;
   }
 
@@ -529,27 +534,23 @@ function replenishCards() {
   }
 }
 
-function handleGameOver(): void {
-  console.log('Game over:', {
-    playerCards: playerCards.value.length,
-    opponentCards: opponentCards.value.length,
-    score: score.value
-  });
+function handleGameEnd(playerWon: boolean) {
   isGameActive.value = false;
-  const playerWon = playerCards.value.length === 0;
-  
   if (playerWon) {
     score.value++;
-    if (score.value < WINNING_STREAK) {
-      setTimeout(startGame, 2000);
+    if (score.value >= WINNING_STREAK) {
+      onOpenGameVictoryDialog();
+      return;
     }
   } else {
     score.value = 0;
-    setTimeout(startGame, 2000);
   }
+  setTimeout(() => {
+    startNewGame();
+  }, 1000);
 }
 
-function startGame() {
+function startNewGame() {
   // Очищаем все состояния
   playedCards.value = [];
   deck.value = createDeck();
@@ -585,8 +586,19 @@ function handleFinishThrowing() {
   isAttacking.value = true;
 }
 
+// Добавляем функцию для показа модального окна
+async function onOpenGameVictoryDialog() {
+  const modal = await openModal(GameVictoryDialog, {
+    score: score.value,
+  })
+  modal.on('close', () => {
+    modal.close();
+    push('/list');
+  })
+}
+
 onMounted(() => {
-  startGame();
+  startNewGame();
 });
 </script>
 

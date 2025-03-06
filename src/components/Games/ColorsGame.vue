@@ -23,11 +23,14 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
 import ProgressBar from '@/components/Games/ProgressBar.vue';
+import GameVictoryDialog from '@/components/Dialogs/GameVictoryDialog.vue';
+import { openModal } from 'jenesius-vue-modal';
+import { useRouter } from 'vue-router';
 
 const { t } = useI18n();
+const { push } = useRouter();
 
 const TIME_LIMIT = 1;
 const WINNING_STREAK = 15;
@@ -89,12 +92,23 @@ function checkAnswer(selectedColor) {
     score.value++;
     correctStreak.value++;
     if (correctStreak.value >= WINNING_STREAK) {
+      onOpenGameVictoryDialog();
       return;
     }
     generateColorTask();
   } else {
     resetGame();
   }
+}
+
+async function onOpenGameVictoryDialog() {
+  const modal = await openModal(GameVictoryDialog, {
+    score: score.value,
+  })
+  modal.on('close', () => {
+    modal.close();
+    push('/list');
+  })
 }
 
 onMounted(() => {

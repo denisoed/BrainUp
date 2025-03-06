@@ -29,8 +29,12 @@ import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
 import ProgressBar from '@/components/Games/ProgressBar.vue';
+import GameVictoryDialog from '@/components/Dialogs/GameVictoryDialog.vue';
+import { openModal } from 'jenesius-vue-modal';
+import { useRouter } from 'vue-router';
 
 const { t } = useI18n();
+const router = useRouter();
 
 const TIME_LIMIT = 10;
 const WINNING_STREAK = 15;
@@ -250,7 +254,7 @@ function checkAnswer(word: string) {
     score.value++;
     setTimeout(() => {
       if (score.value >= WINNING_STREAK) {
-        isStarted.value = false;
+        onOpenGameVictoryDialog();
       } else {
         startNewRound();
       }
@@ -285,6 +289,16 @@ function resetGame() {
   showSuccess.value = false;
   showError.value = false;
   timeLeft.value = TIME_LIMIT;
+}
+
+async function onOpenGameVictoryDialog() {
+  const modal = await openModal(GameVictoryDialog, {
+    score: score.value,
+  })
+  modal.on('close', () => {
+    modal.close();
+    router.push('/list');
+  })
 }
 
 onMounted(() => {

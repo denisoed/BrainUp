@@ -60,6 +60,11 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
 import ProgressBar from '@/components/Games/ProgressBar.vue';
+import GameVictoryDialog from '@/components/Dialogs/GameVictoryDialog.vue';
+import { openModal } from 'jenesius-vue-modal';
+import { useRouter } from 'vue-router';
+
+const { push } = useRouter();
 
 const INITIAL_TIME = 4;
 const SHOW_SEQUENCE_TIME = 4;
@@ -143,13 +148,17 @@ function selectCard(card: string) {
 }
 
 function checkSequence() {
-  const isCorrect = selectedCards.value.every(
-    (card, index) => card === originalSequence.value[index]
-  );
-
+  const isCorrect = selectedCards.value.join('') === displayCards.value.join('');
+  
   if (isCorrect) {
     showSuccess.value = true;
     score.value++;
+    
+    if (score.value >= WINNING_STREAK) {
+      onOpenGameVictoryDialog();
+      return;
+    }
+
     setTimeout(() => {
       showSuccess.value = false;
       startNewRound();
@@ -162,6 +171,16 @@ function checkSequence() {
       startNewRound();
     }, 500);
   }
+}
+
+async function onOpenGameVictoryDialog() {
+  const modal = await openModal(GameVictoryDialog, {
+    score: score.value,
+  })
+  modal.on('close', () => {
+    modal.close();
+    push('/list');
+  })
 }
 
 function startNewRound() {
