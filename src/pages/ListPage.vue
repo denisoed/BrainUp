@@ -85,27 +85,34 @@ const cards = computed(() => [
     class: '', 
     icon: TongueTwisterIcon, 
     title: t('home.cards.tongueTwister'), 
-    width: 60
-  },
-  {
-    to: '/game/sequence',
-    class: '',
-    icon: SequenceIcon,
-    title: t('home.cards.sequence'),
-    width: 40
+    width: 50
   },
   {
     to: '/game/gridSequence',
     class: '',
     icon: GridSequenceIcon,
     title: t('home.cards.gridSequence'),
-    width: 100
+    width: 50
+  },
+  {
+    to: '/game/sequence',
+    class: '',
+    icon: SequenceIcon,
+    title: t('home.cards.sequence'),
+    width: 60
   },
   {
     to: '/game/minesweeper',
     class: '',
     icon: MinesweeperIcon,
     title: t('home.cards.minesweeper'),
+    width: 40
+  },
+  {
+    to: '/game/durak',
+    class: '',
+    icon: Abstract1,
+    title: t('home.cards.durak'),
     width: 40
   },
   {
@@ -120,22 +127,15 @@ const cards = computed(() => [
     class: '',
     icon: VocabularyIcon,
     title: t('home.cards.vocabulary'),
-    width: 60
+    width: 50
   },
   {
     to: '/game/mathBlocks',
     class: '',
     icon: MathBlocksIcon,
     title: t('home.cards.mathBlocks'),
-    width: 40
+    width: 50
   },
-  {
-    to: '/game/durak',
-    class: '',
-    icon: Abstract1,
-    title: t('home.cards.durak'),
-    width: 100
-  }
 ]);
 
 const tab = ref('all');
