@@ -41,7 +41,7 @@ import {
 const { push } = useRouter();
 
 const TIME_LIMIT = 5;
-const WINNING_STREAK = 50;
+const WINNING_STREAK = 40;
 
 // Game state
 const timeLeft = ref(TIME_LIMIT);
@@ -158,9 +158,14 @@ async function onOpenGameVictoryDialog() {
   const modal = await openModal(GameVictoryDialog, {
     score: score.value,
   })
-  modal.on('close', () => {
+  modal.on('finish', () => {
     modal.close();
     push('/list');
+  })
+  modal.on('restart', () => {
+    modal.close();
+    resetGame();
+    startGame();
   })
 }
 

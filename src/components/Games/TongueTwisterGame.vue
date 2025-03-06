@@ -206,13 +206,30 @@ function handleGameEnd(isCorrect) {
   }
 }
 
+function resetGame() {
+  clearInterval(timerInterval);
+  isStarted.value = false;
+  recognition.stop();
+  if (audioContext) {
+    audioContext.close();
+  }
+  if (animationFrame) {
+    cancelAnimationFrame(animationFrame);
+  }
+}
+
 async function onOpenGameVictoryDialog() {
   const modal = await openModal(GameVictoryDialog, {
     score: score.value,
   })
-  modal.on('close', () => {
+  modal.on('finish', () => {
     modal.close();
     push('/list');
+  })
+  modal.on('restart', () => {
+    modal.close();
+    resetGame();
+    startGame();
   })
 }
 
@@ -311,15 +328,7 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-  clearInterval(timerInterval);
-  isStarted.value = false;
-  recognition.stop();
-  if (audioContext) {
-    audioContext.close();
-  }
-  if (animationFrame) {
-    cancelAnimationFrame(animationFrame);
-  }
+  resetGame();
 });
 </script>
 

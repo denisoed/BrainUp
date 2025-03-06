@@ -244,9 +244,13 @@ async function onOpenGameVictoryDialog() {
   const modal = await openModal(GameVictoryDialog, {
     score: score.value,
   })
-  modal.on('close', () => {
+  modal.on('finish', () => {
     modal.close();
     push('/list');
+  })
+  modal.on('restart', () => {
+    modal.close();
+    startGame();
   })
 }
 

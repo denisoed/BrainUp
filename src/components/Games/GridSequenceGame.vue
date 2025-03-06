@@ -46,7 +46,7 @@ import GameVictoryDialog from '@/components/Dialogs/GameVictoryDialog.vue';
 import { openModal } from 'jenesius-vue-modal';
 import { useRouter } from 'vue-router';
 
-const router = useRouter();
+const { push } = useRouter();
 
 const TIME_LIMIT = 15;
 const WINNING_STREAK = 15;
@@ -148,9 +148,13 @@ async function onOpenGameVictoryDialog() {
   const modal = await openModal(GameVictoryDialog, {
     score: score.value,
   })
-  modal.on('close', () => {
+  modal.on('finish', () => {
     modal.close();
-    router.push('/list');
+    push('/list');
+  })
+  modal.on('restart', () => {
+    modal.close();
+    resetGame();
   })
 }
 

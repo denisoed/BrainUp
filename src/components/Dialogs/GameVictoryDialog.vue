@@ -14,10 +14,16 @@
       </div>
       <div class="victory-dialog_actions">
         <button 
-          class="btn btn--primary"
-          @click="onContinue"
+          class="btn btn--secondary"
+          @click="onFinish"
         >
-          {{ $t('games.victory.continue') }}
+          {{ $t('games.victory.finish') }}
+        </button>
+        <button 
+          class="btn btn--primary"
+          @click="onRestart"
+        >
+          {{ $t('games.victory.restart') }}
         </button>
       </div>
     </div>
@@ -33,7 +39,8 @@ defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: 'close'): void;
+  (e: 'finish'): void;
+  (e: 'restart'): void;
 }>();
 
 function fireConfetti() {
@@ -78,8 +85,12 @@ function fireConfetti() {
   });
 }
 
-function onContinue() {
-  emit('close');
+function onFinish() {
+  emit('finish');
+}
+
+function onRestart() {
+  emit('restart');
 }
 
 onMounted(() => {

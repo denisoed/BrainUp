@@ -64,7 +64,8 @@
       "title": "Congratulations!",
       "text": "You have successfully earned the required points! Keep practicing and improving your result.",
       "earned": "Earned",
-      "continue": "Continue Training",
+      "finish": "Finish",
+      "restart": "Restart",
       "close": "Close"
     },
     "colors": {
