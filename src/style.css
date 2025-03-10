@@ -46,13 +46,14 @@ a:hover {
 
 html {
   height: 100vh;
-  overflow: auto;
+  overflow: hidden;
   background: linear-gradient(175deg, #212121 0%, rgba(34, 40, 49 ,1) 100%);
 }
 
 body {
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: auto;
   margin: 0;
   display: flex;
   background: linear-gradient(175deg, #212121 0%, rgba(34, 40, 49 ,1) 100%);
