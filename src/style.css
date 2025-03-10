@@ -45,6 +45,8 @@ a:hover {
 }
 
 html {
+  height: 100vh;
+  overflow: auto;
   background: linear-gradient(175deg, #212121 0%, rgba(34, 40, 49 ,1) 100%);
 }
 
