@@ -88,7 +88,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import TheHeader from '@/components/TheHeader.vue';
@@ -101,7 +101,6 @@ import SequenceIcon from '@/assets/abstracts/sequence.svg';
 
 const { t } = useI18n();
 const router = useRouter();
-const userName = ref('');
 
 // Training cards data
 const trainingCards = ref([
@@ -197,14 +196,6 @@ function startTraining() {
     console.error('Failed to start training:', error);
   }
 }
-
-onMounted(() => {
-  // Get user data from Telegram WebApp
-  if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
-    const user = window.Telegram.WebApp.initDataUnsafe.user;
-    userName.value = user.first_name || '';
-  }
-});
 </script>
 
 <style lang="scss" scoped>

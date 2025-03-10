@@ -12,10 +12,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useStreakStore } from '@/stores/streak';
 import { openModal } from 'jenesius-vue-modal';
 import StreakDialog from '@/components/Dialogs/StreakDialog.vue';
+
+const userName = ref('');
 
 const streakStore = useStreakStore();
 const streak = computed(() => streakStore.getStreak);
@@ -33,6 +35,12 @@ async function openStreakDialog() {
 
 onMounted(() => {
   streakStore.initializeStreak();
+
+  // Get user data from Telegram WebApp
+  if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
+    const user = window.Telegram.WebApp.initDataUnsafe.user;
+    userName.value = user.first_name || '';
+  }
 });
 </script>
 
