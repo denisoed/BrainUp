@@ -26,16 +26,16 @@
       "gridSequence": "Grid Sequence"
     },
     "welcome": "Hi, <span>{name}</span>!",
-    "subtitle": "Ready for today's training?",
+    "subtitle": "Ready for new victories?",
     "more": "More",
     "goals": {
-      "title": "Daily Goals",
+      "title": "Today's progress",
       "focus": "Improve Focus",
       "memory": "Train Memory",
       "logic": "Logic Practice"
     },
     "training": {
-      "title": "Daily Training Set",
+      "title": "Daily Goals",
       "time": "{minutes} min",
       "start": "Start Training",
       "exercises": {
@@ -54,6 +54,9 @@
       "puzzle": "Logical Thinking",
       "speech": "Speech Skills"
     }
+  },
+  "trainingCards": {
+    "title": "Recommended Training"
   },
   "games": {
     "howToPlay": "How to play?",

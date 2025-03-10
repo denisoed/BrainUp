@@ -234,6 +234,10 @@ canvas {
 }
 
 .mr-lg {
+  margin-right: 24px;
+}
+
+.mr-xl {
   margin-right: 32px;
 }
 
@@ -250,6 +254,10 @@ canvas {
 }
 
 .ml-lg {
+  margin-left: 24px;
+}
+
+.ml-xl {
   margin-left: 32px;
 }
 
@@ -266,6 +274,10 @@ canvas {
 }
 
 .mt-lg {
+  margin-top: 24px;
+}
+
+.mt-xl {
   margin-top: 32px;
 }
 
@@ -289,6 +301,10 @@ canvas {
 }
 
 .mb-lg {
+  margin-bottom: 24px;
+}
+
+.mb-xl {
   margin-bottom: 32px;
 }
 

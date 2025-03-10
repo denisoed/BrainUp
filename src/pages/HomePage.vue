@@ -1,7 +1,7 @@
 <template>
   <div class="home-page">
     <!-- Welcome Section -->
-    <div class="container">
+    <div class="container mb-lg">
       <div class="welcome-section">
         <h1 class="welcome-title" v-html="$t('home.welcome', { name: userName })" />
         <p class="welcome-subtitle">{{ $t('home.subtitle') }}</p>
@@ -11,8 +11,61 @@
       </router-link>
     </div>
 
+    <!-- Daily Training Set -->
+    <div class="daily-training mb-lg container">
+      <div class="training-card">
+        <div class="training-header">
+          <h2>{{ $t('home.training.title') }}</h2>
+          <div class="training-time">{{ $t('home.training.time', { minutes: 15 }) }}</div>
+        </div>
+        <div class="training-exercises">
+          <div 
+            v-for="exercise in dailyExercises" 
+            :key="exercise.id" 
+            class="exercise-item"
+          >
+            <div class="exercise-icon">{{ exercise.icon }}</div>
+            <div class="exercise-title">{{ exercise.title }}</div>
+          </div>
+        </div>
+        <button class="start-button" @click="startTraining">
+          {{ $t('home.training.start') }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Daily Goals -->
+    <div class="daily-goals mb-lg container">
+      <div class="section-header">
+        <h2>{{ $t('home.goals.title') }}</h2>
+        <span class="progress-text">{{ completedGoals }}/{{ totalGoals }}</span>
+      </div>
+      <div class="goals-grid">
+        <div 
+          v-for="goal in dailyGoals" 
+          :key="goal.id"
+          class="goal-item"
+          :class="{ 'completed': goal.completed }"
+        >
+          <div class="goal-icon">{{ goal.icon }}</div>
+          <div class="goal-info">
+            <div class="goal-title">{{ goal.title }}</div>
+            <div class="goal-progress">
+              <div 
+                class="progress-bar" 
+                :style="{ width: `${goal.progress}%` }"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Training Cards Slider -->
     <div class="training-cards container">
+      <div class="section-header">
+        <h2>{{ $t('home.trainingCards.title') }}</h2>
+      </div>
       <div class="training-cards_scroll">
         <div 
           v-for="card in trainingCards" 
@@ -40,55 +93,6 @@
       </div>
     </div>
 
-    <!-- Daily Goals -->
-    <div class="daily-goals container">
-      <div class="section-header">
-        <h2>{{ $t('home.goals.title') }}</h2>
-        <span class="progress-text">{{ completedGoals }}/{{ totalGoals }}</span>
-      </div>
-      <div class="goals-grid">
-        <div 
-          v-for="goal in dailyGoals" 
-          :key="goal.id"
-          class="goal-item"
-          :class="{ 'completed': goal.completed }"
-        >
-          <div class="goal-icon">{{ goal.icon }}</div>
-          <div class="goal-info">
-            <div class="goal-title">{{ goal.title }}</div>
-            <div class="goal-progress">
-              <div 
-                class="progress-bar" 
-                :style="{ width: `${goal.progress}%` }"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Daily Training Set -->
-    <div class="daily-training container">
-      <div class="training-card">
-        <div class="training-header">
-          <h2>{{ $t('home.training.title') }}</h2>
-          <div class="training-time">{{ $t('home.training.time', { minutes: 15 }) }}</div>
-        </div>
-        <div class="training-exercises">
-          <div 
-            v-for="exercise in dailyExercises" 
-            :key="exercise.id" 
-            class="exercise-item"
-          >
-            <div class="exercise-icon">{{ exercise.icon }}</div>
-            <div class="exercise-title">{{ exercise.title }}</div>
-          </div>
-        </div>
-        <button class="start-button" @click="startTraining">
-          {{ $t('home.training.start') }}
-        </button>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -231,13 +235,11 @@ onMounted(() => {
 }
 
 .welcome-section {
-  margin-bottom: 24px;
-
   :deep(h1) {
     font-size: 32px;
     color: var(--white-color);
     font-weight: bold;
-    margin: 0;
+    margin: 0 0 8px;
 
     span {
       color: var(--primary);
@@ -247,7 +249,7 @@ onMounted(() => {
   .welcome-subtitle {
     color: var(--white-color);
     opacity: 0.7;
-    margin: 8px 0 0;
+    margin: 0;
   }
 }
 
@@ -255,7 +257,7 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
   
   h2 {
     font-size: 20px;
@@ -319,10 +321,6 @@ onMounted(() => {
       transition: width 0.3s ease;
     }
   }
-}
-
-.daily-training {
-  margin-top: 24px;
 }
 
 .all-games-card {
@@ -402,8 +400,6 @@ onMounted(() => {
 }
 
 .training-cards {
-  margin: 24px 0;
-  
   &_scroll {
     display: flex;
     overflow-x: auto;
