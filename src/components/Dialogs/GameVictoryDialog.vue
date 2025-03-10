@@ -39,6 +39,7 @@
 import { onMounted } from 'vue';
 import confetti from 'canvas-confetti';
 import { GAME_SCORE_NAME } from '@/config';
+import { useStreakStore } from '@/stores/streak';
 
 defineProps<{
   score: number;
@@ -48,6 +49,8 @@ const emit = defineEmits<{
   (e: 'finish'): void;
   (e: 'restart'): void;
 }>();
+
+const streakStore = useStreakStore();
 
 function fireConfetti() {
   const count = 200;
@@ -101,6 +104,7 @@ function onRestart() {
 
 onMounted(() => {
   setTimeout(fireConfetti, 300);
+  streakStore.completeDay();
 });
 </script>
 

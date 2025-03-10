@@ -1,4 +1,5 @@
 {
+  "lang": "en-US",
   "home": {
     "title": "Get better <br><span>every day</span>",
     "tabs": {
@@ -334,5 +335,12 @@
       "next": "Next",
       "start": "Let's Go!"
     }
+  },
+  "streak": {
+    "title": "Training Streak",
+    "current": "Current Streak",
+    "best": "Best Streak",
+    "days": "days",
+    "close": "Close"
   }
 }

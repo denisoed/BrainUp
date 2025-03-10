@@ -1,12 +1,13 @@
 export const AUDIO_LOCAL_STORAGE_KEY = 'heathapp-audio';
 export const VIBRATION_LOCAL_STORAGE_KEY = 'heathapp-vibration';
+export const STREAK_DATA_LOCAL_STORAGE_KEY = 'streak-data';
 export const FIRST_TAP_HELP_LOCAL_STORAGE_KEY = 'heathapp-first-tap-help';
 export const LOCALE_LOCAL_STORAGE_KEY = 'heathapp-locale';
 export const HAS_SEEN_WELCOME_LOCAL_STORAGE_KEY = 'has_seen_welcome';
 
 export const ACCESS_TOKEN_LOCAL_STORAGE_KEY = 'heathapp-access-token';
 
-export const GAME_SCORE_NAME = 'HLTH';
+export const GAME_SCORE_NAME = 'HLZ';
 
 export const FARMING_AMOUNT = 500;
 export const FARMING_COOLDOWN = 28800; // 8h
@@ -19,6 +20,7 @@ declare global {
         initDataUnsafe?: {
           user?: {
             first_name?: string;
+            language_code?: string;
           };
         };
       };

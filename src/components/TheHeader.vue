@@ -1,7 +1,91 @@
 <template>
-  <div class="the-header"></div>
+  <header class="header container">
+    <div class="welcome-section">
+      <h1 class="welcome-title" v-html="$t('home.welcome', { name: userName })" />
+      <p class="welcome-subtitle">{{ $t('home.subtitle') }}</p>
+    </div>
+    <div class="streak-btn" @click="openStreakDialog">
+      <span class="streak-icon">🔥</span>
+      <span class="streak-count">{{ streak }}</span>
+    </div>
+  </header>
 </template>
 
-<style lang="scss" scoped>
-.the-header {}
+<script setup lang="ts">
+import { computed, onMounted } from 'vue';
+import { useStreakStore } from '@/stores/streak';
+import { openModal } from 'jenesius-vue-modal';
+import StreakDialog from '@/components/Dialogs/StreakDialog.vue';
+
+const streakStore = useStreakStore();
+const streak = computed(() => streakStore.getStreak);
+
+async function openStreakDialog() {
+  const modal = await openModal(StreakDialog, {
+    currentStreak: streakStore.getStreak,
+    bestStreak: streakStore.getBestStreak,
+    lastDays: streakStore.getLastDays
+  });
+  modal.on('close', () => {
+    modal.close();
+  });
+}
+
+onMounted(() => {
+  streakStore.initializeStreak();
+});
+</script>
+
+<style scoped lang="scss">
+.header {
+  width: 100%;
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+}
+
+.streak-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  .streak-icon {
+    font-size: 20px;
+  }
+
+  .streak-count {
+    color: var(--white-color);
+    font-weight: 600;
+  }
+}
+
+.welcome-section {
+  width: 100%;
+
+  :deep(h1) {
+    font-size: 32px;
+    color: var(--white-color);
+    font-weight: bold;
+    margin: 0 0 8px;
+
+    span {
+      color: var(--primary);
+    }
+  }
+  
+  .welcome-subtitle {
+    color: var(--white-color);
+    opacity: 0.7;
+    margin: 0;
+  }
+}
 </style>

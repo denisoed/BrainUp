@@ -1,15 +1,6 @@
 <template>
   <div class="home-page">
-    <!-- Welcome Section -->
-    <div class="container mb-lg">
-      <div class="welcome-section">
-        <h1 class="welcome-title" v-html="$t('home.welcome', { name: userName })" />
-        <p class="welcome-subtitle">{{ $t('home.subtitle') }}</p>
-      </div>
-      <router-link to="/list" class="home-page_menu-btn">
-        <img src="@/assets/burger-menu-right.svg" alt="Menu" />
-      </router-link>
-    </div>
+    <TheHeader class="mb-lg" />
 
     <!-- Daily Training Set -->
     <div class="daily-training mb-lg container">
@@ -100,6 +91,8 @@
 import { ref, computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
+import TheHeader from '@/components/TheHeader.vue';
+
 import MinesweeperIcon from '@/assets/abstracts/minesweeper.svg';
 import ColorsIcon from '@/assets/abstracts/colors.svg';
 import NumbersIcon from '@/assets/abstracts/numbers.svg';
@@ -217,40 +210,6 @@ onMounted(() => {
 <style lang="scss" scoped>
 .home-page {
   padding-bottom: 20px;
-
-  &_menu-btn {
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 2;
-    width: 60px;
-    background: transparent;
-    padding: 20px 16px;
-    
-    img {
-      width: 100%;
-      display: block;
-    }
-  }
-}
-
-.welcome-section {
-  :deep(h1) {
-    font-size: 32px;
-    color: var(--white-color);
-    font-weight: bold;
-    margin: 0 0 8px;
-
-    span {
-      color: var(--primary);
-    }
-  }
-  
-  .welcome-subtitle {
-    color: var(--white-color);
-    opacity: 0.7;
-    margin: 0;
-  }
 }
 
 .section-header {
