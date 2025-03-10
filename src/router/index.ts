@@ -39,6 +39,9 @@ export async function loadLayoutMiddleware(route) {
 const router = createRouter({
   history: createMemoryHistory(),
   routes,
+  scrollBehavior() {
+    return { top: 0 }
+  }
 })
 
 router.beforeEach(async (to, from, next) => {
