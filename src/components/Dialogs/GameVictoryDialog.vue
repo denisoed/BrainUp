@@ -2,15 +2,20 @@
   <div 
     class="victory-dialog"
   >
-    <div class="victory-dialog_content">
+    <div class="victory-dialog_content flex column items-center">
       <div class="victory-dialog_icon">🏆</div>
       <h2 class="victory-dialog_title">{{ $t('games.victory.title') }}</h2>
-      <div class="victory-dialog_text">{{ $t('games.victory.text') }}</div>
-      <div class="victory-dialog_stats">
-        <div class="stat">
-          <div class="stat_label">{{ $t('games.victory.earned') }}</div>
-          <div class="stat_value">+{{ score }} xp</div>
+      <div class="victory-dialog_stats-and-text flex column items-center">
+        <div class="victory-dialog_stats">
+          <div class="stat">
+            <div class="stat_label">{{ $t('games.victory.earned') }}</div>
+            <div class="stat_value flex items-center gap-xs">
+              <span>+{{ score }}</span>
+              <span>{{ GAME_SCORE_NAME }}</span>
+            </div>
+          </div>
         </div>
+        <div class="victory-dialog_text">{{ $t('games.victory.text') }}</div>
       </div>
       <div class="victory-dialog_actions">
         <button 
@@ -33,6 +38,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
 import confetti from 'canvas-confetti';
+import { GAME_SCORE_NAME } from '@/config';
 
 defineProps<{
   score: number;
@@ -123,6 +129,13 @@ onMounted(() => {
     transform: translateY(0);
   }
 
+  &_stats-and-text {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 24px;
+  }
+
   &_icon {
     font-size: 64px;
     margin-bottom: 16px;
@@ -132,18 +145,19 @@ onMounted(() => {
   &_title {
     font-size: 24px;
     font-weight: bold;
-    margin-bottom: 16px;
+    margin: 0;
+    margin-bottom: 8px;
     color: var(--primary);
   }
 
   &_text {
-    font-size: 16px;
-    margin-bottom: 24px;
+    max-width: 234px;
+    font-size: 14px;
     color: var(--white-color);
   }
 
   &_stats {
-    margin-bottom: 24px;
+    margin-bottom: 8px;
 
     .stat {
       display: flex;
@@ -169,7 +183,7 @@ onMounted(() => {
 
   &_actions {
     display: flex;
-    gap: 16px;
+    gap: 8px;
     justify-content: center;
 
     .btn {
@@ -190,9 +204,8 @@ onMounted(() => {
       }
 
       &--secondary {
-        background: transparent;
-        color: var(--white-color);
-        border: 1px solid var(--white-color);
+        background: var(--white-color);
+        color: var(--dark-color);
       }
     }
   }

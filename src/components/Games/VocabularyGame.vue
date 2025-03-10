@@ -41,7 +41,7 @@ import {
 const { push } = useRouter();
 
 const TIME_LIMIT = 5;
-const WINNING_STREAK = 40;
+const WINNING_STREAK = 1;
 
 // Game state
 const timeLeft = ref(TIME_LIMIT);
