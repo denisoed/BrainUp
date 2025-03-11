@@ -1,5 +1,10 @@
 {
   "lang": "en-US",
+  "common": {
+    "prev": "Previous",
+    "next": "Next",
+    "swipe": "Swipe to navigate"
+  },
   "home": {
     "title": "Get better <br><span>every day</span>",
     "tabs": {
