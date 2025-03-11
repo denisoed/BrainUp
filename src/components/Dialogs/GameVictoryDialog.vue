@@ -1,8 +1,11 @@
 <template>
   <div 
     class="victory-dialog"
+    v-touch:swipe.up="onFinish"
+    v-touch:swipe.down="onFinish"
   >
     <div class="victory-dialog_content flex column items-center">
+      <button class="close-btn" @click="onFinish">×</button>
       <div class="victory-dialog_icon">🏆</div>
       <h2 class="victory-dialog_title">{{ $t('games.victory.title') }}</h2>
       <div class="victory-dialog_stats-and-text flex column items-center">
@@ -113,31 +116,25 @@ onMounted(() => {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: transparent !important;
-  backdrop-filter: blur(10px);
+  right: 0;
+  bottom: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
   z-index: 1000;
+  backdrop-filter: blur(10px);
+  box-shadow: none;
 
   &_content {
-    background: var(--card-bg);
+    background: var(--dark-color);
     border-radius: 16px;
-    max-width: 400px;
+    padding: 24px;
     width: 90%;
-    text-align: center;
-    transition: transform 0.3s ease;
-    transform: translateY(0);
-  }
-
-  &_stats-and-text {
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 16px;
-    padding: 16px;
-    margin-bottom: 24px;
+    max-width: 400px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   &_icon {
@@ -154,10 +151,12 @@ onMounted(() => {
     color: var(--primary);
   }
 
-  &_text {
-    max-width: 234px;
-    font-size: 14px;
-    color: var(--white-color);
+  &_stats-and-text {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 24px;
   }
 
   &_stats {
@@ -168,50 +167,64 @@ onMounted(() => {
       align-items: center;
       justify-content: center;
       gap: 8px;
+      line-height: normal;
+      text-align: center;
 
       &_label {
-        font-size: 22px;
         color: var(--white-color);
+        font-size: 22px;
       }
       
       &_value {
-        font-size: 22px;
-        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
         color: var(--primary);
-        background: linear-gradient(45deg, var(--primary), #45B7D1);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        font-size: 24px;
+        font-weight: bold;
       }
     }
+  }
+
+  &_text {
+    text-align: center;
+    max-width: 234px;
+    font-size: 14px;
+    color: var(--white-color);
+    opacity: 0.7;
+    margin: 0 auto;
   }
 
   &_actions {
     display: flex;
     gap: 8px;
     justify-content: center;
+    width: 100%;
+  }
+}
 
-    .btn {
-      padding: 12px 24px;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: opacity 0.2s ease;
+.btn {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: opacity 0.2s;
 
-      &:hover {
-        opacity: 0.9;
-      }
+  &:hover {
+    opacity: 0.9;
+  }
 
-      &--primary {
-        background: var(--primary);
-        color: var(--dark-color);
-        border: none;
-      }
+  &--primary {
+    background: var(--primary);
+    color: var(--dark-color);
+    border: none;
+  }
 
-      &--secondary {
-        background: var(--white-color);
-        color: var(--dark-color);
-      }
-    }
+  &--secondary {
+    background: var(--white-color);
+    color: var(--dark-color);
+    border: none;
   }
 }
 
@@ -221,6 +234,26 @@ onMounted(() => {
   }
   50% {
     transform: translateY(-10px);
+  }
+}
+
+.close-btn {
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  color: var(--white-color);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+
+  &:hover {
+    opacity: 1;
   }
 }
 </style> 
