@@ -109,7 +109,7 @@ const trainingCards = ref([
     title: t('home.cards.minesweeper'),
     description: t('games.minesweeper.about.descr'),
     icon: MinesweeperIcon,
-    route: '/game/minesweeper',
+    route: '/game-preview/minesweeper',
     premium: false
   },
   {
@@ -117,7 +117,7 @@ const trainingCards = ref([
     title: t('home.cards.colors'),
     description: t('games.colors.about.descr'),
     icon: ColorsIcon,
-    route: '/game/colors',
+    route: '/game-preview/colors',
     premium: false
   },
   {
@@ -125,7 +125,7 @@ const trainingCards = ref([
     title: t('home.cards.numbers'),
     description: t('games.numbers.about.descr'),
     icon: NumbersIcon,
-    route: '/game/numbers',
+    route: '/game-preview/numbers',
     premium: true
   },
   {
@@ -133,7 +133,7 @@ const trainingCards = ref([
     title: t('home.cards.tongueTwister'),
     description: t('games.tongueTwister.about.descr'),
     icon: TongueTwisterIcon,
-    route: '/game/tongueTwister',
+    route: '/game-preview/tongueTwister',
     premium: false
   },
   {
@@ -141,7 +141,7 @@ const trainingCards = ref([
     title: t('home.cards.sequence'),
     description: t('games.sequence.about.descr'),
     icon: SequenceIcon,
-    route: '/game/sequence',
+    route: '/game-preview/sequence',
     premium: true
   },
 ]);

@@ -2,6 +2,7 @@ import { createMemoryHistory, createRouter } from 'vue-router'
 
 import HomePage from '@/pages/HomePage.vue'
 import GamePage from '@/pages/GamePage.vue'
+import GamePreview from '@/pages/GamePreview.vue'
 import LeaderboardPage from '@/pages/LeaderboardPage.vue'
 import ListPage from '@/pages/ListPage.vue'
 import WelcomePage from '@/pages/WelcomePage.vue'
@@ -16,6 +17,7 @@ const routes = [
   { path: '/list', component: ListPage, meta: { layout: 'MainLayout' }},
   { path: '/leaderboard', component: LeaderboardPage, meta: { layout: 'MainLayout' }},
   { path: '/settings', component: SettingsPage, meta: { layout: 'MainLayout' }},
+  { path: '/game-preview/:game', component: GamePreview, meta: { layout: 'SimpleLayout' }},
   { path: '/game/:game', component: GamePage, meta: { layout: 'MainLayout' }},
   { 
     path: '/buy-premium', 

@@ -74,63 +74,63 @@ const tabs = computed(() => [
 ]);
 
 const cards = computed(() => [
-  { to: '/game/breath', class: '', icon: Abstract4, title: t('home.cards.breath'), width: 50 },
+  { to: '/game-preview/breath', class: '', icon: Abstract4, title: t('home.cards.breath'), width: 50 },
   { to: '', locked: true, class: '', icon: Abstract2, title: t('home.cards.sleep'), width: 50 },
-  { to: '/game/mathSprint', class: '', icon: MathSprintIcon, title: t('home.cards.mathSprint'), width: 80 },
+  { to: '/game-preview/mathSprint', class: '', icon: MathSprintIcon, title: t('home.cards.mathSprint'), width: 80 },
   { to: '/buy-premium', class: 'abstract-vip', icon: AbstractVip, title: '', width: 20 },
-  { to: '/game/colors', class: '', icon: ColorsIcon, title: t('home.cards.colors'), width: 30 },
-  { to: '/game/numbers', class: '', icon: NumbersIcon, title: t('home.cards.numbers'), width: 70 },
+  { to: '/game-preview/colors', class: '', icon: ColorsIcon, title: t('home.cards.colors'), width: 30 },
+  { to: '/game-preview/numbers', class: '', icon: NumbersIcon, title: t('home.cards.numbers'), width: 70 },
   { 
-    to: '/game/tongueTwister', 
+    to: '/game-preview/tongueTwister', 
     class: '', 
     icon: TongueTwisterIcon, 
     title: t('home.cards.tongueTwister'), 
     width: 50
   },
   {
-    to: '/game/gridSequence',
+    to: '/game-preview/gridSequence',
     class: '',
     icon: GridSequenceIcon,
     title: t('home.cards.gridSequence'),
     width: 50
   },
   {
-    to: '/game/sequence',
+    to: '/game-preview/sequence',
     class: '',
     icon: SequenceIcon,
     title: t('home.cards.sequence'),
     width: 60
   },
   {
-    to: '/game/minesweeper',
+    to: '/game-preview/minesweeper',
     class: '',
     icon: MinesweeperIcon,
     title: t('home.cards.minesweeper'),
     width: 40
   },
   {
-    to: '/game/durak',
+    to: '/game-preview/durak',
     class: '',
     icon: Abstract1,
     title: t('home.cards.durak'),
     width: 40
   },
   {
-    to: '/game/spelling',
+    to: '/game-preview/spelling',
     class: '',
     icon: SpellingIcon,
     title: t('home.cards.spelling'),
     width: 60
   },
   {
-    to: '/game/vocabulary',
+    to: '/game-preview/vocabulary',
     class: '',
     icon: VocabularyIcon,
     title: t('home.cards.vocabulary'),
     width: 50
   },
   {
-    to: '/game/mathBlocks',
+    to: '/game-preview/mathBlocks',
     class: '',
     icon: MathBlocksIcon,
     title: t('home.cards.mathBlocks'),

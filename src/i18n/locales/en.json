@@ -69,6 +69,9 @@
     "time": "Time",
     "score": "Score",
     "gotIt": "Got it",
+    "levels": "Levels",
+    "skills": "Skills",
+    "startPlaying": "Start playing",
     "victory": {
       "title": "Congratulations!",
       "text": "Keep practicing and improving your result.",
