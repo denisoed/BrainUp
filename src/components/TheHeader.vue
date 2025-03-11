@@ -55,10 +55,10 @@ onMounted(() => {
 .streak-btn {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
+  gap: 4px;
+  padding: 4px 8px;
   background: rgba(255, 255, 255, 0.05);
-  border-radius: 20px;
+  border-radius: 16px;
   cursor: pointer;
   transition: transform 0.2s;
 

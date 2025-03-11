@@ -33,7 +33,7 @@
       </div>
 
       <div class="streak-dialog_footer">
-        <button class="btn btn--primary" @click="$emit('close')">
+        <button class="btn" @click="$emit('close')">
           {{ $t('streak.close') }}
         </button>
       </div>
@@ -189,10 +189,11 @@ defineEmits(['close']);
   cursor: pointer;
   transition: opacity 0.2s;
   width: 100%;
+  background: var(--white-color);
+  color: var(--dark-color);
 
   &--primary {
     background: var(--primary);
-    color: var(--dark-color);
     border: none;
 
     &:hover {
