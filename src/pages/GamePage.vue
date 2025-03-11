@@ -1,8 +1,8 @@
 <template>
   <div class="game-page">
     <div class="game-page_header">
-      <InfoBtn @click="onOpenAboutGameDialog" />
       <BackBtn @click="$router.back()" />
+      <InfoBtn @click="onOpenAboutGameDialog" />
     </div>
     <div class="container">
       <component :is="game" />
