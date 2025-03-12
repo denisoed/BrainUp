@@ -148,16 +148,19 @@ onMounted(() => {
 }
 
 .welcome-title {
-  color: var(--primary);
+  color: var(--white-color);
   margin-bottom: 16px;
-  font-size: 2em;
+  font-size: 32px;
+
+  :deep(span) {
+    color: var(--primary);
+  }
 }
 
 .welcome-text {
   color: var(--white-color);
-  font-size: 1.1em;
+  font-size: 16px;
   line-height: 1.6;
-  margin-bottom: 32px;
 
   :deep(span) {
     color: var(--primary);
