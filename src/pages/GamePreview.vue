@@ -61,7 +61,7 @@
 
       <Button
         class="start-button"
-        @click="startGame"
+        @click="() => startGame()"
       >
         {{ $t('games.startPlaying') }}
       </Button>
@@ -75,8 +75,6 @@ import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import BackBtn from '@/components/BackBtn.vue'
 import Button from '@/components/Button.vue'
-import AboutGameDialog from '@/components/Dialogs/AboutGameDialog.vue'
-import { openModal } from 'jenesius-vue-modal'
 import CheckIcon from '@/components/Icons/CheckIcon.vue'
 import PlayIcon from '@/components/Icons/PlayIcon.vue'
 import LockIcon from '@/components/Icons/LockIcon.vue'
@@ -119,10 +117,10 @@ const gameRules = computed(() => {
   return rules
 })
 
-const startGame = async (level: number): Promise<void> => {
-  if (level !== completedLevels.value + 1) return;
+const startGame = async (level?: number): Promise<void> => {
+  if (level && level !== completedLevels.value + 1) return;
   try {
-    await router.push(`/game/${route.params.game}`)
+    router.push(`/game/${route.params.game}`)
   } catch (error) {
     console.error('Navigation error:', error)
   }
@@ -134,15 +132,6 @@ const goBack = async (): Promise<void> => {
   } catch (error) {
     console.error('Navigation error:', error)
   }
-}
-
-async function onOpenAboutGameDialog() {
-  const modal = await openModal(AboutGameDialog, {
-    game: route.params.game
-  })
-  modal.on('close', () => {
-    modal.close()
-  })
 }
 </script>
 
