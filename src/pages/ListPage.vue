@@ -29,8 +29,7 @@ import Tabs from '@/components/Tabs/index.vue';
 import CardComp from '@/components/CardComp.vue';
 import Abstract1 from '@/assets/abstracts/1.svg';
 import Abstract2 from '@/assets/abstracts/2.svg';
-import Abstract3 from '@/assets/abstracts/3.svg';
-import Abstract4 from '@/assets/abstracts/4.svg';
+import BreathIcon from '@/assets/abstracts/breath.svg';
 import MathSprintIcon from '@/assets/abstracts/mathSprint.svg';
 import ColorsIcon from '@/assets/abstracts/colors.svg';
 import NumbersIcon from '@/assets/abstracts/numbers.svg';
@@ -74,7 +73,7 @@ const tabs = computed(() => [
 ]);
 
 const cards = computed(() => [
-  { to: '/game-preview/breath', class: '', icon: Abstract4, title: t('home.cards.breath'), width: 50 },
+  { to: '/game-preview/breath', class: '', icon: BreathIcon, title: t('home.cards.breath'), width: 50 },
   { to: '', locked: true, class: '', icon: Abstract2, title: t('home.cards.sleep'), width: 50 },
   { to: '/game-preview/mathSprint', class: '', icon: MathSprintIcon, title: t('home.cards.mathSprint'), width: 80 },
   { to: '/buy-premium', class: 'abstract-vip', icon: AbstractVip, title: '', width: 20 },

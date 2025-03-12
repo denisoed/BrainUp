@@ -1,6 +1,6 @@
 <template>
   <div class="game-preview">
-    <!-- <img src="@/assets/abstracts/colors.svg" alt="abstract" class="game-icon" /> -->
+    <img :src="gameIcon" alt="abstract" class="game-icon" />
     <div class="game-preview__header">
       <div class="game-preview__logo flex items-center gap-2">
         <h1 v-html="gameName" />
@@ -74,6 +74,7 @@
 import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import gameIcons from '@/data/gameIcons'
 import BackBtn from '@/components/BackBtn.vue'
 import Button from '@/components/Button.vue'
 import CheckIcon from '@/components/Icons/CheckIcon.vue'
@@ -98,6 +99,8 @@ const gameBenefit = computed(() => {
 const gameName = computed(() => {
   return t(`games.${gameKey.value}.about.title`)
 })
+
+const gameIcon = computed(() => gameIcons[gameKey.value])
 
 // Получаем правила игры
 const gameRules = computed(() => {
