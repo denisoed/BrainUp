@@ -86,7 +86,7 @@
 					</Button>
 					<Button 
 						class="btn"
-						:class="{ 'btn--primary': currentStep !== totalSteps, 'btn--success': currentStep === totalSteps }"
+						:class="{ 'btn--primary': currentStep === totalSteps, 'btn--success': currentStep !== totalSteps }"
 						@click="currentStep === totalSteps ? onClose() : nextStep()"
 					>
 						{{ currentStep === totalSteps ? t('games.gotIt') : t('common.next') }}
@@ -225,7 +225,8 @@ function onClose() {
 	&_description {
 		margin-bottom: 24px;
 		padding: 16px;
-		background: rgba(0, 217, 255, 0.1);
+		background: rgba(var(--primary-rgb), 0.1);
+  	border: 1px solid var(--primary);
 		border-radius: 12px;
 		color: var(--white-color);
 		font-size: 14px;

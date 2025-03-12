@@ -1,8 +1,8 @@
 <template>
   <div class="game-page">
     <div class="game-page_header">
-      <BackBtn @click="$router.back()" />
       <InfoBtn @click="onOpenAboutGameDialog" />
+      <BackBtn @click="$router.back()" />
     </div>
     <div class="container">
       <component :is="game" />
@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
+import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import ColorsGame from '@/components/Games/ColorsGame.vue';
 import NumbersGame from '@/components/Games/NumbersGame.vue';
@@ -58,10 +58,6 @@ async function onOpenAboutGameDialog() {
     modal.close();
   })
 }
-
-onMounted(() => {
-  onOpenAboutGameDialog();
-})
 </script>
 
 <style lang="scss" scoped>

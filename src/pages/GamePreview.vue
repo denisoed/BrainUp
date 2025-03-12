@@ -1,14 +1,14 @@
 <template>
   <div class="game-preview">
     <div class="game-preview__header">
-      <BackBtn @click="goBack" />
       <div class="game-preview__logo">
-        <h1>{{ route.params.game }}</h1>
+        <h1 v-html="gameName" />
       </div>
-      <InfoBtn @click="onOpenAboutGameDialog" />
+      <BackBtn @click="goBack" />
     </div>
 
     <div class="container">
+      <!-- Блок с уровнями -->
       <section class="game-preview__levels">
         <h2>{{ $t('games.levels') }}</h2>
         <div class="levels-scroll">
@@ -25,9 +25,15 @@
               @click="startGame(level)"
             >
               <div class="level-icon">
-                <span v-if="level <= completedLevels" class="icon">🏆</span>
-                <span v-else-if="level === completedLevels + 1" class="icon">▶</span>
-                <span v-else class="icon">🔒</span>
+                <span v-if="level <= completedLevels" class="flex items-center justify-center check-icon">
+                  <CheckIcon />
+                </span>
+                <span v-else-if="level === completedLevels + 1" class="flex items-center justify-center play-icon">
+                  <PlayIcon />
+                </span>
+                <span v-else class="flex items-center justify-center lock-icon">
+                  <LockIcon />
+                </span>
               </div>
               <span class="level-number">{{ level }}</span>
             </div>
@@ -35,26 +41,27 @@
         </div>
       </section>
 
-      <section class="game-preview__skills">
-        <h2>{{ $t('games.skills') }}</h2>
-        <div class="skills-list">
+      <!-- Блок с пользой игры -->
+      <section class="game-preview__benefit">
+        <div class="benefit-content" v-html="gameBenefit"></div>
+      </section>
+
+      <!-- Блок с правилами -->
+      <section class="game-preview__rules">
+        <h2>{{ $t('games.rules') }}</h2>
+        <div class="rules-list">
           <div
-            v-for="(skill, index) in skills"
+            v-for="(rule, index) in gameRules"
             :key="index"
-            class="skill-item"
-          >
-            <span class="skill-icon">{{ skill.icon }}</span>
-            <div class="skill-info">
-              <h3>{{ skill.title }}</h3>
-              <p>{{ skill.description }}</p>
-            </div>
-          </div>
+            class="rule-item"
+            v-html="rule"
+          ></div>
         </div>
       </section>
 
       <Button
-        class="mt-md start-button"
-        @click="startGame(completedLevels + 1)"
+        class="start-button"
+        @click="startGame"
       >
         {{ $t('games.startPlaying') }}
       </Button>
@@ -63,43 +70,54 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import BackBtn from '@/components/BackBtn.vue'
-import InfoBtn from '@/components/InfoBtn.vue'
 import Button from '@/components/Button.vue'
 import AboutGameDialog from '@/components/Dialogs/AboutGameDialog.vue'
 import { openModal } from 'jenesius-vue-modal'
-
-interface Skill {
-  icon: string
-  title: string
-  description: string
-}
+import CheckIcon from '@/components/Icons/CheckIcon.vue'
+import PlayIcon from '@/components/Icons/PlayIcon.vue'
+import LockIcon from '@/components/Icons/LockIcon.vue'
 
 const router = useRouter()
 const route = useRoute()
+const { t } = useI18n()
 
 const completedLevels = ref(3)
 const totalLevels = ref(20)
 
-const skills: Skill[] = [
-  {
-    icon: '📖',
-    title: 'Reading and comprehension',
-    description: 'Understanding and interpreting written information.'
-  },
-  {
-    icon: '👁️',
-    title: 'Visual search',
-    description: 'Active scanning of the visual environment for a particular object or feature.'
-  },
-  {
-    icon: '🧩',
-    title: 'Problem-solving',
-    description: 'Generating ingenious solutions in tough situations.'
+// Получаем информацию о текущей игре
+const gameKey = computed(() => route.params.game as string)
+
+// Получаем описание пользы игры
+const gameBenefit = computed(() => {
+  return t(`games.${gameKey.value}.about.descr`)
+})
+
+const gameName = computed(() => {
+  return t(`games.${gameKey.value}.about.title`)
+})
+
+// Получаем правила игры
+const gameRules = computed(() => {
+  const rules = []
+  let ruleIndex = 1
+  
+  while (true) {
+    const ruleKey = `games.${gameKey.value}.about.rule${ruleIndex}`
+    const rule = t(ruleKey)
+    
+    // Если ключ не найден, прекращаем поиск
+    if (rule === ruleKey) break
+    
+    rules.push(rule)
+    ruleIndex++
   }
-]
+  
+  return rules
+})
 
 const startGame = async (level: number): Promise<void> => {
   if (level !== completedLevels.value + 1) return;
@@ -133,7 +151,6 @@ async function onOpenAboutGameDialog() {
   min-height: 100vh;
   background: linear-gradient(175deg, #212121 0%, rgba(34, 40, 49, 1) 100%);
   display: flex;
-  padding-bottom: 30px;
   flex-direction: column;
 }
 
@@ -152,15 +169,50 @@ async function onOpenAboutGameDialog() {
   color: var(--white-color);
   font-size: 24px;
   margin: 0;
-  text-transform: capitalize;
+
+  :deep(span) {
+    color: var(--primary);
+  }
 }
 
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 16px 24px;
+}
+
+.game-preview__benefit,
+.game-preview__levels,
+.game-preview__rules {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.game-preview__benefit {
+  background: rgba(var(--primary-rgb), 0.1);
+  border: 1px solid var(--primary);
+}
 
 h2 {
   color: var(--white-color);
-  margin-bottom: 16px;
+  margin: 0;
+  margin-bottom: 8px;
   font-size: 20px;
   font-weight: 600;
+}
+
+.benefit-content {
+  color: var(--gray-color);
+  font-size: 16px;
+  line-height: 1.5;
+
+  :deep(span) {
+    color: var(--primary);
+    font-weight: 600;
+  }
 }
 
 .levels-scroll {
@@ -177,8 +229,7 @@ h2 {
 
 .levels-grid {
   display: flex;
-  gap: 8px;
-  padding-bottom: 8px;
+  gap: 16px;
 }
 
 .level-item {
@@ -200,6 +251,11 @@ h2 {
   color: var(--white-color);
   border: 1px solid rgba(255, 255, 255, 0.1);
   transition: all 0.3s ease;
+
+  :deep(svg) {
+    width: 18px;
+    height: 18px;
+  }
 }
 
 .level-number {
@@ -223,46 +279,25 @@ h2 {
   opacity: 0.5;
 }
 
-.skills-list {
+.rules-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-}
-
-.skill-item {
-  display: flex;
-  align-items: center;
   gap: 16px;
-  padding: 16px;
-  background: rgba(255, 255, 255, 0.04);
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
 }
 
-.skill-icon {
-  font-size: 24px;
-  width: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 12px;
-}
-
-.skill-info h3 {
-  margin: 0;
-  font-size: 16px;
-  color: var(--white-color);
-  font-weight: 600;
-}
-
-.skill-info p {
-  margin: 4px 0 0;
-  font-size: 14px;
+.rule-item {
   color: var(--gray-color);
+  font-size: 16px;
+  line-height: 1.5;
+  
+  :deep(span) {
+    color: var(--primary);
+    font-weight: 600;
+  }
 }
 
 .start-button {
+  margin-top: auto;
   width: 100%;
   background: var(--primary);
   color: var(--dark-color);

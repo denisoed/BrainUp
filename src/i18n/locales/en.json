@@ -71,6 +71,8 @@
     "gotIt": "Got it",
     "levels": "Levels",
     "skills": "Skills",
+    "benefit": "Benefit",
+    "rules": "Rules",
     "startPlaying": "Start playing",
     "victory": {
       "title": "Congratulations!",
@@ -82,7 +84,7 @@
     },
     "colors": {
       "about": {
-        "title": "<span>Game:</span> Colors",
+        "title": "Colors",
         "descr": "<span>Benefit:</span> Develops cognitive flexibility, ability to make quick decisions, suppress automatic reactions (Stroop effect).",
         "rules": "Rules:",
         "rule1": "<span>1.</span> Look at the word — it's written in different colors! Click on the card that matches the color of the text, not its value. 🎨",
@@ -103,7 +105,7 @@
     },
     "numbers": {
       "about": {
-        "title": "<span>Game:</span> Numbers",
+        "title": "Numbers",
         "descr": "<span>Benefit:</span> Improves visual perception, trains the ability to focus on the desired object among many distracting elements.",
         "rules": "Rules:",
         "rule1": "<span>1.</span> Find and click on the card where the number matches the number shown below. 😊",
@@ -113,7 +115,7 @@
     },
     "mathSprint": {
       "about": {
-        "title": "<span>Game:</span> Math Sprint",
+        "title": "Math Sprint",
         "descr": "<span>Benefit:</span> Develops speed of information processing, improves arithmetic skills, and helps train the brain for quick calculations.",
         "rules": "Rules:",
         "rule1": "<span>1.</span> Solve the example and click on the card with the correct answer. 😊",
@@ -128,7 +130,7 @@
       "stop": "Stop",
       "ready": "Ready to twist your tongue? 👅",
       "about": {
-        "title": "<span>Game:</span> Tongue Twisters",
+        "title": "Tongue Twisters",
         "descr": "<span>Benefit:</span> Improves diction, develops speech apparatus.",
         "rules": "Rules:",
         "rule1": "<span>1.</span> You have 7 seconds to correctly pronounce the tongue twister. ⏳",
@@ -141,7 +143,7 @@
       "reproduce": "Reproduce 🎯",
       "title": "Pump up your memory! 🧠",
       "about": {
-        "title": "<span>Game:</span> Sequence",
+        "title": "Sequence",
         "descr": "<span>Benefit:</span> Trains memory, attention and reaction speed.",
         "rules": "Rules:",
         "rule1": "<span>1.</span> Look carefully at the cards for 5 seconds and memorize their sequence. 👀",
@@ -168,7 +170,7 @@
         "repeats": "Repeats"
       },
       "about": {
-        "title": "<span>Game:</span> Breath",
+        "title": "Breath",
         "descr": "<span>Benefit:</span> Helps reduce stress and anxiety, improve concentration and sleep quality.",
         "rules": "Rules:",
         "rule1": "<span>1.</span> Follow the instructions and perform the exercise.",
@@ -180,7 +182,7 @@
       "restart": "Start Again",
       "title": "Minesweeper",
       "about": {
-        "title": "<span>Game:</span> Minesweeper",
+        "title": "Minesweeper",
         "descr": "<span>Benefit:</span> Develops logical thinking, improves decision-making skills and attention to detail.",
         "rules": "Rules:",
         "rule1": "<span>1.</span> Click on cells to reveal what's hidden underneath. Avoid mines! 💣",
@@ -196,7 +198,7 @@
       "title": "Find the word with a spelling mistake",
       "start": "Start",
       "about": {
-        "title": "<span>Game:</span> Spelling",
+        "title": "Spelling",
         "descr": "<span>Benefit:</span> Improves literacy, attention to detail, and develops visual memory for correct word spelling.",
         "rules": "Rules:",
         "rule1": "<span>1.</span> Look at 4 words and find the one with a spelling mistake. 🔍",
@@ -212,7 +214,7 @@
         "start": "Start Game"
       },
       "about": {
-        "title": "<span>Game:</span> Vocabulary",
+        "title": "Vocabulary",
         "descr": "<span>Benefit:</span> Expands English vocabulary, improves word recognition and translation speed.",
         "rules": "Rules:",
         "rule1": "<span>1.</span> Look at the Russian word and find its correct English translation among the cards. 📚",
@@ -224,7 +226,7 @@
     "gridSequence": {
       "level": "Level",
       "about": {
-        "title": "<span>Game:</span> Grid Sequence",
+        "title": "Grid Sequence",
         "descr": "<span>Benefit:</span> Develops multitasking skills, visual scanning, and sequential processing abilities.",
         "rules": "Rules:",
         "rule1": "<span>1.</span> Click on the numbers in ascending order (from smallest to largest) as quickly as possible. 🔢",
@@ -235,7 +237,7 @@
     },
     "mathBlocks": {
       "about": {
-        "title": "<span>Game:</span> Math Blocks",
+        "title": "Math Blocks",
         "descr": "<span>Benefit:</span> Develops multitasking abilities, quick mathematical thinking, and decision-making under time pressure.",
         "rules": "Rules:",
         "rule1": "<span>1.</span> Math blocks with equations will fall from the top. Click on blocks with correct answers! 🧮",
@@ -246,7 +248,7 @@
     },
     "durak": {
       "about": {
-        "title": "<span>Game:</span> Durak",
+        "title": "Durak",
         "descr": "<span>Benefit:</span> Develops strategic thinking, decision-making skills, and memory.",
         "rules": "Rules:",
         "rule1": "<span>1.</span> Each player gets 6 cards. The last card determines the trump suit. 🃏",
