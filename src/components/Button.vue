@@ -55,6 +55,8 @@ defineProps({
   }
 
   &-slot {
+    color: var(--dark-color);
+
     &--loading {
       opacity: 0;
       visibility: hidden;

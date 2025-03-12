@@ -24,7 +24,11 @@ defineProps({
 
   &.tab--active {
     background-color: var(--white-color);
-    color: #212121;
+
+    * {
+      color: var(--dark-color);
+
+    }
   }
 }
 </style>
