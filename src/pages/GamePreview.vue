@@ -1,13 +1,19 @@
 <template>
   <div class="game-preview">
+    <!-- <img src="@/assets/abstracts/colors.svg" alt="abstract" class="game-icon" /> -->
     <div class="game-preview__header">
-      <div class="game-preview__logo">
+      <div class="game-preview__logo flex items-center gap-2">
         <h1 v-html="gameName" />
       </div>
       <BackBtn @click="goBack" />
     </div>
 
     <div class="container">
+      <!-- Блок с пользой игры -->
+      <section class="game-preview__benefit">
+        <div class="benefit-content" v-html="gameBenefit"></div>
+      </section>
+  
       <!-- Блок с уровнями -->
       <section class="game-preview__levels">
         <h2>{{ $t('games.levels') }}</h2>
@@ -39,11 +45,6 @@
             </div>
           </div>
         </div>
-      </section>
-
-      <!-- Блок с пользой игры -->
-      <section class="game-preview__benefit">
-        <div class="benefit-content" v-html="gameBenefit"></div>
       </section>
 
       <!-- Блок с правилами -->
@@ -154,6 +155,17 @@ const goBack = async (): Promise<void> => {
   z-index: 2;
 }
 
+.game-icon {
+  width: 300px;
+  height: 300px;
+  position: fixed;
+  top: -150px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  opacity: 0.05;
+}
+
 .game-preview__logo h1 {
   color: var(--white-color);
   font-size: 24px;
@@ -218,7 +230,7 @@ h2 {
 
 .levels-grid {
   display: flex;
-  gap: 16px;
+  gap: 8px;
 }
 
 .level-item {
@@ -264,8 +276,11 @@ h2 {
   color: var(--primary);
 }
 
-.level-item--locked .level-icon {
-  opacity: 0.5;
+.level-item--locked {
+  .level-icon,
+  .level-number {
+    opacity: 0.5;
+  }
 }
 
 .rules-list {
