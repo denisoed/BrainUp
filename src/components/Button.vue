@@ -55,7 +55,7 @@ defineProps({
   }
 
   &-slot {
-    color: var(--dark-color);
+    color: inherit;
 
     &--loading {
       opacity: 0;
