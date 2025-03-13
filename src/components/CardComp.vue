@@ -2,7 +2,7 @@
   <component
     :is="to ? 'router-link' : 'div'" :to="to || '/'"
     class="card"
-    :class="{ locked }"
+    :class="{ locked, active }"
   >
     <div class="card-title">{{ title }}</div>
     <img v-if="icon" :src="icon" alt="icon" class="card-icon">
@@ -18,6 +18,7 @@ defineProps({
   to: String,
   icon: String,
   locked: Boolean,
+  active: Boolean,
 });
 </script>
 
@@ -35,6 +36,7 @@ defineProps({
   &-title {
     position: relative;
     z-index: 2;
+    text-align: left;
   }
 
   &.locked {
@@ -60,6 +62,11 @@ defineProps({
     bottom: 16px;
     left: 16px;
     opacity: 0.5;
+  }
+
+  &.active {
+    background: rgba(var(--primary-rgb), 0.1);
+  	border: 1px solid var(--primary);
   }
 }
 </style>

@@ -10,9 +10,26 @@
 
       <!-- Current Exercise Card -->
       <div class="exercise-card">
-        <div class="exercise-icon">{{ currentExercise.icon }}</div>
-        <h2 class="exercise-title">{{ currentExercise.title }}</h2>
+        <div class="exercise-icon">{{ currentExercise?.icon }}</div>
+        <h2 class="exercise-title">{{ currentExercise?.title }}</h2>
         <p class="exercise-description">{{ $t('training.exerciseDescription') }}</p>
+
+        <!-- Games List for Current Category -->
+        <div class="games-list">
+          <div class="games-scroll">
+            <CardComp
+              v-for="(game, index) in currentExercise?.games" 
+              :key="index"
+              :title="game.title"
+              :to="game.route"
+              :icon="getGameIcon(game.iconKey)"
+              :active="game.active"
+              :locked="!game.active"
+              class="game-card"
+            />
+          </div>
+        </div>
+
         <button class="start-exercise-btn" @click="startExercise">
           {{ $t('training.startExercise') }}
         </button>
@@ -20,16 +37,20 @@
 
       <!-- Progress Timeline -->
       <div class="timeline">
+        <div class="timeline-progress" :style="{ width: `${progressWidth}%` }" />
         <div 
           v-for="(exercise, index) in exercises" 
-          :key="exercise.id"
+          :key="index"
           class="timeline-item"
           :class="{
-            'completed': index < currentExerciseIndex,
-            'current': index === currentExerciseIndex
+            'completed': exercise.completed,
+            'current': exercise.current
           }"
         >
           <div class="timeline-icon">{{ exercise.icon }}</div>
+          <div v-if="exercise.completed" class="timeline-check">
+            <CheckIcon />
+          </div>
         </div>
       </div>
     </div>
@@ -37,48 +58,145 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import BackBtn from '@/components/BackBtn.vue';
+import CardComp from '@/components/CardComp.vue';
+import gameIcons from '@/data/gameIcons';
+import CheckIcon from '@/components/Icons/CheckIcon.vue';
+
+interface Game {
+  iconKey: string;
+  title: string;
+  route: string;
+  active: boolean;
+}
 
 interface Exercise {
-  id: number;
   icon: string;
   title: string;
   route: string;
+  games: Game[];
+  completed: boolean;
+  current: boolean;
 }
 
 const router = useRouter();
 const { t } = useI18n();
 
 // Training exercises data
-const exercises = ref<Exercise[]>([
-  { 
-    id: 1, 
+const exercises = computed<Exercise[]>(() => ([
+  {
     icon: '🎯', 
     title: t('training.exercises.focus'),
-    route: '/game/minesweeper'
+    route: '/game/minesweeper',
+    completed: true,
+    current: false,
+    games: [
+      {
+        iconKey: 'minesweeper',
+        title: t('games.names.minesweeper'),
+        route: '/game/minesweeper',
+        active: true
+      },
+      {
+        iconKey: 'gridSequence',
+        title: t('games.names.gridSequence'),
+        route: '/game/findDifferences',
+        active: false
+      },
+      {
+        iconKey: 'colors',
+        title: t('games.names.colors'),
+        route: '/game/eyeTracker',
+        active: false
+      }
+    ]
   },
-  { 
-    id: 2, 
+  {
     icon: '🧩', 
     title: t('training.exercises.puzzle'),
-    route: '/game/sequence'
+    route: '/game/sequence',
+    completed: false,
+    current: true,
+    games: [
+      {
+        iconKey: 'sequence',
+        title: t('games.names.sequence'),
+        route: '/game/sequence',
+        active: true
+      },
+      {
+        iconKey: 'mathBlocks',
+        title: t('games.names.mathBlocks'),
+        route: '/game/memory',
+        active: false
+      },
+      {
+        iconKey: 'numbers',
+        title: t('games.names.numbers'),
+        route: '/game/patternMatch',
+        active: false
+      }
+    ]
   },
-  { 
-    id: 3, 
+  {
     icon: '🗣️', 
     title: t('training.exercises.speech'),
-    route: '/game/tongueTwister'
+    route: '/game/tongueTwister',
+    completed: false,
+    current: false,
+    games: [
+      {
+        iconKey: 'tongueTwister',
+        title: t('games.names.tongueTwister'),
+        route: '/game/tongueTwister',
+        active: true
+      },
+      {
+        iconKey: 'spelling',
+        title: t('games.names.spelling'),
+        route: '/game/pronunciation',
+        active: false
+      },
+      {
+        iconKey: 'vocabulary',
+        title: t('games.names.vocabulary'),
+        route: '/game/voiceControl',
+        active: false
+      }
+    ]
   }
-]);
+]));
 
-const currentExerciseIndex = ref(0);
-const currentExercise = computed(() => exercises.value[currentExerciseIndex.value]);
+const currentExercise = computed(() => exercises.value.find(exercise => exercise.current));
+const currentExerciseIndex = computed(() => exercises.value.findIndex(exercise => exercise.current));
+
+const progressWidth = computed(() => {
+  const currentIndex = exercises.value.findIndex(ex => ex.current);
+  
+  // Расчет с учетом отступов:
+  // Первый шаг - 15%
+  // Второй шаг - 50%
+  // Третий шаг - 85%
+  // Все завершены - 100%
+  if (exercises.value.every(ex => ex.completed)) {
+    return 100;
+  }
+  
+  const positions = [15, 50, 85];
+  return positions[currentIndex];
+});
 
 function startExercise() {
-  router.push(currentExercise.value.route);
+  if (currentExercise.value) {
+    router.push(currentExercise.value.route);
+  }
+}
+
+function getGameIcon(iconKey: string) {
+  return gameIcons[iconKey as keyof typeof gameIcons];
 }
 </script>
 
@@ -105,24 +223,23 @@ function startExercise() {
 .exercise-card {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 16px;
-  padding: 24px;
+  padding: 20px;
   text-align: center;
   margin-bottom: 32px;
   
   .exercise-icon {
     font-size: 48px;
-    margin-bottom: 16px;
   }
   
   .exercise-title {
     color: var(--white-color);
     font-size: 24px;
-    margin: 0 0 12px;
+    margin: 0 0 8px;
   }
   
   .exercise-description {
     color: var(--gray-color);
-    margin-bottom: 24px;
+    margin: 0 0 16px;
   }
 }
 
@@ -149,6 +266,7 @@ function startExercise() {
   align-items: center;
   padding: 0 32px;
   position: relative;
+  margin-bottom: 32px;
   
   &::before {
     content: '';
@@ -159,6 +277,16 @@ function startExercise() {
     height: 2px;
     background: rgba(255, 255, 255, 0.1);
     z-index: 0;
+  }
+
+  .timeline-progress {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 2px;
+    background: var(--primary);
+    z-index: 0;
+    transition: width 0.3s ease;
   }
 }
 
@@ -176,12 +304,36 @@ function startExercise() {
     align-items: center;
     justify-content: center;
     font-size: 20px;
+    position: relative;
+  }
+  
+  .timeline-check {
+    position: absolute;
+    bottom: -5px;
+    right: -5px;
+    width: 20px;
+    height: 20px;
+    background: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--dark-color);
+    font-size: 12px;
+    font-weight: bold;
+    border: 2px solid var(--dark-color);
+
+    :deep(svg) {
+      width: 8px;
+      height: 8px;
+    }
   }
   
   &.completed {
     .timeline-icon {
       background: var(--primary);
       border-color: var(--primary);
+      color: var(--dark-color);
     }
   }
   
@@ -190,6 +342,42 @@ function startExercise() {
       border-color: var(--primary);
       transform: scale(1.2);
     }
+  }
+}
+
+/* Games List Styles */
+.games-list {
+  margin-bottom: 16px;
+  
+  .games-list-title {
+    color: var(--white-color);
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+  
+  .games-scroll {
+    display: flex;
+    overflow-x: auto;
+    gap: 12px;
+    
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    &::-webkit-scrollbar {
+      height: 4px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 4px;
+    }
+  }
+  
+  .game-card {
+    min-width: 70%;
   }
 }
 </style> 

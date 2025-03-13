@@ -88,7 +88,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import TheHeader from '@/components/TheHeader.vue';
@@ -103,7 +103,7 @@ const { t } = useI18n();
 const router = useRouter();
 
 // Training cards data
-const trainingCards = ref([
+const trainingCards = computed(() => ([
   {
     id: 1,
     title: t('home.cards.minesweeper'),
@@ -144,18 +144,10 @@ const trainingCards = ref([
     route: '/game-preview/sequence',
     premium: true
   },
-]);
-
-function onCardClick(card: any) {
-  if (card.premium) {
-    router.push('/buy-premium');
-  } else {
-    router.push(card.route);
-  }
-}
+]));
 
 // Daily goals data
-const dailyGoals = ref([
+const dailyGoals = computed(() => ([
   { 
     id: 1, 
     icon: '🎯', 
@@ -177,17 +169,25 @@ const dailyGoals = ref([
     progress: 30,
     completed: false 
   }
-]);
+]));
 
 const completedGoals = computed(() => dailyGoals.value.filter(goal => goal.completed).length);
 const totalGoals = computed(() => dailyGoals.value.length);
 
 // Daily exercises
-const dailyExercises = ref([
+const dailyExercises = computed(() => [
   { id: 1, icon: '🎯', title: t('home.training.exercises.focus') },
   { id: 2, icon: '🧩', title: t('home.training.exercises.puzzle') },
   { id: 3, icon: '🗣️', title: t('home.training.exercises.speech') }
 ]);
+
+function onCardClick(card: any) {
+  if (card.premium) {
+    router.push('/buy-premium');
+  } else {
+    router.push(card.route);
+  }
+}
 
 function startTraining() {
   try {

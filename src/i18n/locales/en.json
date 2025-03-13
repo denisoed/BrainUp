@@ -29,7 +29,8 @@
       "minesweeper": "Minesweeper",
       "spelling": "Spelling",
       "vocabulary": "Vocabulary",
-      "gridSequence": "Grid Sequence"
+      "gridSequence": "Grid Sequence",
+      "durak": "Durak"
     },
     "welcome": "Hi, <span>{name}</span>!",
     "subtitle": "Ready for today's training?",
@@ -49,12 +50,16 @@
         "puzzle": "Logic Puzzle",
         "speech": "Speech Practice"
       }
+    },
+    "trainingCards": {
+      "title": "Recommended Training"
     }
   },
   "training": {
     "title": "Training day",
     "exerciseDescription": "Complete exercises to improve your skills",
     "startExercise": "Start Exercise",
+    "gamesInCategory": "Games in this category",
     "exercises": {
       "focus": "Focus Training",
       "puzzle": "Logical Thinking",
@@ -74,6 +79,20 @@
     "benefit": "Benefit",
     "rules": "Rules",
     "startPlaying": "Start playing",
+    "names": {
+      "mathBlocks": "Math Blocks",
+      "mathSprint": "Math Sprint",
+      "sleep": "Sleep",
+      "colors": "Colors",
+      "breath": "Breathing",
+      "numbers": "Numbers",
+      "tongueTwister": "Tongue Twisters",
+      "sequence": "Sequence",
+      "minesweeper": "Minesweeper",
+      "spelling": "Spelling",
+      "vocabulary": "Vocabulary",
+      "gridSequence": "Grid Sequence"
+    },
     "victory": {
       "title": "Congratulations!",
       "text": "Keep practicing and improving your result.",
@@ -259,6 +278,30 @@
       "take": "Take",
       "done": "Done",
       "finishThrowing": "Finish"
+    },
+    "findDifferences": {
+      "title": "Find Differences",
+      "description": "Trains attentiveness and visual perception"
+    },
+    "eyeTracker": {
+      "title": "Eye Tracker",
+      "description": "Improves focus and eye movement control"
+    },
+    "memory": {
+      "title": "Memory Training",
+      "description": "Develops short-term memory and concentration"
+    },
+    "patternMatch": {
+      "title": "Pattern Matching",
+      "description": "Improves visual recognition and logic"
+    },
+    "pronunciation": {
+      "title": "Pronunciation",
+      "description": "Improves diction and articulation"
+    },
+    "voiceControl": {
+      "title": "Voice Control",
+      "description": "Develops intonation and speech expressiveness"
     }
   },
   "premium": {

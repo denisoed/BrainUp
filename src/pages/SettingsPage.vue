@@ -107,7 +107,7 @@
             </div>
             <div class="info-item">
               <span class="label">{{ $t('settings.about.developer') }}:</span>
-              <span class="value">denisoed</span>
+              <a href="https://t.me/denisoed" class="value">denisoed</a>
             </div>
           </div>
         </div>
@@ -318,6 +318,10 @@ function changeTheme(theme: string) {
       border-radius: 4px;
       font-size: 12px;
       font-weight: 500;
+    }
+
+    a {
+      color: var(--white-color);
     }
   }
 }
