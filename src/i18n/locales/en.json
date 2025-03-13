@@ -5,6 +5,28 @@
     "next": "Next",
     "swipe": "Swipe to navigate"
   },
+  "categories": {
+    "memory": {
+      "title": "Memory",
+      "description": "Memory training games"
+    },
+    "logic": {
+      "title": "Logic",
+      "description": "Logic training games"
+    },
+    "speech": {
+      "title": "Speech",
+      "description": "Speech training games"
+    },
+    "attention": {
+      "title": "Attention",
+      "description": "Attention training games"
+    },
+    "breathing": {
+      "title": "Breathing",
+      "description": "Breathing training games"
+    }
+  },
   "home": {
     "title": "Get better <br><span>every day</span>",
     "tabs": {

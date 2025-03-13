@@ -5,6 +5,28 @@
     "next": "Далее",
     "swipe": "Свайпните для навигации"
   },
+  "categories": {
+    "memory": {
+      "title": "Память",
+      "description": "Тренировка памяти"
+    },
+    "logic": {
+      "title": "Логика",
+      "description": "Тренировка логики"
+    },
+    "speech": {
+      "title": "Речь",
+      "description": "Тренировка речи"
+    },
+    "attention": {
+      "title": "Внимание",
+      "description": "Тренировка внимания"
+    },
+    "breathing": {
+      "title": "Дыхание",
+      "description": "Тренировка дыхания"
+    }
+  },
   "home": {
     "title": "Становись лучше <br><span>каждый день</span>",
     "tabs": {
