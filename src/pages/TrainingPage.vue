@@ -97,19 +97,19 @@ const exercises = computed<Exercise[]>(() => ([
       {
         iconKey: 'minesweeper',
         title: t('games.names.minesweeper'),
-        route: '/game/minesweeper',
+        route: '/game-preview/minesweeper',
         active: true
       },
       {
         iconKey: 'gridSequence',
         title: t('games.names.gridSequence'),
-        route: '/game/findDifferences',
+        route: '/game-preview/gridSequence',
         active: false
       },
       {
         iconKey: 'colors',
         title: t('games.names.colors'),
-        route: '/game/eyeTracker',
+        route: '/game-preview/colors',
         active: false
       }
     ]
@@ -117,26 +117,26 @@ const exercises = computed<Exercise[]>(() => ([
   {
     icon: '🧩', 
     title: t('training.exercises.puzzle'),
-    route: '/game/sequence',
+    route: '/game-preview/sequence',
     completed: false,
     current: true,
     games: [
       {
         iconKey: 'sequence',
         title: t('games.names.sequence'),
-        route: '/game/sequence',
+        route: '/game-preview/sequence',
         active: true
       },
       {
         iconKey: 'mathBlocks',
         title: t('games.names.mathBlocks'),
-        route: '/game/memory',
+        route: '/game-preview/memory',
         active: false
       },
       {
         iconKey: 'numbers',
         title: t('games.names.numbers'),
-        route: '/game/patternMatch',
+        route: '/game-preview/numbers',
         active: false
       }
     ]
@@ -151,19 +151,19 @@ const exercises = computed<Exercise[]>(() => ([
       {
         iconKey: 'tongueTwister',
         title: t('games.names.tongueTwister'),
-        route: '/game/tongueTwister',
+        route: '/game-preview/tongueTwister',
         active: true
       },
       {
         iconKey: 'spelling',
         title: t('games.names.spelling'),
-        route: '/game/pronunciation',
+        route: '/game-preview/spelling',
         active: false
       },
       {
         iconKey: 'vocabulary',
         title: t('games.names.vocabulary'),
-        route: '/game/voiceControl',
+        route: '/game-preview/vocabulary',
         active: false
       }
     ]

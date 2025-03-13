@@ -27,7 +27,7 @@ import { useI18n } from 'vue-i18n';
 
 import Tabs from '@/components/Tabs/index.vue';
 import CardComp from '@/components/CardComp.vue';
-import Abstract1 from '@/assets/abstracts/1.svg';
+import DurakIcon from '@/assets/abstracts/durak.svg';
 import Abstract2 from '@/assets/abstracts/2.svg';
 import BreathIcon from '@/assets/abstracts/breath.svg';
 import MathSprintIcon from '@/assets/abstracts/mathSprint.svg';
@@ -110,7 +110,7 @@ const cards = computed(() => [
   {
     to: '/game-preview/durak',
     class: '',
-    icon: Abstract1,
+    icon: DurakIcon,
     title: t('home.cards.durak'),
     width: 40
   },
