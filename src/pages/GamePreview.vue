@@ -17,7 +17,7 @@
       <!-- Блок с уровнями -->
       <section class="game-preview__levels">
         <h2>{{ $t('games.levels') }}</h2>
-        <div class="levels-scroll">
+        <div class="levels-scroll" ref="levelsScrollRef">
           <div class="levels-grid">
             <div
               v-for="level in totalLevels"
@@ -29,6 +29,7 @@
                 'level-item--locked': level > completedLevels + 1
               }"
               @click="startGame(level)"
+              :ref="el => setCurrentLevelRef(el, level)"
             >
               <div class="level-icon">
                 <span v-if="level <= completedLevels" class="flex items-center justify-center check-icon">
@@ -71,7 +72,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import gameIcons from '@/data/gameIcons'
@@ -85,8 +86,17 @@ const router = useRouter()
 const route = useRoute()
 const { t } = useI18n()
 
-const completedLevels = ref(3)
+const completedLevels = ref(8)
 const totalLevels = ref(20)
+const levelsScrollRef = ref<HTMLElement | null>(null)
+const currentLevelRef = ref<HTMLElement | null>(null)
+
+// Функция для установки ref текущего уровня
+const setCurrentLevelRef = (el: Element | null, level: number): void => {
+  if (el instanceof HTMLElement && level === completedLevels.value + 1) {
+    currentLevelRef.value = el;
+  }
+}
 
 // Получаем информацию о текущей игре
 const gameKey = computed(() => route.params.game as string)
@@ -120,6 +130,33 @@ const gameRules = computed(() => {
   
   return rules
 })
+
+// Функция для прокрутки к текущему уровню
+const scrollToCurrentLevel = (): void => {
+  if (levelsScrollRef.value && currentLevelRef.value) {
+    const scrollContainer = levelsScrollRef.value;
+    const currentLevelElement = currentLevelRef.value;
+    
+    // Получаем позицию элемента относительно контейнера
+    const containerRect = scrollContainer.getBoundingClientRect();
+    const elementRect = currentLevelElement.getBoundingClientRect();
+    
+    // Вычисляем позицию для прокрутки (центрирование элемента)
+    const scrollLeft = elementRect.left - containerRect.left - 
+                      (containerRect.width / 2) + (elementRect.width / 2);
+    
+    // Плавная прокрутка к элементу
+    scrollContainer.scrollTo({
+      left: scrollLeft,
+      behavior: 'smooth'
+    });
+  }
+}
+
+onMounted(() => {
+  // Прокручиваем к текущему уровню после рендеринга компонента
+  setTimeout(scrollToCurrentLevel, 100);
+});
 
 const startGame = async (level?: number): Promise<void> => {
   if (level && level > completedLevels.value + 1) return;
