@@ -343,7 +343,7 @@ h2 {
 .start-button {
   margin-top: auto;
   width: 100%;
-  background: var(--primary);
+  background: var(--white-color);
   color: var(--dark-color);
   position: sticky;
   bottom: 16px;
