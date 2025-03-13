@@ -38,7 +38,7 @@ import {
   openModal
 } from 'jenesius-vue-modal';
 
-const { push } = useRouter();
+const router = useRouter();
 
 const TIME_LIMIT = 5;
 const WINNING_STREAK = 1;
@@ -160,7 +160,7 @@ async function onOpenGameVictoryDialog() {
   })
   modal.on('finish', () => {
     modal.close();
-    push('/list');
+    router.back();
   })
   modal.on('restart', () => {
     modal.close();

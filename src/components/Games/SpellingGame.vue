@@ -297,7 +297,7 @@ async function onOpenGameVictoryDialog() {
   })
   modal.on('finish', () => {
     modal.close();
-    router.push('/list');
+    router.back();
   })
   modal.on('restart', () => {
     modal.close();

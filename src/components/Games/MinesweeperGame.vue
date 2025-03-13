@@ -72,7 +72,7 @@ interface Cell {
   nearbyMines: number;
 }
 
-const { push } = useRouter();
+const router = useRouter();
 
 const score = ref(0);
 const board = ref<Cell[][]>([]);
@@ -246,7 +246,7 @@ async function onOpenGameVictoryDialog() {
   })
   modal.on('finish', () => {
     modal.close();
-    push('/list');
+    router.back();
   })
   modal.on('restart', () => {
     modal.close();

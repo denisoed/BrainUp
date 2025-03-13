@@ -339,7 +339,7 @@ function startTraining() {
 .start-button {
   width: 100%;
   padding: 16px;
-  background: var(--primary);
+  background: var(--white-color);
   border: none;
   border-radius: 12px;
   color: var(--dark-color);
