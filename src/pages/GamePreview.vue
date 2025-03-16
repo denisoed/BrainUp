@@ -1,7 +1,7 @@
 <template>
   <div class="game-preview">
     <img :src="gameIcon" alt="abstract" class="game-icon" />
-    <div class="game-preview__header">
+    <div class="game-preview__header mb-md">
       <div class="game-preview__logo flex items-center gap-2">
         <h1 v-html="gameName" />
       </div>
@@ -10,12 +10,12 @@
 
     <div class="container">
       <!-- Блок с пользой игры -->
-      <section class="game-preview__benefit">
+      <section class="game-preview__benefit mb-md">
         <div class="benefit-content" v-html="gameBenefit"></div>
       </section>
   
       <!-- Блок с уровнями -->
-      <section class="game-preview__levels">
+      <section class="game-preview__levels mb-md">
         <h2>{{ $t('games.levels') }}</h2>
         <div class="levels-scroll" ref="levelsScrollRef">
           <div class="levels-grid">
@@ -49,7 +49,7 @@
       </section>
 
       <!-- Блок с правилами -->
-      <section class="game-preview__rules">
+      <section class="game-preview__rules mb-md">
         <h2>{{ $t('games.rules') }}</h2>
         <div class="rules-list">
           <div
@@ -169,7 +169,7 @@ const startGame = async (level?: number): Promise<void> => {
 
 const goBack = async (): Promise<void> => {
   try {
-    await router.push('/list')
+    await router.back()
   } catch (error) {
     console.error('Navigation error:', error)
   }
@@ -187,7 +187,7 @@ const goBack = async (): Promise<void> => {
 .game-preview__header {
   width: 100%;
   position: relative;
-  padding: 20px 16px;
+  padding: 0 16px;
   display: flex;
   justify-content: space-between;
   gap: 12px;
@@ -214,14 +214,6 @@ const goBack = async (): Promise<void> => {
   :deep(span) {
     color: var(--primary);
   }
-}
-
-.container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 0 16px 24px;
 }
 
 .game-preview__benefit,
@@ -347,5 +339,6 @@ h2 {
   color: var(--dark-color);
   position: sticky;
   bottom: 16px;
+  z-index: 2;
 }
 </style> 
