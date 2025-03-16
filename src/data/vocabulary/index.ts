@@ -1,4 +1,8 @@
-import { beginnerVocabulary, intermediateVocabulary, advancedVocabulary } from './levels';
+import {
+  beginnerVocabulary,
+  intermediateVocabulary,
+  advancedVocabulary
+} from '@/data/vocabulary/levels';
 
 interface Level {
   timeLimit: number;
@@ -7,7 +11,7 @@ interface Level {
 }
 
 // Levels configuration with increasing difficulty
-const levels: Record<number, Level> = {
+export const levels: Record<number, Level> = {
   // Beginner levels (1-8) - Using beginnerVocabulary
   1: {
     timeLimit: 10,
@@ -115,4 +119,6 @@ const levels: Record<number, Level> = {
   }
 };
 
-export default levels;
+export default {
+  levels,
+}

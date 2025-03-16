@@ -2,9 +2,9 @@
   <div class="vocabulary-game flex column items-center justify-center">
     <div class="stats">
       <div class="timer">⏳ {{ $t('games.time') }}: <span>{{ timeLeft.toFixed(1) }}</span></div>
-      <div class="score">🏆 {{ $t('games.score') }}: <span>{{ score }}/{{ WINNING_STREAK }}</span></div>
+      <div class="score">🏆 {{ $t('games.score') }}: <span>{{ score }}/{{ winningStreak }}</span></div>
     </div>
-    <ProgressBar :progress="(timeLeft / TIME_LIMIT) * 100" />
+    <ProgressBar :progress="(timeLeft / timeLimit) * 100" />
 
     <div class="cards mb-md mt-md">
       <div
@@ -23,7 +23,7 @@
 
     <div class="translation">{{ currentTranslation }}</div>
 
-    <SuccessCounter :value="`${score}/${WINNING_STREAK}`" :show="score > 0" />
+    <SuccessCounter :value="`${score}/${winningStreak}`" :show="score > 0" />
   </div>
 </template>
 
@@ -33,18 +33,20 @@ import SuccessCounter from '@/components/Games/SuccessCounter.vue';
 import ProgressBar from '@/components/Games/ProgressBar.vue';
 import { middleVocabulary, type VocabularyItem } from '@/data/vocabulary';
 import GameVictoryDialog from '@/components/Dialogs/GameVictoryDialog.vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import {
   openModal
 } from 'jenesius-vue-modal';
+import { levels } from '@/data/vocabulary/index';
 
 const router = useRouter();
+const route = useRoute();
 
-const TIME_LIMIT = 5;
-const WINNING_STREAK = 1;
 
 // Game state
-const timeLeft = ref(TIME_LIMIT);
+const timeLimit = ref(levels[route.query.level]?.timeLimit || 5);
+const winningStreak = ref(levels[route.query.level]?.winningStreak || 1);
+const timeLeft = ref(timeLimit.value);
 const score = ref(0);
 const isStarted = ref(false);
 const showResults = ref(false);
@@ -82,7 +84,7 @@ function startTimer() {
   if (timerInterval) {
     clearInterval(timerInterval);
   }
-  timeLeft.value = TIME_LIMIT;
+  timeLeft.value = timeLimit.value;
   timerInterval = setInterval(() => {
     timeLeft.value -= 0.1;
     if (timeLeft.value <= 0) {
@@ -116,12 +118,13 @@ function checkAnswer(word: string) {
   if (word === correctWord.value) {
     score.value++;
     setTimeout(() => {
-      if (score.value >= WINNING_STREAK) {
+      if (score.value >= winningStreak.value) {
+        localStorage.setItem(`${route.params.game}-current-level`, String(Number(route.query.level) + 1));
         onOpenGameVictoryDialog();
         return;
       }
       startNewRound();
-    }, 1000);
+    }, 500);
   } else {
     score.value = 0;
     setTimeout(() => {
@@ -151,7 +154,7 @@ function resetGame() {
   isStarted.value = false;
   score.value = 0;
   showResults.value = false;
-  timeLeft.value = TIME_LIMIT;
+  timeLeft.value = timeLimit.value;
 }
 
 async function onOpenGameVictoryDialog() {
@@ -162,8 +165,10 @@ async function onOpenGameVictoryDialog() {
     modal.close();
     router.back();
   })
-  modal.on('restart', () => {
+  modal.on('continue', () => {
     modal.close();
+    timeLimit.value = levels[Number(route.query.level) + 1]?.timeLimit || 5;
+    winningStreak.value = levels[Number(route.query.level) + 1]?.winningStreak || 1;
     resetGame();
     startGame();
   })
@@ -191,8 +196,8 @@ defineExpose({
   startNewRound,
   checkAnswer,
   resetGame,
-  TIME_LIMIT,
-  WINNING_STREAK
+  timeLimit,
+  winningStreak
 });
 </script>
 

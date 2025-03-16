@@ -24,18 +24,18 @@
               :key="level"
               class="level-item"
               :class="{
-                'level-item--completed': level <= completedLevels,
-                'level-item--current': level === completedLevels + 1,
-                'level-item--locked': level > completedLevels + 1
+                'level-item--completed': level < CURRENT_LEVEL,
+                'level-item--current': level === CURRENT_LEVEL,
+                'level-item--locked': level > CURRENT_LEVEL
               }"
               @click="startGame(level)"
               :ref="el => setCurrentLevelRef(el, level)"
             >
               <div class="level-icon">
-                <span v-if="level <= completedLevels" class="flex items-center justify-center check-icon">
+                <span v-if="level < CURRENT_LEVEL" class="flex items-center justify-center check-icon">
                   <CheckIcon />
                 </span>
-                <span v-else-if="level === completedLevels + 1" class="flex items-center justify-center play-icon">
+                <span v-else-if="level === CURRENT_LEVEL" class="flex items-center justify-center play-icon">
                   <PlayIcon />
                 </span>
                 <span v-else class="flex items-center justify-center lock-icon">
@@ -63,7 +63,7 @@
 
       <Button
         class="start-button"
-        @click="() => startGame()"
+        @click="() => startGame(CURRENT_LEVEL)"
       >
         {{ $t('games.startPlaying') }}
       </Button>
@@ -75,6 +75,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import data from '@/data'
 import gameIcons from '@/data/gameIcons'
 import BackBtn from '@/components/BackBtn.vue'
 import Button from '@/components/Button.vue'
@@ -86,14 +87,15 @@ const router = useRouter()
 const route = useRoute()
 const { t } = useI18n()
 
-const completedLevels = ref(8)
+const CURRENT_LEVEL = Number(localStorage.getItem(`${route.params.game}-current-level`) || 1);
+
 const totalLevels = ref(20)
 const levelsScrollRef = ref<HTMLElement | null>(null)
 const currentLevelRef = ref<HTMLElement | null>(null)
 
 // Функция для установки ref текущего уровня
 const setCurrentLevelRef = (el: Element | null, level: number): void => {
-  if (el instanceof HTMLElement && level === completedLevels.value + 1) {
+  if (el instanceof HTMLElement && level === CURRENT_LEVEL) {
     currentLevelRef.value = el;
   }
 }
@@ -153,15 +155,10 @@ const scrollToCurrentLevel = (): void => {
   }
 }
 
-onMounted(() => {
-  // Прокручиваем к текущему уровню после рендеринга компонента
-  setTimeout(scrollToCurrentLevel, 100);
-});
-
 const startGame = async (level?: number): Promise<void> => {
-  if (level && level > completedLevels.value + 1) return;
+  if (level && level > CURRENT_LEVEL) return;
   try {
-    router.push(`/game/${route.params.game}`)
+    router.push(`/game/${route.params.game}?level=${level}`)
   } catch (error) {
     console.error('Navigation error:', error)
   }
@@ -174,6 +171,16 @@ const goBack = async (): Promise<void> => {
     console.error('Navigation error:', error)
   }
 }
+
+async function getGameLevels() {
+  const levels = data[gameKey.value]?.levels;
+  totalLevels.value = Object.keys(levels).length || 20;
+}
+
+onMounted(() => {
+  getGameLevels();
+  setTimeout(scrollToCurrentLevel, 100);
+});
 </script>
 
 <style lang="scss" scoped>

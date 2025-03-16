@@ -121,7 +121,8 @@
       "earned": "Earned",
       "finish": "Finish",
       "restart": "Restart",
-      "close": "Close"
+      "close": "Close",
+      "continue": "Continue"
     },
     "colors": {
       "about": {

@@ -29,9 +29,9 @@
         </button>
         <button 
           class="btn btn--primary"
-          @click="onRestart"
+          @click="onContinue"
         >
-          {{ $t('games.victory.restart') }}
+          {{ $t('games.victory.continue') }}
         </button>
       </div>
     </div>
@@ -50,7 +50,7 @@ defineProps<{
 
 const emit = defineEmits<{
   (e: 'finish'): void;
-  (e: 'restart'): void;
+  (e: 'continue'): void;
 }>();
 
 const streakStore = useStreakStore();
@@ -101,8 +101,8 @@ function onFinish() {
   emit('finish');
 }
 
-function onRestart() {
-  emit('restart');
+function onContinue() {
+  emit('continue');
 }
 
 onMounted(() => {
@@ -183,6 +183,10 @@ onMounted(() => {
         color: var(--primary);
         font-size: 24px;
         font-weight: bold;
+        
+        span {
+          color: var(--primary);
+        }
       }
     }
   }
