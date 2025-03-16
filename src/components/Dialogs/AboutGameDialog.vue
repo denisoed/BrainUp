@@ -69,7 +69,7 @@
 				</div>
 			</div>
 
-			<div class="swipe-hint" :class="{ 'swipe-hint--hidden': currentStep === totalSteps }">
+			<div class="swipe-hint hidden" :class="{ 'swipe-hint--hidden': currentStep === totalSteps }">
 				<div class="swipe-hint_icon swipe-hint_icon--left">👈</div>
 				<div class="swipe-hint_text">{{ t('common.swipe') }}</div>
 				<div class="swipe-hint_icon swipe-hint_icon--right">👉</div>
@@ -205,7 +205,7 @@ function onClose() {
 	}
 
 	&_rules {
-		margin-bottom: 24px;
+		margin-bottom: 8px;
 		min-height: 100px;
 
 		.rule-item {

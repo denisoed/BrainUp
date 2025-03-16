@@ -12,7 +12,7 @@
   --primary-rgb: 0, 217, 255;
   --white-color: #ececec;
   --dark-color: #212121;
-  --gray-color: rgba(255, 255, 255, 0.8);
+  --gray-color: #c7c7c7;
   --yellow-color: #ffd700;
 
   font-synthesis: none;
@@ -160,7 +160,7 @@ canvas {
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 .flex {
