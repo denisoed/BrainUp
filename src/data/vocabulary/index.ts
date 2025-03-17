@@ -2,7 +2,7 @@ import {
   beginnerVocabulary,
   intermediateVocabulary,
   advancedVocabulary
-} from '@/data/vocabulary/levels';
+} from '@/data/vocabulary/words';
 
 interface Level {
   timeLimit: number;

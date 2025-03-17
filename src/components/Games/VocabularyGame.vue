@@ -42,10 +42,12 @@ import { levels } from '@/data/vocabulary/index';
 const router = useRouter();
 const route = useRoute();
 
+const LAST_SUCCESS_LEVEL_KEY = `${route.params.game}-current-level`;
 
 // Game state
-const timeLimit = ref(levels[route.query.level]?.timeLimit || 5);
-const winningStreak = ref(levels[route.query.level]?.winningStreak || 1);
+const currentLevel = ref(route.query.level ? Number(route.query.level) : 0);
+const timeLimit = ref(levels[currentLevel.value]?.timeLimit || 5);
+const winningStreak = ref(levels[currentLevel.value]?.winningStreak || 1);
 const timeLeft = ref(timeLimit.value);
 const score = ref(0);
 const isStarted = ref(false);
@@ -119,7 +121,10 @@ function checkAnswer(word: string) {
     score.value++;
     setTimeout(() => {
       if (score.value >= winningStreak.value) {
-        localStorage.setItem(`${route.params.game}-current-level`, String(Number(route.query.level) + 1));
+        const lastSuccessLevel = Number(localStorage.getItem(LAST_SUCCESS_LEVEL_KEY));
+        if (!lastSuccessLevel || currentLevel.value >= lastSuccessLevel) {
+          localStorage.setItem(LAST_SUCCESS_LEVEL_KEY, String(currentLevel.value + 1));
+        }
         onOpenGameVictoryDialog();
         return;
       }
@@ -167,8 +172,9 @@ async function onOpenGameVictoryDialog() {
   })
   modal.on('continue', () => {
     modal.close();
-    timeLimit.value = levels[Number(route.query.level) + 1]?.timeLimit || 5;
-    winningStreak.value = levels[Number(route.query.level) + 1]?.winningStreak || 1;
+    currentLevel.value = currentLevel.value + 1;
+    timeLimit.value = levels[currentLevel.value]?.timeLimit || 5;
+    winningStreak.value = levels[currentLevel.value]?.winningStreak || 1;
     resetGame();
     startGame();
   })
