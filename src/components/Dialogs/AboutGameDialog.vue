@@ -205,8 +205,7 @@ function onClose() {
 	}
 
 	&_rules {
-		margin-bottom: 8px;
-		min-height: 100px;
+		margin-bottom: 16px;
 
 		.rule-item {
 			padding: 12px;
@@ -223,7 +222,7 @@ function onClose() {
 	}
 
 	&_description {
-		margin-bottom: 24px;
+		margin-bottom: 16px;
 		padding: 16px;
 		background: rgba(var(--primary-rgb), 0.1);
   	border: 1px solid var(--primary);

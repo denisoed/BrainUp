@@ -18,7 +18,7 @@ const routes = [
   { path: '/leaderboard', component: LeaderboardPage, meta: { layout: 'MainLayout' }},
   { path: '/settings', component: SettingsPage, meta: { layout: 'MainLayout' }},
   { path: '/game-preview/:game', component: GamePreview, meta: { layout: 'SimpleLayout' }},
-  { path: '/game/:game', component: GamePage, meta: { layout: 'MainLayout' }},
+  { path: '/game/:game', component: GamePage, meta: { layout: 'SimpleLayout' }},
   { 
     path: '/buy-premium', 
     component: BuyPremiumPage,

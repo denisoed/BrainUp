@@ -6,14 +6,14 @@
   >
     <div class="victory-dialog_content flex column items-center">
       <button class="close-btn" @click="onFinish">×</button>
-      <div class="victory-dialog_icon">🏆</div>
+      <div class="victory-dialog_icon">🔥</div>
       <h2 class="victory-dialog_title">{{ $t('games.victory.title') }}</h2>
       <div class="victory-dialog_stats-and-text flex column items-center">
         <div class="victory-dialog_stats">
           <div class="stat">
             <div class="stat_label">{{ $t('games.victory.earned') }}</div>
             <div class="stat_value flex items-center gap-xs">
-              <span>+{{ score }}</span>
+              <span>+<AnimatedNumber :value="score" :duration="1000" :delay="300" /></span>
               <span>{{ GAME_SCORE_NAME }}</span>
             </div>
           </div>
@@ -43,6 +43,7 @@ import { onMounted } from 'vue';
 import confetti from 'canvas-confetti';
 import { GAME_SCORE_NAME } from '@/config';
 import { useStreakStore } from '@/stores/streak';
+import AnimatedNumber from '@/components/Common/AnimatedNumber.vue';
 
 defineProps<{
   score: number;

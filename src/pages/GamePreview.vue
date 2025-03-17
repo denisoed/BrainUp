@@ -65,7 +65,7 @@
         class="start-button"
         @click="() => startGame(CURRENT_LEVEL)"
       >
-        {{ $t('games.startPlaying') }}
+        {{ $t('games.practise') }}
       </Button>
     </div>
   </div>

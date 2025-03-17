@@ -66,7 +66,7 @@ async function onOpenAboutGameDialog() {
     width: 100%;
     position: absolute;
     left: 0;
-    top: 20px;
+    top: 16px;
     z-index: 2;
     padding: 0 16px;
     display: flex;

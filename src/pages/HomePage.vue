@@ -20,7 +20,7 @@
           </div>
         </div>
         <button class="start-button" @click="startTraining">
-          {{ $t('home.training.start') }}
+          {{ $t('home.training.practise') }}
         </button>
       </div>
     </div>
