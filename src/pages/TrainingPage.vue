@@ -245,7 +245,8 @@ function getGameIcon(iconKey: string) {
 
 .start-exercise-btn {
   width: 100%;
-  background: var(--primary);
+  padding: 16px;
+  background: var(--white-color);
   color: var(--dark-color);
 }
 
