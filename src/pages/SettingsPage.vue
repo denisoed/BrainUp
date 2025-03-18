@@ -7,20 +7,20 @@
 
     <div class="container settings-page_content mt-lg">
       <!-- User Profile Section -->
-      <div class="settings-section">
+      <div v-if="user" class="settings-section">
         <div class="settings-block">
           <div class="settings-block_header">
             <h2>{{ $t('settings.profile.title') }}</h2>
           </div>
           <div class="user-profile">
             <UserAvatar
-              :src="userPhoto"
-              :alt="userName"
-              :name="userName"
+              :src="user.photo"
+              :alt="user.name"
+              :name="user.name"
             />
             <div class="user-info">
-              <h3 class="user-name">{{ userName }}</h3>
-              <p class="user-username">@{{ userUsername }}</p>
+              <h3 class="user-name">{{ user.name }}</h3>
+              <p class="user-username">@{{ user.username }}</p>
             </div>
           </div>
         </div>
@@ -124,13 +124,12 @@ import SwitchToggle from '@/components/UI/SwitchToggle.vue';
 import UserAvatar from '@/components/UI/UserAvatar.vue';
 import { LOCALE_LOCAL_STORAGE_KEY } from '@/config';
 import pkg from '../../package.json';
+import useUser from '@/composables/useUser';
 
 const { locale } = useI18n();
+const { user } = useUser();
 
 const currentLocale = computed(() => locale.value);
-const userPhoto = ref('');
-const userName = ref('');
-const userUsername = ref('');
 const currentTheme = ref('dark');
 const notifications = reactive({
   reminders: false
@@ -139,15 +138,6 @@ const notifications = reactive({
 const appVersion = pkg.version;
 
 onMounted(() => {
-  // @ts-ignore - Telegram Web App API
-  const tg = window.Telegram.WebApp;
-  if (tg.initDataUnsafe?.user) {
-    const user = tg.initDataUnsafe.user;
-    userPhoto.value = user.photo_url || '';
-    userName.value = `${user.first_name} ${user.last_name || ''}`.trim();
-    userUsername.value = user.username || '';
-  }
-  
   // Load saved theme
   const savedTheme = localStorage.getItem('theme') || 'dark';
   changeTheme(savedTheme);

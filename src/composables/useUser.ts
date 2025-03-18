@@ -1,34 +1,19 @@
-import { computed, ref } from 'vue';
-import useUserApi from '@/api/useUserApi';
+import { computed } from 'vue';
 import { useUserStore } from '@/stores/user';
+import { IUser } from '@/interfaces/user';
 
 const useUser = () => {
   const userStore = useUserStore();
-  const { getUser } = useUserApi();
 
-  const userLoading = ref(false);
-
-  async function fetchUser(id: number = userStore.getUser.id) {
-    try {
-      userLoading.value = true;
-      const u = await getUser(id);
-      if (u?.data) {
-        userStore.setUser(u.data);
-        return u;
-      }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      userLoading.value = false;
-    }
+  async function setUser(user: IUser) {
+    userStore.setUser(user);
   }
 
   const user = computed(() => userStore.getUser);
 
   return {
     user,
-    fetchUser,
-    userLoading
+    setUser,
   };
 };
 
