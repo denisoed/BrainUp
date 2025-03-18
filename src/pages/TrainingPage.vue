@@ -17,22 +17,17 @@
         <!-- Games List for Current Category -->
         <div class="games-list">
           <div class="games-scroll">
-            <CardComp
+            <TrainingCardItem
               v-for="(game, index) in currentExercise?.games" 
               :key="index"
               :title="game.title"
-              :to="game.route"
+              :description="t(`games.${game.iconKey}.about.descr`)"
               :icon="getGameIcon(game.iconKey)"
-              :active="game.active"
               :locked="!game.active"
-              class="game-card"
+              :route="game.route"
             />
           </div>
         </div>
-
-        <button class="start-exercise-btn" @click="startExercise">
-          {{ $t('training.startExercise') }}
-        </button>
       </div>
 
       <!-- Progress Timeline -->
@@ -53,6 +48,10 @@
           </div>
         </div>
       </div>
+
+      <Button @click="startExercise" class="start-exercise-btn">
+        {{ $t('training.startExercise') }}
+      </Button>
     </div>
   </div>
 </template>
@@ -62,9 +61,10 @@ import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import BackBtn from '@/components/BackBtn.vue';
-import CardComp from '@/components/CardComp.vue';
+import TrainingCardItem from '@/components/TrainingCardItem.vue';
 import gameIcons from '@/data/gameIcons';
 import CheckIcon from '@/components/Icons/CheckIcon.vue';
+import Button from '@/components/Button.vue';
 
 interface Game {
   iconKey: string;
@@ -245,19 +245,8 @@ function getGameIcon(iconKey: string) {
 
 .start-exercise-btn {
   width: 100%;
-  padding: 16px;
   background: var(--primary);
-  border: none;
-  border-radius: 12px;
   color: var(--dark-color);
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-  
-  &:hover {
-    transform: translateY(-2px);
-  }
 }
 
 .timeline {
@@ -347,8 +336,6 @@ function getGameIcon(iconKey: string) {
 
 /* Games List Styles */
 .games-list {
-  margin-bottom: 16px;
-  
   .games-list-title {
     color: var(--white-color);
     font-size: 18px;
@@ -374,10 +361,6 @@ function getGameIcon(iconKey: string) {
       background: var(--primary);
       border-radius: 4px;
     }
-  }
-  
-  .game-card {
-    min-width: 70%;
   }
 }
 </style> 

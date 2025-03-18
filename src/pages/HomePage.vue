@@ -58,24 +58,15 @@
         <h2>{{ $t('home.trainingCards.title') }}</h2>
       </div>
       <div class="training-cards_scroll">
-        <div 
-          v-for="card in trainingCards" 
+        <TrainingCardItem
+          v-for="card in trainingCards"
           :key="card.id"
-          class="training-card-item"
-          :class="{ 'training-card-item--premium': card.premium }"
+          :title="card.title"
+          :description="card.description"
+          :icon="card.icon"
+          :premium="card.premium"
           @click="onCardClick(card)"
-        >
-          <div class="card-icon">
-            <img :src="card.icon" :alt="card.title">
-          </div>
-          <div class="card-content">
-            <h3 class="card-title">{{ card.title }}</h3>
-            <p class="card-description" v-html="card.description" />
-          </div>
-          <div v-if="card.premium" class="premium-badge">
-            <span>PRO</span>
-          </div>
-        </div>
+        />
         <router-link to="/list" class="all-games-card">
           <div class="all-games-card_content">
             <h3 class="card-title">{{ $t('home.more') }}</h3>
@@ -92,6 +83,7 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import TheHeader from '@/components/TheHeader.vue';
+import TrainingCardItem from '@/components/TrainingCardItem.vue';
 
 import MinesweeperIcon from '@/assets/abstracts/minesweeper.svg';
 import ColorsIcon from '@/assets/abstracts/colors.svg';
@@ -355,88 +347,14 @@ function startTraining() {
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     gap: 16px;
-    -webkit-overflow-scrolling: touch; // Для плавного скролла на iOS
+    -webkit-overflow-scrolling: touch;
     
-    // Скрываем скроллбар
     &::-webkit-scrollbar {
       display: none;
     }
 
     scrollbar-width: none;
     -ms-overflow-style: none;
-  }
-}
-
-.training-card-item {
-  flex: 0 0 calc(70% - 8px); // Размер карточки (2.5 карточки на экране)
-  scroll-snap-align: start;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
-  padding: 16px;
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-  box-sizing: border-box;
-  
-  &:hover {
-    transform: translateY(-4px);
-  }
-  
-  &--premium {
-    background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.2), rgba(var(--primary-rgb), 0.1));
-    border: 1px solid var(--primary);
-  }
-  
-  .card-icon {
-    width: 48px;
-    height: 48px;
-    margin-bottom: 12px;
-    
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-  }
-  
-  .card-content {
-    position: relative;
-    z-index: 1;
-  }
-  
-  .card-title {
-    color: var(--white-color);
-    font-size: 16px;
-    font-weight: 600;
-    line-height: normal;
-    margin: 0 0 8px;
-  }
-  
-  :deep(.card-description) {
-    color: var(--gray-color);
-    font-size: 12px;
-    margin: 0;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-
-    span {
-      color: var(--white-color);
-    }
-  }
-  
-  .premium-badge {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    background: var(--primary);
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--dark-color);
   }
 }
 </style>
