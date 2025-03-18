@@ -294,6 +294,7 @@ function getGameIcon(iconKey: string) {
     justify-content: center;
     font-size: 20px;
     position: relative;
+    line-height: normal;
   }
   
   .timeline-check {
