@@ -1,6 +1,6 @@
 <template>
-  <div class="training-page">
-    <div class="container">
+  <div class="training-page full-height">
+    <div class="container full-height">
       <!-- Header -->
       <div class="header">
         <div class="progress">{{ currentExerciseIndex + 1 }}/{{ exercises.length }}</div>
@@ -16,7 +16,7 @@
 
         <!-- Games List for Current Category -->
         <div class="games-list">
-          <div class="games-scroll">
+          <div class="games-scroll horizontal-scroll">
             <TrainingCardItem
               v-for="(game, index) in currentExercise?.games" 
               :key="index"
@@ -49,7 +49,7 @@
         </div>
       </div>
 
-      <Button @click="startExercise" class="start-exercise-btn">
+      <Button @click="startExercise" class="start-exercise-btn mt-auto">
         {{ $t('training.startExercise') }}
       </Button>
     </div>
@@ -347,21 +347,6 @@ function getGameIcon(iconKey: string) {
     display: flex;
     overflow-x: auto;
     gap: 12px;
-    
-    /* Hide scrollbar for Chrome, Safari and Opera */
-    &::-webkit-scrollbar {
-      height: 4px;
-    }
-    
-    &::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 4px;
-    }
-    
-    &::-webkit-scrollbar-thumb {
-      background: var(--primary);
-      border-radius: 4px;
-    }
   }
 }
 </style> 

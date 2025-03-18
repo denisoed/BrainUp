@@ -57,13 +57,14 @@
       <div class="section-header">
         <h2>{{ $t('home.trainingCards.title') }}</h2>
       </div>
-      <div class="training-cards_scroll">
+      <div class="training-cards_scroll horizontal-scroll">
         <TrainingCardItem
           v-for="card in trainingCards"
           :key="card.id"
           :title="card.title"
           :description="card.description"
           :icon="card.icon"
+          :route="card.route"
           :premium="card.premium"
           @click="onCardClick(card)"
         />
@@ -344,17 +345,7 @@ function startTraining() {
 .training-cards {
   &_scroll {
     display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    gap: 16px;
-    -webkit-overflow-scrolling: touch;
-    
-    &::-webkit-scrollbar {
-      display: none;
-    }
-
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    gap: 12px;
   }
 }
 </style>

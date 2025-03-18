@@ -1,8 +1,8 @@
 <template>
   <component :is="$route.meta.layoutComponent">
     <slot />
+    <JenesiusModal />
   </component>
-  <JenesiusModal />
 </template>
 
 <script setup>
