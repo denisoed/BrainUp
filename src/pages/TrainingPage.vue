@@ -9,43 +9,31 @@
       </div>
 
       <!-- Current Exercise Card -->
-      <div class="exercise-card">
+      <div class="exercise-card hidden">
         <div class="exercise-icon">{{ currentExercise?.icon }}</div>
         <h2 class="exercise-title">{{ currentExercise?.title }}</h2>
         <p class="exercise-description">{{ $t('training.exerciseDescription') }}</p>
-
-        <!-- Games List for Current Category -->
-        <div class="games-list">
-          <div class="games-scroll horizontal-scroll">
-            <TrainingCardItem
-              v-for="(game, index) in currentExercise?.games" 
-              :key="index"
-              :title="game.title"
-              :description="t(`games.${game.iconKey}.about.descr`)"
-              :icon="getGameIcon(game.iconKey)"
-              :locked="!game.active"
-              :route="game.route"
-            />
-          </div>
-        </div>
       </div>
 
       <!-- Progress Timeline -->
-      <div class="timeline">
-        <div class="timeline-progress" :style="{ width: `${progressWidth}%` }" />
-        <div 
-          v-for="(exercise, index) in exercises" 
-          :key="index"
-          class="timeline-item"
-          :class="{
-            'completed': exercise.completed,
-            'current': exercise.current
-          }"
-        >
-          <div class="timeline-icon">{{ exercise.icon }}</div>
-          <div v-if="exercise.completed" class="timeline-check">
-            <CheckIcon />
-          </div>
+      <div class="flex gap-md items-center timeline-container">
+        <Timeline 
+          :items="exercises"
+          :progress="progressWidth"
+          vertical
+          class="timeline-vertical"
+        />
+        <!-- Games List for Current Category -->
+        <div class="flex column items-start gap-md games-list">
+          <TrainingCardItem
+            v-for="(game, index) in currentExercise?.games" 
+            :key="index"
+            :title="game.title"
+            :description="t(`games.${game.iconKey}.about.descr`)"
+            :icon="getGameIcon(game.iconKey)"
+            :locked="!game.active"
+            :route="game.route"
+          />
         </div>
       </div>
 
@@ -62,8 +50,8 @@ import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import BackBtn from '@/components/BackBtn.vue';
 import TrainingCardItem from '@/components/TrainingCardItem.vue';
+import Timeline from '@/components/Timeline.vue';
 import gameIcons from '@/data/gameIcons';
-import CheckIcon from '@/components/Icons/CheckIcon.vue';
 import Button from '@/components/Button.vue';
 
 interface Game {
@@ -104,7 +92,7 @@ const exercises = computed<Exercise[]>(() => ([
         iconKey: 'gridSequence',
         title: t('games.names.gridSequence'),
         route: '/game-preview/gridSequence',
-        active: false
+        active: true
       },
       {
         iconKey: 'colors',
@@ -131,7 +119,7 @@ const exercises = computed<Exercise[]>(() => ([
         iconKey: 'mathBlocks',
         title: t('games.names.mathBlocks'),
         route: '/game-preview/memory',
-        active: false
+        active: true
       },
       {
         iconKey: 'numbers',
@@ -239,115 +227,30 @@ function getGameIcon(iconKey: string) {
   
   .exercise-description {
     color: var(--gray-color);
-    margin: 0 0 16px;
+    margin: 0 0 8px;
   }
 }
 
 .start-exercise-btn {
   width: 100%;
-  padding: 16px;
+  position: sticky;
+  bottom: 0;
   background: var(--white-color);
   color: var(--dark-color);
 }
 
-.timeline {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 32px;
-  position: relative;
-  margin-bottom: 32px;
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: rgba(255, 255, 255, 0.1);
-    z-index: 0;
+.timeline-container {
+  margin-bottom: 16px;
+
+  .timeline-vertical {
+    height: 370px;
   }
 
-  .timeline-progress {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    height: 2px;
-    background: var(--primary);
-    z-index: 0;
-    transition: width 0.3s ease;
-  }
-}
-
-.timeline-item {
-  position: relative;
-  z-index: 1;
-  
-  .timeline-icon {
-    width: 40px;
-    height: 40px;
-    background: var(--dark-color);
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    position: relative;
-    line-height: normal;
-  }
-  
-  .timeline-check {
-    position: absolute;
-    bottom: -5px;
-    right: -5px;
-    width: 20px;
-    height: 20px;
-    background: var(--primary);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--dark-color);
-    font-size: 12px;
-    font-weight: bold;
-    border: 2px solid var(--dark-color);
-
-    :deep(svg) {
-      width: 8px;
-      height: 8px;
+  .games-list {
+    .training-card-item {
+      width: 100%;
+      flex: inherit;
     }
-  }
-  
-  &.completed {
-    .timeline-icon {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: var(--dark-color);
-    }
-  }
-  
-  &.current {
-    .timeline-icon {
-      border-color: var(--primary);
-      transform: scale(1.2);
-    }
-  }
-}
-
-/* Games List Styles */
-.games-list {
-  .games-list-title {
-    color: var(--white-color);
-    font-size: 18px;
-    margin-bottom: 8px;
-  }
-  
-  .games-scroll {
-    display: flex;
-    overflow-x: auto;
-    gap: 12px;
   }
 }
 </style> 
