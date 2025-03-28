@@ -31,7 +31,8 @@
             :title="game.title"
             :description="t(`games.${game.iconKey}.about.descr`)"
             :icon="getGameIcon(game.iconKey)"
-            :locked="!game.active"
+            :locked="game.locked"
+            :current="game.current"
             :route="game.route"
           />
         </div>
@@ -58,7 +59,8 @@ interface Game {
   iconKey: string;
   title: string;
   route: string;
-  active: boolean;
+  locked: boolean;
+  current: boolean;
 }
 
 interface Exercise {
@@ -86,19 +88,22 @@ const exercises = computed<Exercise[]>(() => ([
         iconKey: 'minesweeper',
         title: t('games.names.minesweeper'),
         route: '/game-preview/minesweeper',
-        active: true
+        locked: false,
+        current: false
       },
       {
         iconKey: 'gridSequence',
         title: t('games.names.gridSequence'),
         route: '/game-preview/gridSequence',
-        active: true
+        locked: false,
+        current: false
       },
       {
         iconKey: 'colors',
         title: t('games.names.colors'),
         route: '/game-preview/colors',
-        active: false
+        locked: false,
+        current: false
       }
     ]
   },
@@ -113,19 +118,22 @@ const exercises = computed<Exercise[]>(() => ([
         iconKey: 'sequence',
         title: t('games.names.sequence'),
         route: '/game-preview/sequence',
-        active: true
+        locked: false,
+        current: false
       },
       {
         iconKey: 'mathBlocks',
         title: t('games.names.mathBlocks'),
-        route: '/game-preview/memory',
-        active: true
+        route: '/game-preview/mathBlocks',
+        locked: false,
+        current: true
       },
       {
         iconKey: 'numbers',
         title: t('games.names.numbers'),
         route: '/game-preview/numbers',
-        active: false
+        locked: true,
+        current: false
       }
     ]
   },
@@ -140,19 +148,22 @@ const exercises = computed<Exercise[]>(() => ([
         iconKey: 'tongueTwister',
         title: t('games.names.tongueTwister'),
         route: '/game-preview/tongueTwister',
-        active: true
+        locked: true,
+        current: false
       },
       {
         iconKey: 'spelling',
         title: t('games.names.spelling'),
         route: '/game-preview/spelling',
-        active: false
+        locked: true,
+        current: false
       },
       {
         iconKey: 'vocabulary',
         title: t('games.names.vocabulary'),
         route: '/game-preview/vocabulary',
-        active: false
+        locked: true,
+        current: false
       }
     ]
   }

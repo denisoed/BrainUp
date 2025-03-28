@@ -3,7 +3,8 @@
     class="training-card-item"
     :class="{ 
       'training-card-item--premium': premium,
-      'training-card-item--locked': locked
+      'training-card-item--locked': locked,
+      'training-card-item--current': current
     }"
     @click="handleClick"
   >
@@ -34,6 +35,7 @@ interface Props {
   premium?: boolean;
   locked?: boolean;
   route?: string;
+  current?: boolean;
 }
 
 const props = defineProps<Props>();
@@ -75,6 +77,10 @@ function handleClick() {
   &--locked {
     opacity: 0.7;
     cursor: not-allowed;
+  }
+
+  &--current {
+    border: 1px solid var(--primary);
   }
   
   .card-icon {
