@@ -14,9 +14,15 @@ import {
   mathBlocksGame,
 } from '@/data/games';
 
+export const ATTENTION_TYPE = 'attention';
+export const MEMORY_TYPE = 'memory';
+export const LOGIC_TYPE = 'logic';
+export const SPEECH_TYPE = 'speech';
+export const BREATHING_TYPE = 'breathing';
+
 // Individual category exports
 export const attentionCategory: Category = {
-  id: 'attention',
+  type: ATTENTION_TYPE,
   title: 'categories.attention.title',
   description: 'categories.attention.description',
   icon: 'attention',
@@ -28,7 +34,7 @@ export const attentionCategory: Category = {
 };
 
 export const memoryCategory: Category = {
-  id: 'memory',
+  type: MEMORY_TYPE,
   title: 'categories.memory.title',
   description: 'categories.memory.description',
   icon: 'memory',
@@ -40,7 +46,7 @@ export const memoryCategory: Category = {
 };
 
 export const logicCategory: Category = {
-  id: 'logic',
+  type: LOGIC_TYPE,
   title: 'categories.logic.title',
   description: 'categories.logic.description',
   icon: 'logic',
@@ -51,7 +57,7 @@ export const logicCategory: Category = {
 };
 
 export const speechCategory: Category = {
-  id: 'speech',
+  type: SPEECH_TYPE,
   title: 'categories.speech.title',
   description: 'categories.speech.description',
   icon: 'speech',
@@ -63,7 +69,7 @@ export const speechCategory: Category = {
 };
 
 export const breathingCategory: Category = {
-  id: 'breathing',
+  type: BREATHING_TYPE,
   title: 'categories.breathing.title',
   description: 'categories.breathing.description',
   icon: 'breathing',

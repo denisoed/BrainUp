@@ -4,8 +4,8 @@ import type { Game } from '@/types/game';
  * Interface representing a category of games
  */
 export interface Category {
-  /** Unique identifier of the category */
-  id: string;
+  /** Unique type of the category */
+  type: string;
   /** Translation key for the category title */
   title: string;
   /** Translation key for the category description */

@@ -3,6 +3,9 @@
     <router-link to="/">
       <HomeIcon />
     </router-link>
+    <router-link to="/training">
+      <CalendarIcon />
+    </router-link>
     <router-link to="/list">
       <ListIcon />
     </router-link>
@@ -17,6 +20,7 @@
 
 <script setup lang="ts">
 import HomeIcon from '@/components/Icons/HomeIcon.vue';
+import CalendarIcon from '@/components/Icons/CalendarIcon.vue';
 import ListIcon from '@/components/Icons/ListIcon.vue';
 import ActivityIcon from '@/components/Icons/ActivityIcon.vue';
 import SettingsIcon from '@/components/Icons/Settings.vue';

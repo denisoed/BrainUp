@@ -17,11 +17,12 @@
 
       <!-- Progress Timeline -->
       <div class="flex gap-md items-center timeline-container">
-        <Timeline 
+        <Timeline
           :items="exercises"
           :progress="progressWidth"
           vertical
           class="timeline-vertical"
+          @on-change="handleTimelineChange"
         />
         <!-- Games List for Current Category -->
         <div class="flex column items-start gap-md games-list">
@@ -37,10 +38,6 @@
           />
         </div>
       </div>
-
-      <Button @click="startExercise" class="start-exercise-btn mt-auto">
-        {{ $t('training.startExercise') }}
-      </Button>
     </div>
   </div>
 </template>
@@ -49,6 +46,9 @@
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
+import { TimelineItem } from '@/types/timeline';
+import { ATTENTION_TYPE, LOGIC_TYPE, SPEECH_TYPE } from '@/data/categories';
+
 import BackBtn from '@/components/BackBtn.vue';
 import TrainingCardItem from '@/components/TrainingCardItem.vue';
 import Timeline from '@/components/Timeline.vue';
@@ -64,6 +64,7 @@ interface Game {
 }
 
 interface Exercise {
+  type: string;
   icon: string;
   title: string;
   route: string;
@@ -83,6 +84,7 @@ const exercises = computed<Exercise[]>(() => ([
     route: '/game/minesweeper',
     completed: true,
     current: false,
+    type: ATTENTION_TYPE,
     games: [
       {
         iconKey: 'minesweeper',
@@ -113,6 +115,7 @@ const exercises = computed<Exercise[]>(() => ([
     route: '/game-preview/sequence',
     completed: false,
     current: true,
+    type: LOGIC_TYPE,
     games: [
       {
         iconKey: 'sequence',
@@ -143,6 +146,7 @@ const exercises = computed<Exercise[]>(() => ([
     route: '/game/tongueTwister',
     completed: false,
     current: false,
+    type: SPEECH_TYPE,
     games: [
       {
         iconKey: 'tongueTwister',
@@ -196,6 +200,10 @@ function startExercise() {
 
 function getGameIcon(iconKey: string) {
   return gameIcons[iconKey as keyof typeof gameIcons];
+}
+
+function handleTimelineChange(item: TimelineItem) {
+  console.log(item);
 }
 </script>
 

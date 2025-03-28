@@ -17,6 +17,7 @@
         'completed': item.completed,
         'current': item.current
       }"
+      @click="handleClick(item)"
     >
       <div class="timeline-icon">{{ item.icon }}</div>
       <div v-if="item.completed" class="timeline-check">
@@ -28,12 +29,7 @@
 
 <script setup lang="ts">
 import CheckIcon from '@/components/Icons/CheckIcon.vue';
-
-interface TimelineItem {
-  icon: string;
-  completed: boolean;
-  current: boolean;
-}
+import { TimelineItem } from '@/types/timeline';
 
 interface Props {
   items: TimelineItem[];
@@ -42,6 +38,14 @@ interface Props {
 }
 
 defineProps<Props>();
+
+const emit = defineEmits<{
+  (e: 'on-change', item: TimelineItem): void
+}>();
+
+const handleClick = (item: TimelineItem) => {
+  emit('on-change', item);
+};
 </script>
 
 <style lang="scss" scoped>

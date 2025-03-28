@@ -28,7 +28,7 @@ const routes = [
     path: '/training',
     name: 'Training',
     component: TrainingPage,
-    meta: { layout: 'SimpleLayout' }
+    meta: { layout: 'MainLayout' }
   },
 ]
 
