@@ -418,6 +418,7 @@
     "current": "Current Streak",
     "best": "Best Streak",
     "days": "days",
-    "close": "Close"
+    "close": "Close",
+    "train": "Start Training"
   }
 }

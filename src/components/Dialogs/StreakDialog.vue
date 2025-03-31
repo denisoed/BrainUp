@@ -33,8 +33,8 @@
       </div>
 
       <div class="streak-dialog_footer">
-        <button class="btn" @click="$emit('close')">
-          {{ $t('streak.close') }}
+        <button class="btn" @click="goToTraining">
+          {{ $t('streak.train') }}
         </button>
       </div>
     </div>
@@ -42,6 +42,8 @@
 </template>
 
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
+
 interface Props {
   currentStreak: number;
   bestStreak: number;
@@ -52,8 +54,15 @@ interface Props {
   }>;
 }
 
+const router = useRouter();
+
 defineProps<Props>();
-defineEmits(['close']);
+const emit = defineEmits(['close']);
+
+const goToTraining = () => {
+  emit('close');
+  router.push('/training');
+};
 </script>
 
 <style scoped lang="scss">
@@ -183,8 +192,7 @@ defineEmits(['close']);
 }
 
 .btn {
-  padding: 12px 24px;
-  border-radius: 8px;
+  border-radius: 12px;
   font-size: 16px;
   cursor: pointer;
   transition: opacity 0.2s;

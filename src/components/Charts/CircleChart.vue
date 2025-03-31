@@ -16,6 +16,8 @@
 import type { PropType } from 'vue';
 import { onMounted, ref, watch } from 'vue';
 
+type ChartSize = 'sm' | 'md' | 'lg';
+
 const props = defineProps({
   percentage: {
     type: Number,
@@ -23,7 +25,7 @@ const props = defineProps({
     validator: (value: number) => value >= 0 && value <= 100
   },
   size: {
-    type: String as PropType<'sm' | 'md' | 'lg'>,
+    type: String as PropType<ChartSize>,
     default: 'lg'
   }
 });
