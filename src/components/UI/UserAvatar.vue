@@ -1,5 +1,5 @@
 <template>
-  <div class="user-avatar">
+  <div class="user-avatar" :class="{ 'user-avatar--sm': size === 'sm' }">
     <img 
       v-if="src" 
       :src="src" 
@@ -19,6 +19,7 @@ const props = defineProps<{
   src?: string;
   alt?: string;
   name: string;
+  size?: string;
 }>();
 
 const hasImageError = ref(false);
@@ -60,6 +61,15 @@ function handleImageError() {
     color: var(--dark-color);
     font-size: 24px;
     font-weight: 600;
+  }
+
+  &--sm {
+    width: 40px;
+    height: 40px;
+
+    .user-avatar_placeholder {
+      font-size: 16px;
+    }
   }
 }
 </style> 

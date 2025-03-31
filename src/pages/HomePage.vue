@@ -331,7 +331,6 @@ function startTraining() {
 
 .start-button {
   width: 100%;
-  padding: 16px;
   background: var(--white-color);
   border: none;
   border-radius: 12px;

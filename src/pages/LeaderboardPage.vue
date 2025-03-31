@@ -8,75 +8,13 @@
     </div>
 
     <div class="leaderboard-page_content">
-      <!-- Top 3 Winners -->
-      <div class="top-winners">
-        <!-- Second Place -->
-        <div class="winner-card winner-card--second">
-          <div class="avatar-wrapper">
-            <div class="winner-position">🥈</div>
-            <UserAvatar
-              :src="topWinners[1].avatar"
-              :alt="topWinners[1].firstName"
-              :name="topWinners[1].firstName"
-              size="medium"
-            />
-          </div>
-          <div class="winner-info">
-            <div class="winner-name">
-              {{ topWinners[1].firstName }}<br>
-              {{ topWinners[1].lastName }}
-            </div>
-            <div class="winner-score">{{ topWinners[1].score }}</div>
-          </div>
-        </div>
-
-        <!-- First Place -->
-        <div class="winner-card winner-card--first">
-          <div class="avatar-wrapper">
-            <div class="winner-position">🥇</div>
-            <UserAvatar
-              :src="topWinners[0].avatar"
-              :alt="topWinners[0].firstName"
-              :name="topWinners[0].firstName"
-              size="large"
-            />
-          </div>
-          <div class="winner-info">
-            <div class="winner-name">
-              {{ topWinners[0].firstName }}<br>
-              {{ topWinners[0].lastName }}
-            </div>
-            <div class="winner-score">{{ topWinners[0].score }}</div>
-          </div>
-        </div>
-
-        <!-- Third Place -->
-        <div class="winner-card winner-card--third">
-          <div class="avatar-wrapper">
-            <div class="winner-position">🥉</div>
-            <UserAvatar
-              :src="topWinners[2].avatar"
-              :alt="topWinners[2].firstName"
-              :name="topWinners[2].firstName"
-              size="medium"
-            />
-          </div>
-          <div class="winner-info">
-            <div class="winner-name">
-              {{ topWinners[2].firstName }}<br>
-              {{ topWinners[2].lastName }}
-            </div>
-            <div class="winner-score">{{ topWinners[2].score }}</div>
-          </div>
-        </div>
-      </div>
-
       <div class="current-user-card">
         <div class="player-position">#{{ currentUser.position }}</div>
         <UserAvatar
           :src="currentUser.avatar"
           :alt="currentUser.firstName || $t('leaderboard.current_user.you')"
           :name="currentUser.firstName || $t('leaderboard.current_user.you')"
+          size="sm"
         />
         <div class="player-info">
           <div class="player-name">
@@ -99,11 +37,12 @@
           :key="index"
           class="player-card"
         >
-          <div class="player-position">{{ index + 4 }}</div>
+          <div class="player-position">#{{ index + 1 }}</div>
           <UserAvatar
             :src="player.avatar"
             :alt="player.firstName"
             :name="player.firstName"
+            size="sm"
           />
           <div class="player-info">
             <div class="player-name">
@@ -144,7 +83,7 @@ const currentUser = ref<Player>({
   winRate: 65
 });
 
-const topWinners = ref<Player[]>([
+const otherPlayers = ref([
   {
     firstName: 'John',
     lastName: 'Doe',
@@ -167,10 +106,7 @@ const topWinners = ref<Player[]>([
     score: '1,958',
     avatar: '',
     position: 3
-  }
-]);
-
-const otherPlayers = ref([
+  },
   {
     firstName: 'Emma',
     lastName: 'Wilson',
@@ -297,87 +233,6 @@ declare global {
   &_content {
     width: 100%;
   }
-}
-
-.top-winners {
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  gap: 16px;
-  margin: 40px 0;
-  padding: 0 16px;
-}
-
-.winner-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  padding: 16px;
-  border-radius: 16px;
-  width: 120px;
-  transition: transform 0.3s ease;
-
-  .avatar-wrapper {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .winner-position {
-    position: absolute;
-    top: -12px;
-    right: -12px;
-    z-index: 2;
-    font-weight: bold;
-    font-size: 24px;
-  }
-
-  &--first {
-    padding-top: 24px;
-    transform: scale(1.2);
-    animation: pulse 2s infinite;
-
-    .winner-position {
-      color: #FFD700;
-    }
-  }
-
-  &--second {
-    .winner-position {
-      color: #C0C0C0;
-    }
-  }
-
-  &--third {
-    .winner-position {
-      color: #CD7F32;
-    }
-  }
-
-  &:hover {
-    transform: translateY(-8px);
-  }
-}
-
-.winner-info {
-  text-align: center;
-  margin-top: 12px;
-}
-
-.winner-name {
-  color: var(--white-color);
-  font-size: 14px;
-  font-weight: 500;
-  margin-bottom: 4px;
-  line-height: 1.2;
-}
-
-.winner-score {
-  color: var(--primary);
-  font-size: 16px;
-  font-weight: bold;
 }
 
 .other-players {

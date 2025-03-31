@@ -373,7 +373,7 @@
     }
   },
   "leaderboard": {
-    "title": "Leader <br><span>board</span>",
+    "title": "Leaders",
     "achievements": {
       "tournament_winner": "🏆 Tournament Winner",
       "games_played": "⭐ 100 Games Played"
