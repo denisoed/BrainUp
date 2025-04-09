@@ -26,12 +26,13 @@ import VocabularyGame from '@/components/Games/VocabularyGame.vue';
 import GridSequenceGame from '@/components/Games/GridSequenceGame.vue';
 import MathBlocksGame from '@/components/Games/MathBlocksGame.vue';
 import MemoryPairsGame from '@/components/Games/MemoryPairsGame.vue';
+import DurakGame from '@/components/Games/DurakGame.vue';
+import PatternCreatorGame from '@/components/Games/PatternCreatorGame.vue';
 import BackBtn from '@/components/BackBtn.vue';
 import InfoBtn from '@/components/InfoBtn.vue';
 import {
   openModal
 } from 'jenesius-vue-modal';
-import DurakGame from '@/components/Games/DurakGame.vue';
 const route = useRoute();
 
 const GAMES = {
@@ -47,7 +48,8 @@ const GAMES = {
   gridSequence: GridSequenceGame,
   mathBlocks: MathBlocksGame,
   durak: DurakGame,
-  memoryPairs: MemoryPairsGame
+  memoryPairs: MemoryPairsGame,
+  patternCreator: PatternCreatorGame
 };
 
 const game = computed(() => GAMES[route.params.game as keyof typeof GAMES]);
