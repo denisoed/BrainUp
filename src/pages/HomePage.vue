@@ -91,6 +91,7 @@ import ColorsIcon from '@/assets/abstracts/colors.svg';
 import NumbersIcon from '@/assets/abstracts/numbers.svg';
 import TongueTwisterIcon from '@/assets/abstracts/tongueTwister.svg';
 import SequenceIcon from '@/assets/abstracts/sequence.svg';
+import MemoryPairsIcon from '@/assets/abstracts/memoryPairs.svg';
 
 const { t } = useI18n();
 const router = useRouter();
@@ -136,6 +137,14 @@ const trainingCards = computed(() => ([
     icon: SequenceIcon,
     route: '/game-preview/sequence',
     premium: true
+  },
+  {
+    id: 6,
+    title: t('home.cards.memoryPairs'),
+    description: t('games.memoryPairs.about.descr'),
+    icon: MemoryPairsIcon,
+    route: '/game-preview/memoryPairs',
+    premium: false
   },
 ]));
 

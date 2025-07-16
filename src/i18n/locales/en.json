@@ -52,7 +52,8 @@
       "spelling": "Spelling",
       "vocabulary": "Vocabulary",
       "gridSequence": "Grid Sequence",
-      "durak": "Durak"
+      "durak": "Durak",
+      "memoryPairs": "Memory Pairs"
     },
     "welcome": "Hi, <span>{name}</span>!",
     "subtitle": "Ready for today's training?",
@@ -326,6 +327,18 @@
     "voiceControl": {
       "title": "Voice Control",
       "description": "Develops intonation and speech expressiveness"
+    },
+    "memoryPairs": {
+      "title": "Find all pairs! ",
+      "about": {
+        "title": "Memory Pairs",
+        "descr": "<span>Benefit:</span> Enhances visual memory, concentration, and pattern recognition abilities.",
+        "rules": "Rules:",
+        "rule1": "<span>1.</span> Flip cards to reveal symbols and find matching pairs. ",
+        "rule2": "<span>2.</span> Remember the positions of cards you've seen to make matches faster. ",
+        "rule3": "<span>3.</span> Find all pairs before time runs out to win! ",
+        "btn": "Start"
+      }
     }
   },
   "premium": {
