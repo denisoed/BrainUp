@@ -41,6 +41,7 @@ import SpellingIcon from '@/assets/abstracts/spelling.svg';
 import VocabularyIcon from '@/assets/abstracts/vocabulary.svg';
 import GridSequenceIcon from '@/assets/abstracts/gridSequence.svg';
 import MathBlocksIcon from '@/assets/abstracts/mathBlocks.svg';
+import ArticulationIcon from '@/assets/abstracts/articulation.svg';
 
 const { t } = useI18n();
 
@@ -134,6 +135,13 @@ const cards = computed(() => [
     icon: MathBlocksIcon,
     title: t('home.cards.mathBlocks'),
     width: 50
+  },
+  {
+    to: '/game-preview/articulation',
+    class: '',
+    icon: ArticulationIcon,
+    title: t('home.cards.articulation'),
+    width: 100
   },
 ]);
 

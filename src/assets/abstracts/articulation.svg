@@ -1,0 +1,81 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient circle -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="faceGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffeaa7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fdcb6e;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="lipGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff7675;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e74c3c;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="60" cy="60" r="55" fill="url(#bgGradient)" stroke="#5a67d8" stroke-width="2"/>
+  
+  <!-- Face outline -->
+  <ellipse cx="60" cy="55" rx="35" ry="40" fill="url(#faceGradient)" stroke="#fdcb6e" stroke-width="2"/>
+  
+  <!-- Eyes with sparkle -->
+  <circle cx="50" cy="45" r="4" fill="#2d3748"/>
+  <circle cx="70" cy="45" r="4" fill="#2d3748"/>
+  <circle cx="51" cy="43" r="1.5" fill="#ffffff"/>
+  <circle cx="71" cy="43" r="1.5" fill="#ffffff"/>
+  
+  <!-- Eyebrows -->
+  <path d="M45 38 Q50 35 55 38" stroke="#2d3748" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <path d="M65 38 Q70 35 75 38" stroke="#2d3748" stroke-width="2" stroke-linecap="round" fill="none"/>
+  
+  <!-- Nose -->
+  <path d="M60 50 L58 55 L62 55 Z" fill="#fdcb6e"/>
+  <circle cx="59" cy="54" r="1" fill="#e17055"/>
+  <circle cx="61" cy="54" r="1" fill="#e17055"/>
+  
+  <!-- Main mouth/lips (enhanced) -->
+  <ellipse cx="60" cy="70" rx="14" ry="9" fill="url(#lipGradient)" stroke="#c0392b" stroke-width="2"/>
+  
+  <!-- Tongue (more detailed) -->
+  <ellipse cx="60" cy="72" rx="9" ry="6" fill="#ff7675"/>
+  <path d="M55 72 Q60 75 65 72" stroke="#e74c3c" stroke-width="1" fill="none"/>
+  
+  <!-- Enhanced speech/sound waves -->
+  <path d="M85 60 Q90 55 95 60 Q90 65 85 60" stroke="#00b894" stroke-width="2.5" fill="none"/>
+  <path d="M88 50 Q95 45 102 50 Q95 55 88 50" stroke="#00b894" stroke-width="2" fill="none"/>
+  <path d="M88 70 Q95 75 102 70 Q95 65 88 70" stroke="#00b894" stroke-width="2" fill="none"/>
+  
+  <!-- Additional sound wave -->
+  <path d="M90 60 Q97 57 104 60 Q97 63 90 60" stroke="#00b894" stroke-width="1.5" fill="none" opacity="0.7"/>
+  
+  <!-- Motion lines around mouth (enhanced) -->
+  <path d="M35 65 L42 68" stroke="#6c5ce7" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M35 75 L42 72" stroke="#6c5ce7" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M85 65 L78 68" stroke="#6c5ce7" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M85 75 L78 72" stroke="#6c5ce7" stroke-width="2.5" stroke-linecap="round"/>
+  
+  <!-- Additional motion indicators -->
+  <path d="M40 60 L45 62" stroke="#a29bfe" stroke-width="2" stroke-linecap="round"/>
+  <path d="M40 80 L45 78" stroke="#a29bfe" stroke-width="2" stroke-linecap="round"/>
+  <path d="M80 60 L75 62" stroke="#a29bfe" stroke-width="2" stroke-linecap="round"/>
+  <path d="M80 80 L75 78" stroke="#a29bfe" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Articulation points (enhanced) -->
+  <circle cx="45" cy="70" r="2" fill="#a29bfe" opacity="0.8"/>
+  <circle cx="75" cy="70" r="2" fill="#a29bfe" opacity="0.8"/>
+  <circle cx="60" cy="62" r="2" fill="#a29bfe" opacity="0.8"/>
+  <circle cx="60" cy="78" r="2" fill="#a29bfe" opacity="0.8"/>
+  
+  <!-- Inner circles for articulation points -->
+  <circle cx="45" cy="70" r="1" fill="#ffffff"/>
+  <circle cx="75" cy="70" r="1" fill="#ffffff"/>
+  <circle cx="60" cy="62" r="1" fill="#ffffff"/>
+  <circle cx="60" cy="78" r="1" fill="#ffffff"/>
+  
+  <!-- Smile lines -->
+  <path d="M45 65 Q48 68 52 65" stroke="#e17055" stroke-width="1.5" fill="none"/>
+  <path d="M68 65 Q72 68 75 65" stroke="#e17055" stroke-width="1.5" fill="none"/>
+</svg> 

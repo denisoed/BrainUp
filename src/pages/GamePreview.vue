@@ -174,7 +174,7 @@ const goBack = async (): Promise<void> => {
 
 async function getGameLevels() {
   const levels = data[gameKey.value]?.levels;
-  totalLevels.value = Object.keys(levels).length || 20;
+  totalLevels.value = Object.keys(levels || {}).length || 20;
 }
 
 onMounted(() => {

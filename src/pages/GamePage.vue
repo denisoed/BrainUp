@@ -26,6 +26,7 @@ import VocabularyGame from '@/components/Games/VocabularyGame.vue';
 import GridSequenceGame from '@/components/Games/GridSequenceGame.vue';
 import MathBlocksGame from '@/components/Games/MathBlocksGame.vue';
 import MemoryPairsGame from '@/components/Games/MemoryPairsGame.vue';
+import ArticulationGame from '@/components/Games/ArticulationGame.vue';
 import BackBtn from '@/components/BackBtn.vue';
 import InfoBtn from '@/components/InfoBtn.vue';
 import {
@@ -47,7 +48,8 @@ const GAMES = {
   gridSequence: GridSequenceGame,
   mathBlocks: MathBlocksGame,
   durak: DurakGame,
-  memoryPairs: MemoryPairsGame
+  memoryPairs: MemoryPairsGame,
+  articulation: ArticulationGame
 };
 
 const game = computed(() => GAMES[route.params.game as keyof typeof GAMES]);

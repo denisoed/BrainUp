@@ -53,7 +53,8 @@
       "vocabulary": "Vocabulary",
       "gridSequence": "Grid Sequence",
       "durak": "Durak",
-      "memoryPairs": "Memory Pairs"
+      "memoryPairs": "Memory Pairs",
+      "articulation": "Articulation"
     },
     "welcome": "Hi, <span>{name}</span>!",
     "subtitle": "Ready for today's training?",
@@ -338,6 +339,40 @@
         "rule2": "<span>2.</span> Remember the positions of cards you've seen to make matches faster. ",
         "rule3": "<span>3.</span> Find all pairs before time runs out to win! ",
         "btn": "Start"
+      }
+    },
+    "articulation": {
+      "about": {
+        "title": "Articulation Warm-up",
+        "descr": "<span>Benefit:</span> Improves diction, develops speech organs, helps in speech rehabilitation, trains facial muscles.",
+        "rules": "Rules:",
+        "rule1": "<span>1.</span> Watch the exercise demonstration. 👀",
+        "rule2": "<span>2.</span> Repeat the movements while looking at yourself in the camera. 📹",
+        "rule3": "<span>3.</span> Hold the correct position for the specified time to complete the exercise. ⏱️",
+        "btn": "Start"
+      },
+      "ready": "Ready!",
+      "loading": "Loading camera...",
+      "initializing": "Initializing camera...",
+      "error": "Initialization error",
+      "getReady": "Get ready!",
+      "perfect": "Perfect!",
+      "keepTrying": "Keep trying!",
+      "success": "Exercise completed!",
+      "tryAgain": "Try again",
+      "next": "Next",
+      "retry": "Retry",
+      "metrics": {
+        "smile": "Smile",
+        "pucker": "Pucker",
+        "open": "Opening"
+      },
+      "exercises": {
+        "lip_round_smile": "Pucker → Smile",
+        "jaw_open_close": "Mouth Opening",
+        "lip_stretch": "Wide Smile",
+        "lip_pucker": "Kiss",
+        "mouth_alternate": "O → A"
       }
     }
   },

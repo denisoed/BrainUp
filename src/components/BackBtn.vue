@@ -11,6 +11,7 @@ import ChevronLeftIcon from '@/components/Icons/ChevronLeftIcon.vue';
 <style lang="scss" scoped>
 .back-btn {
   width: 40px;
+  min-width: 40px;
   height: 40px;
   border-radius: 50%;
   background-color: rgba(255, 255, 255, 0.04);

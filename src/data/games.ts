@@ -11,6 +11,7 @@ import GridSequenceIcon from '@/assets/abstracts/gridSequence.svg';
 import MathBlocksIcon from '@/assets/abstracts/mathBlocks.svg';
 import BreathIcon from '@/assets/abstracts/breath.svg';
 import DurakIcon from '@/assets/abstracts/durak.svg';
+import ArticulationIcon from '@/assets/abstracts/articulation.svg';
 
 // Individual game exports
 export const breathGame: Game = {
@@ -109,6 +110,14 @@ export const mathBlocksGame: Game = {
   title: 'games.names.mathBlocks',
 };
 
+export const articulationGame: Game = {
+  name: 'articulation',
+  path: '/game/articulation',
+  previewPath: '/game-preview/articulation',
+  icon: ArticulationIcon,
+  title: 'games.names.articulation',
+};
+
 // Export all games as array if needed
 export const games = [
   breathGame,
@@ -123,4 +132,5 @@ export const games = [
   minesweeperGame,
   vocabularyGame,
   mathBlocksGame,
+  articulationGame,
 ];
