@@ -13,6 +13,13 @@ export default ({ mode }) => {
       alias: {
         '@': '/src'
       }
+    },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          api: 'modern-compiler' // or "modern"
+        }
+      }
     }
   });
 };
