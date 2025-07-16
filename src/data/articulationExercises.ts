@@ -10,10 +10,10 @@ export const articulationExercises: ArticulationExercise[] = [
     description: 'Сложите губы в трубочку, затем широко улыбнитесь',
     media: '/articulation/lip_round_smile.webm',
     targets: [
-      { metricId: 'lipRound', threshold: 0.35, direction: '>' },
-      { metricId: 'lipStretch', threshold: 0.60, direction: '>' }
+      { metricId: 'lipRound', threshold: 0.25, direction: '>' },
+      { metricId: 'lipStretch', threshold: 0.45, direction: '>' }
     ],
-    holdMs: 2000
+    holdMs: 1500
   },
   {
     id: 'jaw_open_close',
@@ -21,9 +21,9 @@ export const articulationExercises: ArticulationExercise[] = [
     description: 'Медленно откройте рот как можно шире',
     media: '/articulation/jaw_open.webm',
     targets: [
-      { metricId: 'jawOpen', threshold: 0.4, direction: '>' }
+      { metricId: 'jawOpen', threshold: 0.3, direction: '>' }
     ],
-    holdMs: 1500
+    holdMs: 1000
   },
   {
     id: 'lip_stretch',
@@ -31,10 +31,10 @@ export const articulationExercises: ArticulationExercise[] = [
     description: 'Улыбнитесь как можно шире, не открывая рот',
     media: '/articulation/smile.webm',
     targets: [
-      { metricId: 'lipStretch', threshold: 0.7, direction: '>' },
+      { metricId: 'lipStretch', threshold: 0.5, direction: '>' },
       { metricId: 'jawOpen', threshold: 0.1, direction: '<' }
     ],
-    holdMs: 2000
+    holdMs: 1500
   },
   {
     id: 'lip_pucker',
@@ -42,10 +42,10 @@ export const articulationExercises: ArticulationExercise[] = [
     description: 'Вытяните губы вперед как для поцелуя',
     media: '/articulation/pucker.webm',
     targets: [
-      { metricId: 'lipRound', threshold: 0.5, direction: '>' },
+      { metricId: 'lipRound', threshold: 0.35, direction: '>' },
       { metricId: 'lipStretch', threshold: 0.3, direction: '<' }
     ],
-    holdMs: 1500
+    holdMs: 1000
   },
   {
     id: 'mouth_alternate',
@@ -53,10 +53,10 @@ export const articulationExercises: ArticulationExercise[] = [
     description: 'Произносите звуки "О" и "А" попеременно',
     media: '/articulation/o_a.webm',
     targets: [
-      { metricId: 'jawOpen', threshold: 0.3, direction: '>' },
-      { metricId: 'lipRound', threshold: 0.2, direction: '>' }
+      { metricId: 'jawOpen', threshold: 0.2, direction: '>' },
+      { metricId: 'lipRound', threshold: 0.15, direction: '>' }
     ],
-    holdMs: 1000
+    holdMs: 800
   }
 ];
 
