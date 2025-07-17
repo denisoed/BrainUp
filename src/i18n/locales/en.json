@@ -414,6 +414,12 @@
       "title": "Notifications",
       "reminders": "Daily Reminders"
     },
+    "articulation": {
+      "title": "Articulation Difficulty",
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard"
+    },
     "about": {
       "title": "About App",
       "version": "Version",

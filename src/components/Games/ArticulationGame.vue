@@ -102,38 +102,22 @@
       </div>
 
       <!-- Metrics Display -->
-      <div v-if="currentMetrics" class="metrics-display">
-        <div class="metric">
-          <span class="metric-label">{{ $t('games.articulation.metrics.smile') }}:</span>
+      <div v-if="currentMetrics && relevantMetrics.length > 0" class="metrics-display">
+        <div 
+          v-for="metric in relevantMetrics" 
+          :key="metric.metricId"
+          class="metric"
+          :class="{ 'metric-achieved': metric.achieved }"
+        >
+          <span class="metric-label">{{ getMetricLabel(metric.metricId) }}:</span>
           <div class="metric-bar">
             <div 
               class="metric-fill"
-              :style="{ width: `${currentMetrics.lipStretch * 100}%` }"
+              :class="{ 'metric-fill-achieved': metric.achieved }"
+              :style="{ width: `${metric.progressPercent}%` }"
             />
           </div>
-          <span class="metric-value">{{ Math.round(currentMetrics.lipStretch * 100) }}%</span>
-        </div>
-        
-        <div class="metric">
-          <span class="metric-label">{{ $t('games.articulation.metrics.pucker') }}:</span>
-          <div class="metric-bar">
-            <div 
-              class="metric-fill"
-              :style="{ width: `${currentMetrics.lipRound * 100}%` }"
-            />
-          </div>
-          <span class="metric-value">{{ Math.round(currentMetrics.lipRound * 100) }}%</span>
-        </div>
-        
-        <div class="metric">
-          <span class="metric-label">{{ $t('games.articulation.metrics.open') }}:</span>
-          <div class="metric-bar">
-            <div 
-              class="metric-fill"
-              :style="{ width: `${currentMetrics.jawOpen * 100}%` }"
-            />
-          </div>
-          <span class="metric-value">{{ Math.round(currentMetrics.jawOpen * 100) }}%</span>
+          <span class="metric-value">{{ Math.round(metric.progressPercent) }}%</span>
         </div>
       </div>
 
@@ -166,7 +150,7 @@ import { useRouter } from 'vue-router';
 import { openModal } from 'jenesius-vue-modal';
 
 import { ArticulationController } from '@/core/articulationController';
-import { articulationExercises, getRandomExercise } from '@/data/articulationExercises';
+import { getExercisesByDifficulty } from '@/data/articulationExercises';
 import { ArticulationPhase } from '@/types/articulation';
 import type { ArticulationExercise, ArticulationState, FaceMetrics } from '@/types/articulation';
 
@@ -193,6 +177,8 @@ const countdown = ref(3);
 const exerciseIndex = ref(0);
 const errorMessage = ref('');
 const isLoading = ref(true);
+const difficulty = ref<'easy' | 'medium' | 'hard'>('easy');
+const filteredExercises = ref<ArticulationExercise[]>([]);
 
 // Controller instance
 let controller: ArticulationController | null = null;
@@ -203,7 +189,72 @@ const holdProgress = computed(() => {
   return Math.min(100, (holdTimer.value / currentExercise.value.holdMs) * 100);
 });
 
+const relevantMetrics = computed(() => {
+  if (!currentExercise.value || !currentMetrics.value) return [];
+  
+  return currentExercise.value.targets.map(target => {
+    const currentValue = currentMetrics.value![target.metricId];
+    let progressPercent = 0;
+    let achieved = false;
+    
+    if (target.direction === '>') {
+      // For "greater than" targets, show progress towards threshold
+      progressPercent = Math.min(100, (currentValue / target.threshold) * 100);
+      achieved = currentValue >= target.threshold;
+    } else {
+      // For "less than" targets, show how well we're staying under threshold
+      if (currentValue <= target.threshold) {
+        progressPercent = 100;
+        achieved = true;
+      } else {
+        // Show how much we're exceeding the threshold (inverse progress)
+        const excess = currentValue - target.threshold;
+        const maxExcess = 1 - target.threshold; // Assuming max value is 1
+        progressPercent = Math.max(0, 100 - (excess / maxExcess) * 100);
+        achieved = false;
+      }
+    }
+    
+    return {
+      metricId: target.metricId,
+      threshold: target.threshold,
+      currentValue,
+      progressPercent,
+      achieved,
+      direction: target.direction
+    };
+  });
+});
+
 // Methods
+const getMetricLabel = (metricId: string): string => {
+  switch (metricId) {
+    case 'lipStretch':
+      return t('games.articulation.metrics.smile');
+    case 'lipRound':
+      return t('games.articulation.metrics.pucker');
+    case 'jawOpen':
+      return t('games.articulation.metrics.open');
+    default:
+      return metricId;
+  }
+};
+
+const loadDifficultySettings = () => {
+  const savedDifficulty = localStorage.getItem('articulation-difficulty') as 'easy' | 'medium' | 'hard';
+  if (savedDifficulty) {
+    difficulty.value = savedDifficulty;
+  }
+  
+  // Filter exercises based on difficulty
+  filteredExercises.value = getExercisesByDifficulty(difficulty.value);
+  
+  // Reset exercise index if it exceeds filtered exercises length
+  if (exerciseIndex.value >= filteredExercises.value.length) {
+    exerciseIndex.value = 0;
+  }
+};
+
 const initializeController = async () => {
   try {
     isLoading.value = true;
@@ -276,8 +327,12 @@ const startExercise = () => {
 };
 
 const nextExercise = () => {
-  exerciseIndex.value = (exerciseIndex.value + 1) % articulationExercises.length;
-  currentExercise.value = articulationExercises[exerciseIndex.value];
+  if (filteredExercises.value.length === 0) {
+    loadDifficultySettings();
+  }
+  
+  exerciseIndex.value = (exerciseIndex.value + 1) % filteredExercises.value.length;
+  currentExercise.value = filteredExercises.value[exerciseIndex.value];
   currentPhase.value = ArticulationPhase.Demo;
   holdTimer.value = 0;
   targetsAchieved.value = false;
@@ -312,7 +367,8 @@ const showVictoryDialog = async () => {
 
 // Lifecycle
 onMounted(async () => {
-  currentExercise.value = articulationExercises[0];
+  loadDifficultySettings();
+  currentExercise.value = filteredExercises.value[0];
   await initializeController();
 });
 
@@ -502,6 +558,11 @@ onUnmounted(() => {
   align-items: center;
   margin-bottom: 0.5rem;
   color: white;
+  transition: all 0.3s ease;
+}
+
+.metric.metric-achieved {
+  color: #4CAF50;
 }
 
 .metric-label {
@@ -522,6 +583,10 @@ onUnmounted(() => {
   height: 100%;
   background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1);
   transition: width 0.2s ease;
+}
+
+.metric-fill.metric-fill-achieved {
+  background: #4CAF50;
 }
 
 .metric-value {

@@ -10,8 +10,7 @@ export const articulationExercises: ArticulationExercise[] = [
     description: 'Сложите губы в трубочку, затем широко улыбнитесь',
     media: '/articulation/lip_round_smile.webm',
     targets: [
-      { metricId: 'lipRound', threshold: 0.25, direction: '>' },
-      { metricId: 'lipStretch', threshold: 0.45, direction: '>' }
+      { metricId: 'lipRound', threshold: 0.05, direction: '>' },
     ],
     holdMs: 1500
   },
