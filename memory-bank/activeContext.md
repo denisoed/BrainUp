@@ -3,10 +3,16 @@
 ## Current Focus
 - ✅ Articulation difficulty system implementation
 - ✅ Improved progress display logic for articulation metrics
+- ✅ Fixed face mask mirroring for articulation game
 - Performance optimization and user experience improvements
 - Memory Bank maintenance
 
 ## Recent Changes
+- **Fixed Face Mask Mirroring**: Resolved issue where face landmarks didn't align with mirrored video
+  - Modified `drawFullFaceMask` to apply canvas transformation (scale + translate)
+  - Updated `drawSimpleLandmarks` to mirror x-coordinates manually
+  - Now face mask properly overlays on mirrored video feed
+  - Enhanced visual feedback accuracy for articulation exercises
 - **Improved Articulation Progress Display**: Fixed progress bar logic to show relative progress towards target thresholds
   - Changed metrics display to show only relevant metrics for current exercise
   - Progress bars now show percentage towards required threshold (not absolute values)

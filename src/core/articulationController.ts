@@ -324,6 +324,102 @@ export class ArticulationController {
   private drawLandmarks(landmarks: any[]): void {
     if (!this.drawingUtils || !this.canvasCtx) return;
 
+    // Check if face mask is enabled
+    const showFaceMask = localStorage.getItem('show-face-mask') === 'true';
+    
+    if (showFaceMask) {
+      this.drawFullFaceMask(landmarks);
+    } else {
+      this.drawSimpleLandmarks(landmarks);
+    }
+  }
+
+  /**
+   * Draw full face mask with all landmarks
+   */
+  private drawFullFaceMask(landmarks: any[]): void {
+    if (!this.drawingUtils || !this.canvasCtx || !this.canvasElement) return;
+
+    // Save canvas context state
+    this.canvasCtx.save();
+
+    // Mirror the canvas to match the mirrored video
+    this.canvasCtx.scale(-1, 1);
+    this.canvasCtx.translate(-this.canvasElement.width, 0);
+
+    // Draw face tesselation
+    this.drawingUtils.drawConnectors(
+      landmarks,
+      FaceLandmarker.FACE_LANDMARKS_TESSELATION,
+      { color: "#C0C0C070", lineWidth: 1 }
+    );
+
+    // Draw right eye
+    this.drawingUtils.drawConnectors(
+      landmarks,
+      FaceLandmarker.FACE_LANDMARKS_RIGHT_EYE,
+      { color: "#FF3030" }
+    );
+
+    // Draw right eyebrow
+    this.drawingUtils.drawConnectors(
+      landmarks,
+      FaceLandmarker.FACE_LANDMARKS_RIGHT_EYEBROW,
+      { color: "#FF3030" }
+    );
+
+    // Draw left eye
+    this.drawingUtils.drawConnectors(
+      landmarks,
+      FaceLandmarker.FACE_LANDMARKS_LEFT_EYE,
+      { color: "#30FF30" }
+    );
+
+    // Draw left eyebrow
+    this.drawingUtils.drawConnectors(
+      landmarks,
+      FaceLandmarker.FACE_LANDMARKS_LEFT_EYEBROW,
+      { color: "#30FF30" }
+    );
+
+    // Draw face oval
+    this.drawingUtils.drawConnectors(
+      landmarks,
+      FaceLandmarker.FACE_LANDMARKS_FACE_OVAL,
+      { color: "#E0E0E0" }
+    );
+
+    // Draw lips
+    this.drawingUtils.drawConnectors(
+      landmarks,
+      FaceLandmarker.FACE_LANDMARKS_LIPS,
+      { color: this.state.targetsAchieved ? "#00FF00" : "#E0E0E0" }
+    );
+
+    // Draw right iris
+    this.drawingUtils.drawConnectors(
+      landmarks,
+      FaceLandmarker.FACE_LANDMARKS_RIGHT_IRIS,
+      { color: "#FF3030" }
+    );
+
+    // Draw left iris
+    this.drawingUtils.drawConnectors(
+      landmarks,
+      FaceLandmarker.FACE_LANDMARKS_LEFT_IRIS,
+      { color: "#30FF30" }
+    );
+
+    // Restore canvas context state
+    this.canvasCtx.restore();
+  }
+
+  /**
+   * Draw simple landmarks (original implementation)
+   */
+  private drawSimpleLandmarks(landmarks: any[]): void {
+    if (!this.canvasCtx || !this.canvasElement) return;
+
     // Draw face outline and key points
     this.canvasCtx.fillStyle = this.state.targetsAchieved ? '#00ff00' : '#ff0000';
     this.canvasCtx.globalAlpha = 0.3;
@@ -332,7 +428,8 @@ export class ArticulationController {
     const mouthLandmarks = [61, 291, 13, 14]; // corners and center
     mouthLandmarks.forEach(index => {
       const landmark = landmarks[index];
-      const x = landmark.x * this.canvasElement!.width;
+      // Mirror x coordinate to match the mirrored video
+      const x = this.canvasElement!.width - (landmark.x * this.canvasElement!.width);
       const y = landmark.y * this.canvasElement!.height;
       
       this.canvasCtx!.beginPath();

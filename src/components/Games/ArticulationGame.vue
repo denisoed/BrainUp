@@ -177,7 +177,7 @@ const countdown = ref(3);
 const exerciseIndex = ref(0);
 const errorMessage = ref('');
 const isLoading = ref(true);
-const difficulty = ref<'easy' | 'medium' | 'hard'>('easy');
+const difficulty = ref<'easy' | 'medium' | 'hard'>('medium');
 const filteredExercises = ref<ArticulationExercise[]>([]);
 
 // Controller instance

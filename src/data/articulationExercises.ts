@@ -4,47 +4,47 @@ import type { ArticulationExercise } from '../types/articulation';
  * Available articulation exercises
  */
 export const articulationExercises: ArticulationExercise[] = [
-  {
-    id: 'lip_round_smile',
-    title: 'Трубочка → Улыбка',
-    description: 'Сложите губы в трубочку, затем широко улыбнитесь',
-    media: '/articulation/lip_round_smile.webm',
-    targets: [
-      { metricId: 'lipRound', threshold: 0.05, direction: '>' },
-    ],
-    holdMs: 1500
-  },
-  {
-    id: 'jaw_open_close',
-    title: 'Открываем рот',
-    description: 'Медленно откройте рот как можно шире',
-    media: '/articulation/jaw_open.webm',
-    targets: [
-      { metricId: 'jawOpen', threshold: 0.3, direction: '>' }
-    ],
-    holdMs: 1000
-  },
-  {
-    id: 'lip_stretch',
-    title: 'Широкая улыбка',
-    description: 'Улыбнитесь как можно шире, не открывая рот',
-    media: '/articulation/smile.webm',
-    targets: [
-      { metricId: 'lipStretch', threshold: 0.5, direction: '>' },
-      { metricId: 'jawOpen', threshold: 0.1, direction: '<' }
-    ],
-    holdMs: 1500
-  },
+  // {
+  //   id: 'lip_round_smile',
+  //   title: 'Трубочка → Улыбка',
+  //   description: 'Сложите губы в трубочку, затем широко улыбнитесь',
+  //   media: '/articulation/lip_round_smile.webm',
+  //   targets: [
+  //     { metricId: 'lipRound', threshold: 1, direction: '>' },
+  //   ],
+  //   holdMs: 1500
+  // },
+  // {
+  //   id: 'jaw_open_close',
+  //   title: 'Открываем рот',
+  //   description: 'Медленно откройте рот как можно шире',
+  //   media: '/articulation/jaw_open.webm',
+  //   targets: [
+  //     { metricId: 'jawOpen', threshold: 0.42, direction: '>' }
+  //   ],
+  //   holdMs: 1000
+  // },
+  // {
+  //   id: 'lip_stretch',
+  //   title: 'Широкая улыбка',
+  //   description: 'Улыбнитесь как можно шире, не открывая рот',
+  //   media: '/articulation/smile.webm',
+  //   targets: [
+  //     { metricId: 'lipStretch', threshold: 0.55, direction: '>' },
+  //     { metricId: 'jawOpen', threshold: 0.1, direction: '<' }
+  //   ],
+  //   holdMs: 1500
+  // },
   {
     id: 'lip_pucker',
     title: 'Поцелуй',
     description: 'Вытяните губы вперед как для поцелуя',
     media: '/articulation/pucker.webm',
     targets: [
-      { metricId: 'lipRound', threshold: 0.35, direction: '>' },
-      { metricId: 'lipStretch', threshold: 0.3, direction: '<' }
+      { metricId: 'lipRound', threshold: 0.3, direction: '>' },
+      { metricId: 'jawOpen', threshold: 0.1, direction: '<' }
     ],
-    holdMs: 1000
+    holdMs: 1200
   },
   {
     id: 'mouth_alternate',
