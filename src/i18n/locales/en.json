@@ -6,18 +6,6 @@
     "swipe": "Swipe to navigate"
   },
   "categories": {
-    "memory": {
-      "title": "Memory",
-      "description": "Memory training games"
-    },
-    "logic": {
-      "title": "Logic",
-      "description": "Logic training games"
-    },
-    "speech": {
-      "title": "Speech",
-      "description": "Speech training games"
-    },
     "attention": {
       "title": "Attention",
       "description": "Attention training games"
@@ -46,6 +34,7 @@
       "colors": "Colors",
       "breath": "Breathing",
       "numbers": "Numbers",
+      "patternCreator": "Pattern Creator",
       "tongueTwister": "Tongue Twisters",
       "sequence": "Sequence",
       "minesweeper": "Minesweeper",
@@ -115,7 +104,8 @@
       "minesweeper": "Minesweeper",
       "spelling": "Spelling",
       "vocabulary": "Vocabulary",
-      "gridSequence": "Grid Sequence"
+      "gridSequence": "Grid Sequence",
+      "patternCreator": "Pattern Creator"
     },
     "victory": {
       "title": "Congratulations!",
@@ -338,6 +328,27 @@
         "rule2": "<span>2.</span> Remember the positions of cards you've seen to make matches faster. ",
         "rule3": "<span>3.</span> Find all pairs before time runs out to win! ",
         "btn": "Start"
+      }
+    },
+    "patternCreator": {
+      "title": "Create patterns with creative thinking! 🧠",
+      "about": {
+        "title": "Pattern Creator",
+        "descr": "<span>Benefit:</span> Develops creative thinking, visual perception, and ability to recognize and create patterns.",
+        "rules": "Rules:",
+        "rule1": "<span>1.</span> Observe the pattern for a few seconds and remember it. 👀",
+        "rule2": "<span>2.</span> Recreate the exact same pattern by clicking on the cells. ✏️",
+        "rule3": "<span>3.</span> Each level introduces different pattern rules and increasing difficulty. 📈",
+        "btn": "Start"
+      },
+      "check": "Check Pattern",
+      "recreate": "Recreate the pattern you saw",
+      "rules": {
+        "symmetry": "Create a symmetrical pattern",
+        "diagonal": "Focus on the diagonal patterns",
+        "spiral": "Notice the spiral structure",
+        "checkerboard": "Look for the checkerboard variations",
+        "border": "Pay attention to the borders and interior"
       }
     }
   },

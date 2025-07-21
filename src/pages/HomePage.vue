@@ -146,6 +146,14 @@ const trainingCards = computed(() => ([
     route: '/game-preview/memoryPairs',
     premium: false
   },
+  {
+    id: 7,
+    title: t('home.cards.patternCreator'),
+    description: t('games.patternCreator.about.descr'),
+    icon: MemoryPairsIcon,
+    route: '/game-preview/patternCreator',
+    premium: false
+  },
 ]));
 
 // Daily goals data
