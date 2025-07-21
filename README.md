@@ -2,6 +2,8 @@
   <img src="public/banner.png" alt="BrainUp - Brain Training" width="100%">
 </div>
 
+> **⚠️ Alpha Version** - This project is currently in alpha development stage. Features may be incomplete or subject to change.
+
 # 🧠 BrainUp - Brain Training
 
 Modern web application for developing cognitive abilities through engaging games and exercises. Helps improve attention, memory, logical thinking, and speech skills.
