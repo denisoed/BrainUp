@@ -16,7 +16,7 @@
   
       <!-- Блок с уровнями -->
       <LevelsGrid
-        :current-level="CURRENT_LEVEL"
+        :game-id="gameKey"
         :total-levels="totalLevels"
         :on-level-click="startGame"
       />
@@ -36,7 +36,7 @@
 
       <Button
         class="start-button"
-        @click="() => startGame(CURRENT_LEVEL)"
+        @click="() => startGame()"
       >
         {{ $t('games.practise') }}
       </Button>
@@ -52,13 +52,11 @@ import data from '@/data'
 import gameIcons from '@/data/gameIcons'
 import BackBtn from '@/components/BackBtn.vue'
 import Button from '@/components/Button.vue'
-import LevelsGrid from '@/components/Games/LevelsGrid.vue'
+import LevelsGrid from '@/components/LevelsGrid.vue'
 
 const router = useRouter()
 const route = useRoute()
 const { t } = useI18n()
-
-const CURRENT_LEVEL = Number(localStorage.getItem(`${route.params.game}-current-level`) || 1);
 
 const totalLevels = ref(20)
 
@@ -98,7 +96,6 @@ const gameRules = computed(() => {
 
 
 const startGame = async (level?: number): Promise<void> => {
-  if (level && level > CURRENT_LEVEL) return;
   try {
     router.push(`/game/${route.params.game}?level=${level}`)
   } catch (error) {
@@ -116,7 +113,7 @@ const goBack = async (): Promise<void> => {
 
 async function getGameLevels() {
   const levels = data[gameKey.value]?.levels;
-  totalLevels.value = Object.keys(levels).length || 20;
+  totalLevels.value = levels ? Object.keys(levels).length : 20;
 }
 
 onMounted(() => {

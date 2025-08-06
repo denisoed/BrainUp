@@ -38,16 +38,19 @@ import {
   openModal
 } from 'jenesius-vue-modal';
 import { levels } from '@/data/vocabulary/index';
+import { useGameProgress } from '@/composables/useGameProgress';
 
 const router = useRouter();
 const route = useRoute();
 
-const LAST_SUCCESS_LEVEL_KEY = `${route.params.game}-current-level`;
+// Используем новый composable для управления прогрессом
+const gameId = route.params.game as string;
+const { currentLevel, completeLevel } = useGameProgress(gameId);
 
 // Game state
-const currentLevel = ref(route.query.level ? Number(route.query.level) : 0);
-const timeLimit = ref(levels[currentLevel.value]?.timeLimit || 5);
-const winningStreak = ref(levels[currentLevel.value]?.winningStreak || 1);
+const levelNumber = ref(route.query.level ? Number(route.query.level) : currentLevel.value);
+const timeLimit = ref(levels[levelNumber.value]?.timeLimit || 5);
+const winningStreak = ref(levels[levelNumber.value]?.winningStreak || 1);
 const timeLeft = ref(timeLimit.value);
 const score = ref(0);
 const isStarted = ref(false);
@@ -122,10 +125,8 @@ function checkAnswer(word: string) {
     score.value++;
     setTimeout(() => {
       if (score.value >= winningStreak.value) {
-        const lastSuccessLevel = Number(localStorage.getItem(LAST_SUCCESS_LEVEL_KEY));
-        if (!lastSuccessLevel || currentLevel.value >= lastSuccessLevel) {
-          localStorage.setItem(LAST_SUCCESS_LEVEL_KEY, String(currentLevel.value + 1));
-        }
+        // Используем новую систему прогресса
+        completeLevel(levelNumber.value);
         onOpenGameVictoryDialog();
         return;
       }
@@ -173,9 +174,9 @@ async function onOpenGameVictoryDialog() {
   })
   modal.on('continue', () => {
     modal.close();
-    currentLevel.value = currentLevel.value + 1;
-    timeLimit.value = levels[currentLevel.value]?.timeLimit || 5;
-    winningStreak.value = levels[currentLevel.value]?.winningStreak || 1;
+    levelNumber.value = levelNumber.value + 1;
+    timeLimit.value = levels[levelNumber.value]?.timeLimit || 5;
+    winningStreak.value = levels[levelNumber.value]?.winningStreak || 1;
     resetGame();
     startGame();
   })
@@ -204,7 +205,9 @@ defineExpose({
   checkAnswer,
   resetGame,
   timeLimit,
-  winningStreak
+  winningStreak,
+  levelNumber,
+  currentLevel
 });
 </script>
 

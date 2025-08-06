@@ -1,5 +1,23 @@
 <template>
   <section class="game-preview__levels mb-md">
+    <!-- Селектор сложности -->
+    <div class="difficulty-selector mb-md">
+      <h3>{{ $t('games.difficulty.title') }}</h3>
+      <div class="difficulty-buttons">
+        <button
+          v-for="difficulty in difficulties"
+          :key="difficulty.value"
+          class="difficulty-btn"
+          :class="{
+            'difficulty-btn--active': currentDifficulty === difficulty.value
+          }"
+          @click="handleDifficultyChange(difficulty.value)"
+        >
+          {{ $t(`games.difficulty.${difficulty.value}`) }}
+        </button>
+      </div>
+    </div>
+
     <h2>{{ $t('games.levels') }}</h2>
     <div class="levels-scroll" ref="levelsScrollRef">
       <div class="levels-grid">
@@ -7,16 +25,16 @@
           v-for="level in totalLevels"
           :key="level"
           class="level-item"
-          :class="{
-            'level-item--completed': level < currentLevel,
-            'level-item--current': level === currentLevel,
-            'level-item--locked': level > currentLevel
-          }"
+                      :class="{
+              'level-item--completed': isLevelCompleted(level, currentDifficulty.value),
+              'level-item--current': level === currentLevel,
+              'level-item--locked': level > currentLevel
+            }"
           @click="handleLevelClick(level)"
           :ref="el => setCurrentLevelRef(el, level)"
         >
           <div class="level-icon">
-            <span v-if="level < currentLevel" class="flex items-center justify-center check-icon">
+            <span v-if="isLevelCompleted(level, currentDifficulty.value)" class="flex items-center justify-center check-icon">
               <CheckIcon />
             </span>
             <span v-else-if="level === currentLevel" class="flex items-center justify-center play-icon">
@@ -34,14 +52,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, ComponentPublicInstance } from 'vue'
+import { ref, onMounted, ComponentPublicInstance, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import CheckIcon from '@/components/Icons/CheckIcon.vue'
 import PlayIcon from '@/components/Icons/PlayIcon.vue'
 import LockIcon from '@/components/Icons/LockIcon.vue'
+import { useGameProgress, type Difficulty } from '@/composables/useGameProgress'
 
 interface Props {
-  currentLevel: number
+  gameId: string
   totalLevels: number
   onLevelClick: (level: number) => void
 }
@@ -49,21 +68,42 @@ interface Props {
 const props = defineProps<Props>()
 const { t } = useI18n()
 
+// Используем composable для управления прогрессом
+const {
+  currentDifficulty,
+  currentLevel,
+  completedLevels,
+  setDifficulty,
+  isLevelCompleted
+} = useGameProgress(props.gameId)
+
 const levelsScrollRef = ref<HTMLElement | null>(null)
 const currentLevelRef = ref<HTMLElement | null>(null)
 
+// Массив сложностей
+const difficulties = computed(() => [
+  { value: 'easy' as Difficulty, label: 'easy' },
+  { value: 'medium' as Difficulty, label: 'medium' },
+  { value: 'hard' as Difficulty, label: 'hard' }
+])
+
 // Функция для установки ref текущего уровня
 const setCurrentLevelRef = (el: Element | ComponentPublicInstance | null, level: number): void => {
-  if (el instanceof HTMLElement && level === props.currentLevel) {
+  if (el instanceof HTMLElement && level === currentLevel.value) {
     currentLevelRef.value = el;
   }
 }
 
 // Обработчик клика по уровню
 const handleLevelClick = (level: number): void => {
-  if (level <= props.currentLevel) {
+  if (level <= currentLevel.value) {
     props.onLevelClick(level)
   }
+}
+
+// Обработчик смены сложности
+const handleDifficultyChange = (difficulty: Difficulty): void => {
+  setDifficulty(difficulty)
 }
 
 // Функция для прокрутки к текущему уровню
@@ -100,12 +140,46 @@ onMounted(() => {
   padding: 20px;
 }
 
-h2 {
+h2, h3 {
   color: var(--white-color);
   margin: 0;
   margin-bottom: 8px;
   font-size: 20px;
   font-weight: 600;
+}
+
+h3 {
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+.difficulty-selector {
+  margin-bottom: 20px;
+}
+
+.difficulty-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.difficulty-btn {
+  flex: 1;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: var(--gray-color);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &--active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--dark-color);
+    font-weight: 600;
+  }
 }
 
 .levels-scroll {

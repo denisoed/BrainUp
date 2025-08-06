@@ -92,6 +92,12 @@
     "rules": "Rules",
     "startPlaying": "Start playing",
     "practise": "Practise",
+    "difficulty": {
+      "title": "Difficulty",
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard"
+    },
     "names": {
       "mathBlocks": "Math Blocks",
       "mathSprint": "Math Sprint",
@@ -419,7 +425,7 @@
   "welcome": {
     "steps": {
       "step1": {
-        "title": "Welcome to <span>Health App</span>",
+        "title": "Welcome to <span>Mentorius Bot</span>",
         "text": "<span>Develop</span> your attention, memory, and thinking with engaging exercises. Our trainings will help you become faster, more attentive, and more effective in everyday tasks."
       },
       "step2": {
