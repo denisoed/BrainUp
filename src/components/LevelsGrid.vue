@@ -26,7 +26,7 @@
           :key="level"
           class="level-item"
                       :class="{
-              'level-item--completed': isLevelCompleted(level, currentDifficulty.value),
+              'level-item--completed': isLevelCompleted(level, currentDifficulty),
               'level-item--current': level === currentLevel,
               'level-item--locked': level > currentLevel
             }"
@@ -34,7 +34,7 @@
           :ref="el => setCurrentLevelRef(el, level)"
         >
           <div class="level-icon">
-            <span v-if="isLevelCompleted(level, currentDifficulty.value)" class="flex items-center justify-center check-icon">
+            <span v-if="isLevelCompleted(level, currentDifficulty)" class="flex items-center justify-center check-icon">
               <CheckIcon />
             </span>
             <span v-else-if="level === currentLevel" class="flex items-center justify-center play-icon">

@@ -37,6 +37,9 @@ export function useGameProgress(gameId: string) {
         const allProgress: GameProgressStorage = JSON.parse(stored)
         if (allProgress[gameId]) {
           progress.value = allProgress[gameId]
+          // Убеждаемся, что currentLevel соответствует текущей сложности
+          const storedLevel = getCurrentLevelForDifficulty(progress.value.difficulty)
+          progress.value.currentLevel = storedLevel
         }
       }
     } catch (error) {
@@ -59,7 +62,9 @@ export function useGameProgress(gameId: string) {
   // Установка сложности
   const setDifficulty = (difficulty: Difficulty): void => {
     progress.value.difficulty = difficulty
-    progress.value.currentLevel = 1
+    // Восстанавливаем прогресс для выбранной сложности
+    const storedLevel = getCurrentLevelForDifficulty(difficulty)
+    progress.value.currentLevel = storedLevel
     saveProgress()
   }
 
@@ -81,12 +86,22 @@ export function useGameProgress(gameId: string) {
 
   // Получение текущего уровня для сложности
   const getCurrentLevelForDifficulty = (difficulty: Difficulty): number => {
-    const stored = localStorage.getItem(STORAGE_KEY)
-    if (stored) {
-      const allProgress: GameProgressStorage = JSON.parse(stored)
-      if (allProgress[gameId]) {
-        return allProgress[gameId].currentLevel
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY)
+      if (stored) {
+        const allProgress: GameProgressStorage = JSON.parse(stored)
+        if (allProgress[gameId] && allProgress[gameId].completedLevels[difficulty]) {
+          // Если есть завершенные уровни, возвращаем следующий доступный
+          const completedLevels = allProgress[gameId].completedLevels[difficulty]
+          return completedLevels.length > 0 ? Math.max(...completedLevels) + 1 : 1
+        }
+        // Если есть сохраненный currentLevel для этой сложности, используем его
+        if (allProgress[gameId] && allProgress[gameId].currentLevel) {
+          return allProgress[gameId].currentLevel
+        }
       }
+    } catch (error) {
+      console.error('Error getting current level for difficulty:', error)
     }
     return 1
   }
