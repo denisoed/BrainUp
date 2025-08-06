@@ -34,7 +34,12 @@
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
 import GameHeader from '@/components/Games/GameHeader.vue';
-import { middleVocabulary, type VocabularyItem } from '@/data/vocabulary';
+import { 
+  beginnerVocabulary, 
+  intermediateVocabulary, 
+  advancedVocabulary,
+  type VocabularyItem 
+} from '@/data/vocabulary/words';
 import GameVictoryDialog from '@/components/Dialogs/GameVictoryDialog.vue';
 import { useRoute, useRouter } from 'vue-router';
 import {
@@ -48,7 +53,7 @@ const route = useRoute();
 
 // Используем новый composable для управления прогрессом
 const gameId = route.params.game;
-const { currentLevel, completeLevel, getDifficultyByLevel } = useGameProgress(gameId);
+const { currentLevel, completeLevel, currentDifficulty } = useGameProgress(gameId);
 
 // Game state
 const levelNumber = ref(route.query.level ? Number(route.query.level) : currentLevel.value);
@@ -65,6 +70,16 @@ const displayWords = ref<string[]>([]);
 
 let timerInterval: ReturnType<typeof setInterval> | null = null;
 
+// Выбираем массив слов на основе сложности
+const currentVocabulary = computed(() => {
+  switch(currentDifficulty.value) {
+    case 'easy': return beginnerVocabulary;
+    case 'medium': return intermediateVocabulary;
+    case 'hard': return advancedVocabulary;
+    default: return beginnerVocabulary;
+  }
+});
+
 function shuffleArray<T>(array: T[]): T[] {
   const newArray = [...array];
   for (let i = newArray.length - 1; i > 0; i--) {
@@ -75,8 +90,8 @@ function shuffleArray<T>(array: T[]): T[] {
 }
 
 function generateWords() {
-  // Get random words
-  const shuffledWords = shuffleArray<VocabularyItem>(middleVocabulary);
+  // Get random words from current vocabulary based on difficulty
+  const shuffledWords = shuffleArray<VocabularyItem>(currentVocabulary.value);
   const selectedWords = shuffledWords.slice(0, 4);
   
   // Select one word as correct answer
@@ -194,9 +209,6 @@ onUnmounted(() => {
   resetGame();
 });
 
-// Определяем сложность на основе текущего уровня
-const currentDifficulty = computed(() => getDifficultyByLevel(levelNumber.value));
-
 // Expose for testing
 defineExpose({
   timeLeft,
@@ -213,7 +225,9 @@ defineExpose({
   timeLimit,
   winningStreak,
   levelNumber,
-  currentLevel
+  currentLevel,
+  currentDifficulty,
+  currentVocabulary
 });
 </script>
 

@@ -72,7 +72,6 @@ const { t } = useI18n()
 const {
   currentDifficulty,
   currentLevel,
-  completedLevels,
   setDifficulty,
   isLevelCompleted
 } = useGameProgress(props.gameId)
