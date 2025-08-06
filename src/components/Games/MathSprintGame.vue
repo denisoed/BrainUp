@@ -6,8 +6,8 @@
       :time-left="timeLeft"
       :score="score"
       :winning-streak="WINNING_STREAK"
+      :progress="(timeLeft / TIME_LIMIT) * 100"
     />
-    <ProgressBar :progress="(timeLeft / TIME_LIMIT) * 100" />
     <div class="buttons mb-md mt-md">
       <div
         v-for="(answer, index) in answers"
@@ -26,7 +26,6 @@
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
-import ProgressBar from '@/components/Games/ProgressBar.vue';
 import GameHeader from '@/components/Games/GameHeader.vue';
 import GameVictoryDialog from '@/components/Dialogs/GameVictoryDialog.vue';
 import { openModal } from 'jenesius-vue-modal';
