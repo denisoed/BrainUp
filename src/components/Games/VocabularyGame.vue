@@ -34,18 +34,13 @@
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
 import GameHeader from '@/components/Games/GameHeader.vue';
-import { 
-  beginnerVocabulary, 
-  intermediateVocabulary, 
-  advancedVocabulary,
-  type VocabularyItem 
-} from '@/data/vocabulary/words';
+import { type VocabularyItem } from '@/data/vocabulary/words';
 import GameVictoryDialog from '@/components/Dialogs/GameVictoryDialog.vue';
 import { useRoute, useRouter } from 'vue-router';
 import {
   openModal
 } from 'jenesius-vue-modal';
-import { levels } from '@/data/vocabulary/index';
+import { levels, getVocabularyByDifficulty } from '@/data/vocabulary/index';
 import { useGameProgress } from '@/composables/useGameProgress';
 
 const router = useRouter();
@@ -71,14 +66,7 @@ const displayWords = ref<string[]>([]);
 let timerInterval: ReturnType<typeof setInterval> | null = null;
 
 // Выбираем массив слов на основе сложности
-const currentVocabulary = computed(() => {
-  switch(currentDifficulty.value) {
-    case 'easy': return beginnerVocabulary;
-    case 'medium': return intermediateVocabulary;
-    case 'hard': return advancedVocabulary;
-    default: return beginnerVocabulary;
-  }
-});
+const currentVocabulary = computed(() => getVocabularyByDifficulty(currentDifficulty.value));
 
 function shuffleArray<T>(array: T[]): T[] {
   const newArray = [...array];
