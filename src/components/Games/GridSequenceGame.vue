@@ -1,9 +1,12 @@
 <template>
   <div class="grid-sequence-game flex column items-center justify-center">
-    <div class="stats">
-      <div class="timer">⏳ {{ $t('games.time') }}: <span>{{ timeLeft.toFixed(1) }}</span></div>
-      <div class="score">🏆 {{ $t('games.score') }}: <span>{{ score }}/{{ WINNING_STREAK }}</span></div>
-    </div>
+    <GameHeader 
+      :level="currentLevel"
+      :difficulty="currentDifficulty"
+      :time-left="timeLeft"
+      :score="score"
+      :winning-streak="WINNING_STREAK"
+    />
     <ProgressBar :progress="(timeLeft / TIME_LIMIT) * 100" />
 
     <div 
@@ -30,23 +33,27 @@
       </div>
     </div>
 
-    <div class="level-info">
-      {{ $t('games.gridSequence.level') }}: {{ currentLevel }}
-    </div>
-
     <SuccessCounter :value="`${score}/${WINNING_STREAK}`" :show="score > 0" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { useRoute } from 'vue-router';
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
 import ProgressBar from '@/components/Games/ProgressBar.vue';
+import GameHeader from '@/components/Games/GameHeader.vue';
 import GameVictoryDialog from '@/components/Dialogs/GameVictoryDialog.vue';
 import { openModal } from 'jenesius-vue-modal';
 import { useRouter } from 'vue-router';
+import { useGameProgress } from '@/composables/useGameProgress';
 
 const router = useRouter();
+const route = useRoute();
+
+// Используем composable для управления прогрессом
+const gameId = route.params.game;
+const { currentLevel, getDifficultyByLevel } = useGameProgress(gameId);
 
 const TIME_LIMIT = 15;
 const WINNING_STREAK = 15;
@@ -54,11 +61,13 @@ const MIN_GRID_SIZE = { rows: 2, cols: 3 };
 
 const timeLeft = ref(TIME_LIMIT);
 const score = ref(0);
-const currentLevel = ref(1);
 const gridSize = ref({ ...MIN_GRID_SIZE });
 const numbers = ref<number[]>([]);
 const selectedNumbers = ref<number[]>([]);
 let timerInterval: ReturnType<typeof setInterval>;
+
+// Определяем сложность на основе текущего уровня
+const currentDifficulty = computed(() => getDifficultyByLevel(currentLevel.value));
 
 // Вычисляем отсортированные числа для проверки правильной последовательности
 const sortedNumbers = computed(() => [...numbers.value].sort((a, b) => a - b));
@@ -125,9 +134,8 @@ function handleLevelComplete() {
 
   // Увеличиваем размер сетки каждые 3 уровня
   if (score.value % 3 === 0) {
-    currentLevel.value++;
     // Чередуем увеличение строк и столбцов
-    if (currentLevel.value % 2 === 0) {
+    if (score.value % 6 === 0) {
       gridSize.value.rows++;
     } else {
       gridSize.value.cols++;
@@ -139,7 +147,6 @@ function handleLevelComplete() {
 
 function resetGame() {
   score.value = 0;
-  currentLevel.value = 1;
   gridSize.value = { ...MIN_GRID_SIZE };
   generateGrid();
 }

@@ -130,6 +130,23 @@ export function useGameProgress(gameId: string) {
     return completedLevels.length > 0 ? Math.max(...completedLevels) + 1 : 1
   }
 
+  // Определение сложности на основе уровня
+  const getDifficultyByLevel = (level: number): Difficulty => {
+    if (level <= 8) return 'easy'
+    if (level <= 14) return 'medium'
+    return 'hard'
+  }
+
+  // Получение информации о текущем уровне и сложности
+  const getLevelInfo = (level: number) => {
+    const difficulty = getDifficultyByLevel(level)
+    return {
+      level,
+      difficulty,
+      isMaxLevel: level >= 20
+    }
+  }
+
   // Вычисляемые свойства
   const currentDifficulty = computed(() => progress.value.difficulty)
   const currentLevel = computed(() => progress.value.currentLevel)
@@ -154,6 +171,8 @@ export function useGameProgress(gameId: string) {
     getCurrentLevelForDifficulty,
     getCompletedLevelsForDifficulty,
     isLevelCompleted,
-    getMaxAvailableLevel
+    getMaxAvailableLevel,
+    getDifficultyByLevel,
+    getLevelInfo
   }
 } 

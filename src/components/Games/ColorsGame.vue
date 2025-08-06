@@ -1,9 +1,12 @@
 <template>
   <div class="colors-game flex column items-center justify-center">
-    <div class="stats">
-      <div class="timer">⏳ {{ t('games.time') }}: <span>{{ timeLeft.toFixed(1) }}</span></div>
-      <div class="score">🏆 {{ t('games.score') }}: <span>{{ score }}/{{ WINNING_STREAK }}</span></div>
-    </div>
+    <GameHeader 
+      :level="currentLevel"
+      :difficulty="currentDifficulty"
+      :time-left="timeLeft"
+      :score="score"
+      :winning-streak="WINNING_STREAK"
+    />
     <ProgressBar :progress="(timeLeft / TIME_LIMIT) * 100" />
     <div class="buttons mb-md mt-md">
       <div
@@ -23,14 +26,22 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useRoute } from 'vue-router';
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
 import ProgressBar from '@/components/Games/ProgressBar.vue';
+import GameHeader from '@/components/Games/GameHeader.vue';
 import GameVictoryDialog from '@/components/Dialogs/GameVictoryDialog.vue';
 import { openModal } from 'jenesius-vue-modal';
 import { useRouter } from 'vue-router';
+import { useGameProgress } from '@/composables/useGameProgress';
 
 const { t } = useI18n();
 const router = useRouter();
+const route = useRoute();
+
+// Используем composable для управления прогрессом
+const gameId = route.params.game;
+const { currentLevel, getDifficultyByLevel } = useGameProgress(gameId);
 
 const TIME_LIMIT = 1;
 const WINNING_STREAK = 15;
@@ -57,6 +68,9 @@ const randomColors = ref([]);
 
 const currentWord = computed(() => currentWordObj.value.name);
 const currentTextColor = computed(() => currentTextColorObj.value.color);
+
+// Определяем сложность на основе текущего уровня
+const currentDifficulty = computed(() => getDifficultyByLevel(currentLevel.value));
 
 function getRandomColor() {
   return colors.value[Math.floor(Math.random() * colors.value.length)];

@@ -1,10 +1,15 @@
 <template>
   <div class="vocabulary-game flex column items-center justify-center">
-    <div class="stats">
-      <div class="timer">⏳ {{ $t('games.time') }}: <span>{{ timeLeft.toFixed(1) }}</span></div>
-      <div class="score">🏆 {{ $t('games.score') }}: <span>{{ score }}/{{ winningStreak }}</span></div>
-    </div>
-    <ProgressBar :progress="(timeLeft / timeLimit) * 100" />
+    <GameHeader 
+      :level="levelNumber"
+      :difficulty="currentDifficulty"
+      :time-left="timeLeft"
+      :score="score"
+      :winning-streak="winningStreak"
+      :progress="(timeLeft / timeLimit) * 100"
+    />
+
+    <div class="translation">{{ currentTranslation }}</div>
 
     <div class="cards mb-md mt-md">
       <div
@@ -21,16 +26,14 @@
       </div>
     </div>
 
-    <div class="translation">{{ currentTranslation }}</div>
-
     <SuccessCounter :value="`${score}/${winningStreak}`" :show="score > 0" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
-import ProgressBar from '@/components/Games/ProgressBar.vue';
+import GameHeader from '@/components/Games/GameHeader.vue';
 import { middleVocabulary, type VocabularyItem } from '@/data/vocabulary';
 import GameVictoryDialog from '@/components/Dialogs/GameVictoryDialog.vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -44,8 +47,8 @@ const router = useRouter();
 const route = useRoute();
 
 // Используем новый composable для управления прогрессом
-const gameId = route.params.game as string;
-const { currentLevel, completeLevel } = useGameProgress(gameId);
+const gameId = route.params.game;
+const { currentLevel, completeLevel, getDifficultyByLevel } = useGameProgress(gameId);
 
 // Game state
 const levelNumber = ref(route.query.level ? Number(route.query.level) : currentLevel.value);
@@ -190,6 +193,9 @@ onMounted(() => {
 onUnmounted(() => {
   resetGame();
 });
+
+// Определяем сложность на основе текущего уровня
+const currentDifficulty = computed(() => getDifficultyByLevel(levelNumber.value));
 
 // Expose for testing
 defineExpose({

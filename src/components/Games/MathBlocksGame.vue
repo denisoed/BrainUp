@@ -1,9 +1,12 @@
 <template>
   <div class="math-blocks-game flex column items-center justify-center">
-    <div class="stats">
-      <div class="timer">⏳ {{ $t('games.time') }}: <span>{{ timeLeft.toFixed(1) }}</span></div>
-      <div class="score">🏆 {{ $t('games.score') }}: <span>{{ score }}/{{ WINNING_STREAK }}</span></div>
-    </div>
+    <GameHeader 
+      :level="currentLevel"
+      :difficulty="currentDifficulty"
+      :time-left="timeLeft"
+      :score="score"
+      :winning-streak="WINNING_STREAK"
+    />
     <ProgressBar :progress="(timeLeft / TIME_LIMIT) * 100" />
 
     <div class="game-container">
@@ -33,14 +36,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
+import { useRoute } from 'vue-router';
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
 import ProgressBar from '@/components/Games/ProgressBar.vue';
+import GameHeader from '@/components/Games/GameHeader.vue';
 import GameVictoryDialog from '@/components/Dialogs/GameVictoryDialog.vue';
 import { openModal } from 'jenesius-vue-modal';
 import { useRouter } from 'vue-router';
+import { useGameProgress } from '@/composables/useGameProgress';
 
 const router = useRouter();
+const route = useRoute();
+
+// Используем composable для управления прогрессом
+const gameId = route.params.game;
+const { currentLevel, getDifficultyByLevel } = useGameProgress(gameId);
 
 // Types
 interface Block {
@@ -64,7 +75,7 @@ const CORRECT_ANSWERS_COUNT = 2;
 const BASE_FALL_SPEED = 0.2;
 const INITIAL_BLOCK_COLOR = '#757575';
 const CORRECT_COLOR = '#4CAF50';
-const ERROR_COLOR = '#FF5252';
+const ERROR_COLOR = '#F44336';
 const BLOCK_WIDTH = 15;
 const BLOCK_HEIGHT = 15;
 const MIN_VERTICAL_GAP = 20;

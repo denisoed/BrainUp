@@ -23,7 +23,6 @@ function getColor() {
   background-color: var(--card-bg);
   border-radius: 4px;
   overflow: hidden;
-  margin: 8px 0;
 }
 
 .progress-bar {
