@@ -147,8 +147,9 @@ onMounted(() => {
   top: -120px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 1;
+  z-index: 0;
   opacity: 0.05;
+  pointer-events: none;
 }
 
 .game-preview__logo h1 {

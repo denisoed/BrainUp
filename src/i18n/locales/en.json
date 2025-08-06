@@ -94,9 +94,9 @@
     "practise": "Practise",
     "difficulty": {
       "title": "Difficulty",
-      "easy": "Easy",
-      "medium": "Medium",
-      "hard": "Hard"
+      "easy": "Beginner",
+      "medium": "Pro",
+      "hard": "Expert"
     },
     "names": {
       "mathBlocks": "Math Blocks",

@@ -112,9 +112,9 @@
     "startPlaying": "Начать игру",
     "difficulty": {
       "title": "Сложность",
-      "easy": "Легкий",
-      "medium": "Средний",
-      "hard": "Сложный"
+      "easy": "Новичок",
+      "medium": "Профи",
+      "hard": "Эксперт"
     },
     "names": {
       "mathBlocks": "Мат блоки",
