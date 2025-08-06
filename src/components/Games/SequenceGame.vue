@@ -2,11 +2,14 @@
   <div class="sequence-game flex column items-center justify-center">
     
     <template v-if="isStarted">
-      <div class="stats">
-        <div class="timer">⏳ {{ $t('games.time') }}: <span>{{ timeLeft.toFixed(1) }}</span></div>
-        <div class="score">🏆 {{ $t('games.score') }}: <span>{{ score }}/{{ WINNING_STREAK }}</span></div>
-      </div>
-      <ProgressBar :progress="(timeLeft / INITIAL_TIME) * 100" />
+      <GameHeader 
+        :level="levelNumber"
+        :difficulty="currentDifficulty"
+        :time-left="timeLeft"
+        :score="score"
+        :winning-streak="WINNING_STREAK"
+        :progress="(timeLeft / INITIAL_TIME) * 100"
+      />
     </template>
 
     <template v-if="isStarted">
@@ -58,38 +61,41 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
-import ProgressBar from '@/components/Games/ProgressBar.vue';
+import GameHeader from '@/components/Games/GameHeader.vue';
 import GameVictoryDialog from '@/components/Dialogs/GameVictoryDialog.vue';
 import { openModal } from 'jenesius-vue-modal';
-import { useRouter } from 'vue-router';
+import { useGameProgress } from '@/composables/useGameProgress';
 
 const router = useRouter();
+const route = useRoute();
+
+// Используем composable для управления прогрессом
+const gameId = route.params.game;
+const { currentLevel, completeLevel, currentDifficulty } = useGameProgress(gameId);
+
+// Game state
+const levelNumber = ref(route.query.level ? Number(route.query.level) : currentLevel.value);
 
 const INITIAL_TIME = 4;
+const WINNING_STREAK = 10;
 const SHOW_SEQUENCE_TIME = 4;
-const WINNING_STREAK = 15;
 
 const timeLeft = ref(INITIAL_TIME);
 const score = ref(0);
 const isStarted = ref(false);
 const isShowingSequence = ref(true);
-const showSuccess = ref(false);
-const showError = ref(false);
-
+const selectedCards = ref<string[]>([]);
 const originalSequence = ref<string[]>([]);
 const displayCards = ref<string[]>([]);
-const selectedCards = ref<string[]>([]);
+const showSuccess = ref(false);
+const showError = ref(false);
 
 let timerInterval: ReturnType<typeof setInterval>;
 let memorizeTimeout: ReturnType<typeof setTimeout>;
 
-const symbols = [
-  '⭐', '🌈', '👀', '🔍', '🎲',
-  '🎤', '💎', '💖', '🏆', '💣',
-  'A', 'B', 'C', 'D', 'E', 'F',
-  '1', '2', '3', '4', '5', '6'
-];
+const availableCards = ['🍎', '🍌', '🍇', '🍓', '🍒', '🍑', '🍍', '🥝'];
 
 function shuffleArray(array: string[]) {
   const newArray = [...array];
@@ -101,7 +107,7 @@ function shuffleArray(array: string[]) {
 }
 
 function generateSequence() {
-  const shuffled = shuffleArray(symbols);
+  const shuffled = shuffleArray(availableCards);
   return shuffled.slice(0, 6);
 }
 
@@ -174,12 +180,20 @@ function checkSequence() {
 }
 
 async function onOpenGameVictoryDialog() {
+  // Сохраняем прогресс уровня
+  completeLevel(levelNumber.value);
+  
   const modal = await openModal(GameVictoryDialog, {
     score: score.value,
   })
   modal.on('finish', () => {
     modal.close();
     router.back();
+  })
+  modal.on('continue', () => {
+    modal.close();
+    levelNumber.value = levelNumber.value + 1;
+    resetGame();
   })
   modal.on('restart', () => {
     modal.close();
@@ -212,8 +226,26 @@ function startNewRound() {
 
 function startGame() {
   isStarted.value = true;
-  score.value = 0;
-  startNewRound();
+  isShowingSequence.value = true;
+  selectedCards.value = [];
+  originalSequence.value = generateSequence();
+  displayCards.value = [...originalSequence.value];
+  timeLeft.value = SHOW_SEQUENCE_TIME;
+  
+  // Запускаем таймер для фазы запоминания
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    if (timeLeft.value > 0.1) {
+      timeLeft.value -= 0.1;
+    }
+  }, 100);
+
+  clearTimeout(memorizeTimeout);
+  memorizeTimeout = setTimeout(() => {
+    isShowingSequence.value = false;
+    displayCards.value = shuffleArray([...originalSequence.value]);
+    startTimer();
+  }, SHOW_SEQUENCE_TIME * 1000);
 }
 
 function resetGame() {
