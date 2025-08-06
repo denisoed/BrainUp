@@ -28,7 +28,7 @@
       </div>
     </div>
 
-    <SuccessCounter :value="`${score}/${WINNING_SCORE}`" :show="score > 0" />
+    <SuccessCounter :score="score" :winning-streak="WINNING_SCORE" :show="score > 0" />
   </div>
 </template>
 

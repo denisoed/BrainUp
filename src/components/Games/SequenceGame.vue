@@ -55,7 +55,7 @@
       </button>
     </template>
 
-    <SuccessCounter :value="`${score}/${WINNING_STREAK}`" :show="score > 0" />
+    <SuccessCounter :score="score" :winning-streak="WINNING_STREAK" :show="score > 0" />
   </div>
 </template>
 

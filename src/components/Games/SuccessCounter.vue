@@ -2,7 +2,11 @@
 import { watch, ref } from 'vue';
 
 const props = defineProps({
-  value: {
+  score: {
+    type: Number,
+    default: 0
+  },
+  winningStreak: {
     type: Number,
     default: 0
   },
@@ -15,24 +19,24 @@ const props = defineProps({
 const pulse = ref(false);
 const pulseTimer = ref(0);
 
-watch(() => props.value, () => {
+watch(() => props.score, () => {
   pulse.value = false;
-  if (props.value > 2) {
-    if (pulseTimer.value) {
-      clearTimeout(pulseTimer.value);
-    }
-    pulse.value = true;
-    pulseTimer.value = setTimeout(() => {
-      pulse.value = false;
-    }, 300);
+  if (props.score > 2) {
   }
+  if (pulseTimer.value) {
+    clearTimeout(pulseTimer.value);
+  }
+  pulse.value = true;
+  pulseTimer.value = setTimeout(() => {
+    pulse.value = false;
+  }, 300);
 });
 </script>
 
 <template>
   <div class="success-counter" :class="{ 'success-counter--active': show }">
     <div class="success-counter-text" :class="{ pulse }">
-      <span>{{ value }}</span>
+      <span>{{ score }}/{{ winningStreak }}</span>
     </div>
   </div>
 </template>
@@ -40,9 +44,9 @@ watch(() => props.value, () => {
 <style scoped lang="scss">
 .success-counter {
   position: fixed;
-  bottom: 85px;
-  left: -80px;
-  transform: translateY(-50%);
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
   border-radius: 10px;
   color: var(--white-color);
   z-index: 2;
@@ -52,7 +56,7 @@ watch(() => props.value, () => {
   text-shadow: 0 0 12px rgba($color: #000000, $alpha: 0.1);
 
   &--active {
-    left: 20px;
+    top: 16px;
   }
 
   &-text {
