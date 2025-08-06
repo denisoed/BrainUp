@@ -185,8 +185,7 @@ onUnmounted(() => {
 <style scoped>
 .memory-pairs-game {
   width: 100%;
-  height: 100%;
-  padding: 1rem;
+  height: calc(100vh - 100px);
 }
 
 .stats {
