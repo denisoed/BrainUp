@@ -1,13 +1,16 @@
 <template>
   <div class="colors-game flex column items-center justify-center">
     <GameHeader 
-      :level="currentLevel"
+      :level="levelNumber"
       :difficulty="currentDifficulty"
       :time-left="timeLeft"
       :score="score"
       :winning-streak="WINNING_STREAK"
       :progress="(timeLeft / TIME_LIMIT) * 100"
     />
+
+    <div class="color-text" :style="{ color: currentTextColor }">{{ currentWord }}</div>
+
     <div class="buttons mb-md mt-md">
       <div
         v-for="color in randomColors"
@@ -17,34 +20,36 @@
         @click="checkAnswer(color.color)"
       />
     </div>
-    <div class="color-text" :style="{ color: currentTextColor }">{{ currentWord }}</div>
 
     <SuccessCounter :value="`${score}/${WINNING_STREAK}`" :show="score > 0" />
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
-import { useI18n } from 'vue-i18n';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
 import GameHeader from '@/components/Games/GameHeader.vue';
 import GameVictoryDialog from '@/components/Dialogs/GameVictoryDialog.vue';
 import { openModal } from 'jenesius-vue-modal';
-import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { useGameProgress } from '@/composables/useGameProgress';
 
-const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
+const { t } = useI18n();
 
 // Используем composable для управления прогрессом
 const gameId = route.params.game;
-const { currentLevel, getDifficultyByLevel } = useGameProgress(gameId);
+const { currentLevel, completeLevel, currentDifficulty } = useGameProgress(gameId);
+
+// Game state
+const levelNumber = ref(route.query.level ? Number(route.query.level) : currentLevel.value);
 
 const TIME_LIMIT = 1;
 const WINNING_STREAK = 15;
-const colors = computed(() => [
+
+const colors = ref([
   { name: t('games.colors.listColors.red'), color: 'red' },
   { name: t('games.colors.listColors.blue'), color: 'blue' },
   { name: t('games.colors.listColors.green'), color: 'green' },
@@ -63,13 +68,10 @@ let timerInterval;
 
 const currentWordObj = ref(getRandomColor());
 const currentTextColorObj = ref(getRandomColor());
-const randomColors = ref([]);
+const randomColors = ref<{ name: string; color: string; }[]>([]);
 
 const currentWord = computed(() => currentWordObj.value.name);
 const currentTextColor = computed(() => currentTextColorObj.value.color);
-
-// Определяем сложность на основе текущего уровня
-const currentDifficulty = computed(() => getDifficultyByLevel(currentLevel.value));
 
 function getRandomColor() {
   return colors.value[Math.floor(Math.random() * colors.value.length)];
@@ -115,12 +117,20 @@ function checkAnswer(selectedColor) {
 }
 
 async function onOpenGameVictoryDialog() {
+  // Сохраняем прогресс уровня
+  completeLevel(levelNumber.value);
+  
   const modal = await openModal(GameVictoryDialog, {
     score: score.value,
   })
   modal.on('finish', () => {
     modal.close();
     router.back();
+  })
+  modal.on('continue', () => {
+    modal.close();
+    levelNumber.value = levelNumber.value + 1;
+    resetGame();
   })
   modal.on('restart', () => {
     modal.close();

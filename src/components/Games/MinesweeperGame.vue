@@ -1,6 +1,14 @@
 <template>
   <div class="minesweeper-game flex column items-center justify-center">
-    <div class="score">🏆 {{ $t('games.score') }}: <span>{{ score }}/{{ WINNING_STREAK }}</span></div>
+
+    <GameHeader 
+      :level="levelNumber"
+      :difficulty="currentDifficulty"
+      :time-left="0"
+      :score="score"
+      :winning-streak="WINNING_STREAK"
+      :progress="100"
+    />
 
     <div class="game-board mt-lg mb-lg">
       <div class="grid">
@@ -53,13 +61,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
+import GameHeader from '@/components/Games/GameHeader.vue';
 import GameVictoryDialog from '@/components/Dialogs/GameVictoryDialog.vue';
-import {
-  openModal
-} from 'jenesius-vue-modal';
-import { useRouter } from 'vue-router';
+import { openModal } from 'jenesius-vue-modal';
+import { useGameProgress } from '@/composables/useGameProgress';
 
 const BOARD_SIZE = 10;
 const MINES_COUNT = 15;
@@ -73,6 +81,15 @@ interface Cell {
 }
 
 const router = useRouter();
+const route = useRoute();
+
+// Используем composable для управления прогрессом
+const gameId = route.params.game;
+const { currentLevel, completeLevel, getDifficultyByLevel } = useGameProgress(gameId);
+
+// Game state
+const levelNumber = ref(route.query.level ? Number(route.query.level) : currentLevel.value);
+const currentDifficulty = computed(() => getDifficultyByLevel(levelNumber.value));
 
 const score = ref(0);
 const board = ref<Cell[][]>([]);
@@ -241,12 +258,20 @@ function handleCellClick(row: number, col: number) {
 }
 
 async function onOpenGameVictoryDialog() {
+  // Сохраняем прогресс уровня
+  completeLevel(levelNumber.value);
+  
   const modal = await openModal(GameVictoryDialog, {
     score: score.value,
   })
   modal.on('finish', () => {
     modal.close();
     router.back();
+  })
+  modal.on('continue', () => {
+    modal.close();
+    levelNumber.value = levelNumber.value + 1;
+    startGame();
   })
   modal.on('restart', () => {
     modal.close();

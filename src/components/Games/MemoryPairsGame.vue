@@ -1,11 +1,13 @@
 <template>
   <div class="memory-pairs-game flex column items-center justify-center">
-
-    <div class="stats">
-      <div class="timer">⏳ {{ $t('games.time') }}: <span>{{ timeLeft.toFixed(1) }}</span></div>
-      <div class="score">🏆 {{ $t('games.score') }}: <span>{{ score }}/{{ WINNING_SCORE }}</span></div>
-    </div>
-    <ProgressBar :progress="(timeLeft / INITIAL_TIME) * 100" />
+    <GameHeader 
+      :level="levelNumber"
+      :difficulty="currentDifficulty"
+      :time-left="timeLeft"
+      :score="score"
+      :winning-streak="WINNING_SCORE"
+      :progress="(timeLeft / INITIAL_TIME) * 100"
+    />
 
     <div class="cards-grid mb-md mt-md">
       <div
@@ -31,14 +33,23 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
-import ProgressBar from '@/components/Games/ProgressBar.vue';
+import GameHeader from '@/components/Games/GameHeader.vue';
 import GameVictoryDialog from '@/components/Dialogs/GameVictoryDialog.vue';
 import { openModal } from 'jenesius-vue-modal';
-import { useRouter } from 'vue-router';
+import { useGameProgress } from '@/composables/useGameProgress';
 
 const router = useRouter();
+const route = useRoute();
+
+// Используем composable для управления прогрессом
+const gameId = route.params.game;
+const { currentLevel, completeLevel, currentDifficulty } = useGameProgress(gameId);
+
+// Game state
+const levelNumber = ref(route.query.level ? Number(route.query.level) : currentLevel.value);
 
 interface Card {
   symbol: string;
@@ -145,7 +156,9 @@ function checkMatch() {
 }
 
 async function onOpenGameVictoryDialog() {
-  clearInterval(timerInterval);
+  // Сохраняем прогресс уровня
+  completeLevel(levelNumber.value);
+  
   const modal = await openModal(GameVictoryDialog, {
     score: score.value,
   })
@@ -153,9 +166,16 @@ async function onOpenGameVictoryDialog() {
     modal.close();
     router.back();
   })
+  modal.on('continue', () => {
+    modal.close();
+    levelNumber.value = levelNumber.value + 1;
+    resetGame();
+    startGame();
+  })
   modal.on('restart', () => {
     modal.close();
     resetGame();
+    startGame();
   })
 }
 

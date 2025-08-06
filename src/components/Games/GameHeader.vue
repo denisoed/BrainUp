@@ -6,7 +6,7 @@
         <div class="timer">
           <span class="timer-icon">⏳</span>
           <span class="timer-label">{{ $t('games.time') }}:</span>
-          <span class="timer-value">{{ timeLeft.toFixed(1) }}</span>
+          <span class="timer-value">{{ timeLeft ? timeLeft.toFixed(1) : '∞' }}</span>
         </div>
         <div class="score">
           <span class="score-icon">🏆</span>
@@ -28,7 +28,7 @@
       </div>
     </div>
 
-    <ProgressBar :progress="progress" class="game-header__progress" />
+    <ProgressBar v-if="timeLeft" :progress="progress" class="game-header__progress" />
   </div>
 </template>
 
@@ -60,6 +60,10 @@ defineProps<Props>();
   left: 50%;
   transform: translateX(-50%);
   overflow: hidden;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 12px 16px;
 }
 
 .game-header__level-difficulty {
@@ -98,10 +102,6 @@ defineProps<Props>();
   justify-content: space-between;
   align-items: center;
   gap: 16px;
-  padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .timer,

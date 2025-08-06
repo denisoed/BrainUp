@@ -50,7 +50,10 @@ const route = useRoute();
 
 // Используем composable для управления прогрессом
 const gameId = route.params.game;
-const { currentLevel, currentDifficulty } = useGameProgress(gameId);
+const { currentLevel, completeLevel, currentDifficulty } = useGameProgress(gameId);
+
+// Game state
+const levelNumber = ref(route.query.level ? Number(route.query.level) : currentLevel.value);
 
 // Types
 interface Block {
@@ -210,7 +213,7 @@ function checkAnswer(block: Block) {
 
     if (correctAnswersGiven.value >= correctAnswersNeeded.value) {
       setTimeout(() => {
-        generateBlocks();
+        initializeBlocks();
         correctAnswersGiven.value = 0;
       }, 500);
     }
@@ -220,7 +223,7 @@ function checkAnswer(block: Block) {
     showError.value = true;
     setTimeout(() => {
       showError.value = false;
-      generateBlocks();
+      initializeBlocks();
       correctAnswersGiven.value = 0;
     }, 1000);
   }
@@ -351,12 +354,20 @@ onUnmounted(() => {
 
 // Добавляем функцию для показа модального окна
 async function onOpenGameVictoryDialog() {
+  // Сохраняем прогресс уровня
+  completeLevel(levelNumber.value);
+  
   const modal = await openModal(GameVictoryDialog, {
     score: score.value,
   })
   modal.on('finish', () => {
     modal.close();
     router.back();
+  })
+  modal.on('continue', () => {
+    modal.close();
+    levelNumber.value = levelNumber.value + 1;
+    resetGameAfterSuccess();
   })
   modal.on('restart', () => {
     modal.close();

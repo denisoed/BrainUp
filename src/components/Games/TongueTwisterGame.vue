@@ -1,13 +1,14 @@
 <template>
   <div class="tongue-twister-game flex column items-center justify-center">
-    
-    <template v-if="isStarted">
-      <div class="stats">
-        <div class="timer">⏳ {{ $t('games.time') }}: <span>{{ timeLeft.toFixed(1) }}</span></div>
-        <div class="score">🏆 {{ $t('games.score') }}: <span>{{ score }}/{{ WINNING_STREAK }}</span></div>
-      </div>
-      <ProgressBar :progress="(timeLeft / TIME_LIMIT) * 100" />
-    </template>
+    <GameHeader
+      v-if="isStarted"
+      :level="levelNumber"
+      :difficulty="currentDifficulty"
+      :time-left="timeLeft"
+      :score="score"
+      :winning-streak="WINNING_STREAK"
+      :progress="(timeLeft / TIME_LIMIT) * 100"
+    />
 
     <div 
       class="tongue-twister mt-lg mb-lg"
@@ -45,37 +46,46 @@
   </div>
 </template>
 
-<script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
-import { useI18n } from 'vue-i18n';
+<script setup lang="ts">
+import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
-import ProgressBar from '@/components/Games/ProgressBar.vue';
+import GameHeader from '@/components/Games/GameHeader.vue';
 import GameVictoryDialog from '@/components/Dialogs/GameVictoryDialog.vue';
 import { openModal } from 'jenesius-vue-modal';
-import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import { useGameProgress } from '@/composables/useGameProgress';
 
-const { t } = useI18n();
 const router = useRouter();
+const route = useRoute();
+const { t } = useI18n();
 
-const TIME_LIMIT = 7;
-const WINNING_STREAK = 15;
+// Используем composable для управления прогрессом
+const gameId = route.params.game;
+const { currentLevel, completeLevel, currentDifficulty } = useGameProgress(gameId);
 
-const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-const visualizer = ref(null);
-let audioContext;
-let analyser;
-let dataArray;
-let animationFrame;
+// Game state
+const levelNumber = ref(route.query.level ? Number(route.query.level) : currentLevel.value);
+
+const TIME_LIMIT = 30;
+const WINNING_STREAK = 10;
 
 const timeLeft = ref(TIME_LIMIT);
 const score = ref(0);
 const isStarted = ref(false);
-const currentTwister = ref('');
-const isUpdatingTwister = ref(false);
-let timerInterval;
-
+const isListening = ref(false);
 const showSuccessColor = ref(false);
 const showErrorColor = ref(false);
+const currentTwister = ref('');
+
+let timerInterval: ReturnType<typeof setInterval>;
+let audioContext: AudioContext | null = null;
+let animationFrame: number | null = null;
+
+const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+const visualizer = ref(null);
+let analyser;
+let dataArray;
 
 const twistersRu = [
   'Карл у Клары украл кораллы а Клара у Карла украла кларнет',
@@ -219,12 +229,21 @@ function resetGame() {
 }
 
 async function onOpenGameVictoryDialog() {
+  // Сохраняем прогресс уровня
+  completeLevel(levelNumber.value);
+  
   const modal = await openModal(GameVictoryDialog, {
     score: score.value,
   })
   modal.on('finish', () => {
     modal.close();
     router.back();
+  })
+  modal.on('continue', () => {
+    modal.close();
+    levelNumber.value = levelNumber.value + 1;
+    resetGame();
+    startGame();
   })
   modal.on('restart', () => {
     modal.close();
@@ -317,7 +336,7 @@ recognition.onresult = (event) => {
 recognition.onend = () => {
   if (!isStarted.value) {
     recognition.stop();
-  } else if (!isUpdatingTwister.value) {
+  } else if (!isListening.value) {
     recognition.start();
   }
 };

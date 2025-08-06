@@ -1,12 +1,19 @@
 <template>
   <div class="durak-game flex column items-center justify-center">
+    <GameHeader 
+      :level="levelNumber"
+      :difficulty="currentDifficulty"
+      :time-left="0"
+      :score="score"
+      :winning-streak="1"
+      :progress="100"
+    />
 
-    <div class="stats">
+    <div class="flex justify-center full-width">
       <!-- Add turn indicator -->
       <div class="turn-indicator" v-if="isGameActive">
         {{ isAttacking ? (isPlayerTurn ? "🎮 Ваш ход" : "🤖 Ход соперника") : (isPlayerTurn ? "🛡️ Вы отбиваетесь" : "🛡️ Соперник отбивается") }}
       </div>
-      <div class="score">🏆 {{ $t('games.score') }}: <span>{{ score }}/{{ WINNING_STREAK }}</span></div>
     </div>
 
     <div class="game-board mt-lg mb-lg">
@@ -85,16 +92,29 @@
         {{ $t('games.durak.finishThrowing') }}
       </button>
     </div>
+
+    <SuccessCounter :value="`${score}/${WINNING_STREAK}`" :show="score > 0" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import SuccessCounter from '@/components/Games/SuccessCounter.vue';
+import GameHeader from '@/components/Games/GameHeader.vue';
 import GameVictoryDialog from '@/components/Dialogs/GameVictoryDialog.vue';
 import { openModal } from 'jenesius-vue-modal';
-import { useRouter } from 'vue-router';
+import { useGameProgress } from '@/composables/useGameProgress';
 
 const router = useRouter();
+const route = useRoute();
+
+// Используем composable для управления прогрессом
+const gameId = route.params.game;
+const { currentLevel, completeLevel, currentDifficulty } = useGameProgress(gameId);
+
+// Game state
+const levelNumber = ref(route.query.level ? Number(route.query.level) : currentLevel.value);
 
 const WINNING_STREAK = 3;
 const CARDS_PER_PLAYER = 6;
@@ -588,12 +608,20 @@ function handleFinishThrowing() {
 
 // Добавляем функцию для показа модального окна
 async function onOpenGameVictoryDialog() {
+  // Сохраняем прогресс уровня
+  completeLevel(levelNumber.value);
+  
   const modal = await openModal(GameVictoryDialog, {
     score: score.value,
   })
   modal.on('finish', () => {
     modal.close();
     router.back();
+  })
+  modal.on('continue', () => {
+    modal.close();
+    levelNumber.value = levelNumber.value + 1;
+    startNewGame();
   })
   modal.on('restart', () => {
     modal.close();
@@ -609,13 +637,6 @@ onMounted(() => {
 <style scoped lang="scss">
 .durak-game {
   height: calc(100vh - 100px);
-}
-
-.stats {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .turn-indicator {
@@ -759,7 +780,6 @@ onMounted(() => {
   }
 
   &.card-back {
-    background: var(--primary-color);
     color: white;
   }
 
@@ -791,7 +811,6 @@ onMounted(() => {
   padding: 10px 20px;
   border: none;
   border-radius: 4px;
-  background: var(--primary-color);
   color: white;
   cursor: pointer;
   transition: opacity 0.2s;

@@ -42,7 +42,6 @@ a:hover {
 
 * {
   box-sizing: border-box;
-  color: var(--white-color);
 }
 
 html {

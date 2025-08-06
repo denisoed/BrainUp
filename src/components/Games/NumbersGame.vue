@@ -1,35 +1,38 @@
 <template>
   <div class="numbers-game flex column items-center justify-center">
     <GameHeader 
-      :level="currentLevel"
+      :level="levelNumber"
       :difficulty="currentDifficulty"
       :time-left="timeLeft"
       :score="score"
       :winning-streak="WINNING_STREAK"
       :progress="(timeLeft / TIME_LIMIT) * 100"
     />
-    <div class="buttons mb-md mt-md">
-      <div
-        v-for="(number, index) in numbers"
-        :key="index"
+
+    <div class="target-text mb-md mt-md">{{ target }}</div>
+
+    <div class="buttons">
+      <button
+        v-for="number in numbers"
+        :key="number"
         class="btn"
         @click="checkAnswer(number)"
-      >{{ number }}</div>
+      >
+        {{ number }}
+      </button>
     </div>
-    <div class="target-text">{{ target }}</div>
 
     <SuccessCounter :value="`${score}/${WINNING_STREAK}`" :show="score > 0" />
   </div>
 </template>
 
-<script setup>
-import { ref, onMounted, onUnmounted, computed } from 'vue';
-import { useRoute } from 'vue-router';
+<script setup lang="ts">
+import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
 import GameHeader from '@/components/Games/GameHeader.vue';
 import GameVictoryDialog from '@/components/Dialogs/GameVictoryDialog.vue';
 import { openModal } from 'jenesius-vue-modal';
-import { useRouter } from 'vue-router';
 import { useGameProgress } from '@/composables/useGameProgress';
 
 const router = useRouter();
@@ -37,21 +40,24 @@ const route = useRoute();
 
 // Используем composable для управления прогрессом
 const gameId = route.params.game;
-const { currentLevel, getDifficultyByLevel } = useGameProgress(gameId);
+const { currentLevel, completeLevel, getDifficultyByLevel } = useGameProgress(gameId);
 
-const TIME_LIMIT = 3;
+// Game state
+const levelNumber = ref(route.query.level ? Number(route.query.level) : currentLevel.value);
+
+const TIME_LIMIT = 10;
 const WINNING_STREAK = 15;
 
 const timeLeft = ref(TIME_LIMIT);
 const score = ref(0);
 const correctStreak = ref(0);
-let timerInterval;
-
+const numbers = ref<number[]>([]);
 const target = ref(0);
-const numbers = ref([]);
+
+let timerInterval: ReturnType<typeof setInterval>;
 
 // Определяем сложность на основе текущего уровня
-const currentDifficulty = computed(() => getDifficultyByLevel(currentLevel.value));
+const currentDifficulty = computed(() => getDifficultyByLevel(levelNumber.value));
 
 function startTimer() {
   clearInterval(timerInterval);
@@ -93,12 +99,20 @@ function checkAnswer(selectedNumber) {
 }
 
 async function onOpenGameVictoryDialog() {
+  // Сохраняем прогресс уровня
+  completeLevel(levelNumber.value);
+  
   const modal = await openModal(GameVictoryDialog, {
     score: score.value,
   })
   modal.on('finish', () => {
     modal.close();
     router.back();
+  })
+  modal.on('continue', () => {
+    modal.close();
+    levelNumber.value = levelNumber.value + 1;
+    resetGame();
   })
   modal.on('restart', () => {
     modal.close();

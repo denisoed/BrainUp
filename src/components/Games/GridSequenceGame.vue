@@ -52,8 +52,10 @@ const route = useRoute();
 
 // Используем composable для управления прогрессом
 const gameId = route.params.game;
-const { currentLevel, getDifficultyByLevel } = useGameProgress(gameId);
+const { currentLevel, completeLevel, currentDifficulty } = useGameProgress(gameId);
 
+// Game state
+const levelNumber = ref(route.query.level ? Number(route.query.level) : currentLevel.value);
 const TIME_LIMIT = 15;
 const WINNING_STREAK = 15;
 const MIN_GRID_SIZE = { rows: 2, cols: 3 };
@@ -64,9 +66,6 @@ const gridSize = ref({ ...MIN_GRID_SIZE });
 const numbers = ref<number[]>([]);
 const selectedNumbers = ref<number[]>([]);
 let timerInterval: ReturnType<typeof setInterval>;
-
-// Определяем сложность на основе текущего уровня
-const currentDifficulty = computed(() => getDifficultyByLevel(currentLevel.value));
 
 // Вычисляем отсортированные числа для проверки правильной последовательности
 const sortedNumbers = computed(() => [...numbers.value].sort((a, b) => a - b));
@@ -151,12 +150,20 @@ function resetGame() {
 }
 
 async function onOpenGameVictoryDialog() {
+  // Сохраняем прогресс уровня
+  completeLevel(levelNumber.value);
+  
   const modal = await openModal(GameVictoryDialog, {
     score: score.value,
   })
   modal.on('finish', () => {
     modal.close();
     router.back();
+  })
+  modal.on('continue', () => {
+    modal.close();
+    levelNumber.value = levelNumber.value + 1;
+    resetGame();
   })
   modal.on('restart', () => {
     modal.close();

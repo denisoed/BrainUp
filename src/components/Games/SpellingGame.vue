@@ -1,7 +1,7 @@
 <template>
   <div class="spelling-game flex column items-center justify-center">
     <GameHeader 
-      :level="currentLevel"
+      :level="levelNumber"
       :difficulty="currentDifficulty"
       :time-left="timeLeft"
       :score="score"
@@ -23,34 +23,50 @@
         {{ word }}
       </div>
     </div>
+
     <SuccessCounter :value="`${score}/${WINNING_STREAK}`" :show="score > 0" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
-import { useI18n } from 'vue-i18n';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
 import GameHeader from '@/components/Games/GameHeader.vue';
 import GameVictoryDialog from '@/components/Dialogs/GameVictoryDialog.vue';
 import { openModal } from 'jenesius-vue-modal';
-import { useRouter } from 'vue-router';
 import { useGameProgress } from '@/composables/useGameProgress';
+import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
+const { t } = useI18n();
 
 // Используем composable для управления прогрессом
 const gameId = route.params.game;
-const { currentLevel, getDifficultyByLevel } = useGameProgress(gameId);
+const { currentLevel, completeLevel, getDifficultyByLevel } = useGameProgress(gameId);
+
+// Game state
+const levelNumber = ref(route.query.level ? Number(route.query.level) : currentLevel.value);
 
 const TIME_LIMIT = 10;
 const WINNING_STREAK = 15;
 
+const timeLeft = ref(TIME_LIMIT);
+const score = ref(0);
+const isStarted = ref(false);
+const showSuccess = ref(false);
+const showError = ref(false);
+const selectedWord = ref('');
+const currentWord = ref('');
+const wrongWord = ref('');
+const correctWords = ref<string[]>([]);
+const displayWords = ref<string[]>([]);
+
+let timerInterval: ReturnType<typeof setInterval>;
+
 // Определяем сложность на основе текущего уровня
-const currentDifficulty = computed(() => getDifficultyByLevel(currentLevel.value));
+const currentDifficulty = computed(() => getDifficultyByLevel(levelNumber.value));
 
 // Русские слова
 const correctWordsRu = [
@@ -190,24 +206,13 @@ const wrongWordsEn = [
 ];
 
 // Выбор массива слов в зависимости от языка
-const correctWords = computed(() => {
+const words = computed(() => {
   return t('games.tongueTwister.lang') === 'ru-RU' ? correctWordsRu : correctWordsEn;
 });
 
 const wrongWords = computed(() => {
   return t('games.tongueTwister.lang') === 'ru-RU' ? wrongWordsRu : wrongWordsEn;
 });
-
-const timeLeft = ref(TIME_LIMIT);
-const score = ref(0);
-const isStarted = ref(false);
-const displayWords = ref<string[]>([]);
-const wrongWord = ref('');
-const selectedWord = ref('');
-const showSuccess = ref(false);
-const showError = ref(false);
-
-let timerInterval: ReturnType<typeof setInterval>;
 
 function shuffleArray(array: string[]) {
   const newArray = [...array];
@@ -220,14 +225,14 @@ function shuffleArray(array: string[]) {
 
 function generateWords() {
   // Получаем случайный индекс для слова с ошибкой
-  const randomIndex = Math.floor(Math.random() * correctWords.value.length);
+  const randomIndex = Math.floor(Math.random() * words.value.length);
   
   // Получаем правильное слово и его версию с ошибкой
-  const correctWord = correctWords.value[randomIndex];
+  const correctWord = words.value[randomIndex];
   wrongWord.value = wrongWords.value[randomIndex];
   
   // Получаем 5 случайных правильных слов (исключая выбранное)
-  const otherWords = correctWords.value
+  const otherWords = words.value
     .filter(word => word !== correctWord)
     .sort(() => Math.random() - 0.5)
     .slice(0, 3);
@@ -305,12 +310,21 @@ function resetGame() {
 }
 
 async function onOpenGameVictoryDialog() {
+  // Сохраняем прогресс уровня
+  completeLevel(levelNumber.value);
+  
   const modal = await openModal(GameVictoryDialog, {
     score: score.value,
   })
   modal.on('finish', () => {
     modal.close();
     router.back();
+  })
+  modal.on('continue', () => {
+    modal.close();
+    levelNumber.value = levelNumber.value + 1;
+    resetGame();
+    startGame();
   })
   modal.on('restart', () => {
     modal.close();

@@ -1,10 +1,13 @@
 <template>
   <div class="pattern-creator-game flex column items-center justify-center">
-    <div class="stats">
-      <div class="timer">⏳ {{ $t('games.time') }}: <span>{{ timeLeft.toFixed(1) }}</span></div>
-      <div class="score">🏆 {{ $t('games.score') }}: <span>{{ score }}/{{ WINNING_STREAK }}</span></div>
-    </div>
-    <ProgressBar :progress="(timeLeft / TIME_LIMIT) * 100" />
+    <GameHeader 
+      :level="levelNumber"
+      :difficulty="currentDifficulty"
+      :time-left="timeLeft"
+      :score="score"
+      :winning-streak="WINNING_STREAK"
+      :progress="(timeLeft / TIME_LIMIT) * 100"
+    />
 
     <div class="game-container mt-md mb-md">
       <div v-if="gameState === 'pattern'" class="pattern-display">
@@ -59,16 +62,25 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import SuccessCounter from '@/components/Games/SuccessCounter.vue';
-import ProgressBar from '@/components/Games/ProgressBar.vue';
+import GameHeader from '@/components/Games/GameHeader.vue';
 import GameVictoryDialog from '@/components/Dialogs/GameVictoryDialog.vue';
 import { openModal } from 'jenesius-vue-modal';
-import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
+import { useGameProgress } from '@/composables/useGameProgress';
 
 const router = useRouter();
+const route = useRoute();
 const { t } = useI18n();
+
+// Используем composable для управления прогрессом
+const gameId = route.params.game;
+const { currentLevel, completeLevel, getDifficultyByLevel } = useGameProgress(gameId);
+
+// Game state
+const levelNumber = ref(route.query.level ? Number(route.query.level) : currentLevel.value);
 
 // Game constants
 const TIME_LIMIT = 30;
@@ -98,6 +110,9 @@ const patternRules = [
   'games.patternCreator.rules.checkerboard',
   'games.patternCreator.rules.border'
 ];
+
+// Определяем сложность на основе текущего уровня
+const currentDifficulty = computed(() => getDifficultyByLevel(levelNumber.value));
 
 // Get current instruction based on rule
 const currentInstruction = computed(() => {
@@ -381,17 +396,25 @@ function resetGame() {
 
 // Open victory dialog
 async function onOpenGameVictoryDialog() {
+  // Сохраняем прогресс уровня
+  completeLevel(levelNumber.value);
+  
   const modal = await openModal(GameVictoryDialog, {
     score: score.value,
-  });
+  })
   modal.on('finish', () => {
     modal.close();
     router.back();
-  });
+  })
+  modal.on('continue', () => {
+    modal.close();
+    levelNumber.value = levelNumber.value + 1;
+    resetGame();
+  })
   modal.on('restart', () => {
     modal.close();
     resetGame();
-  });
+  })
 }
 
 // Lifecycle hooks
