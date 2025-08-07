@@ -5,31 +5,15 @@
       :style="{ transform: `translateX(-${currentStep * 100}%)` }"
       v-touch:swipe="handleSwipe"
     >
-      <!-- Step 1 -->
-      <div class="welcome-step">
-        <h1 class="welcome-title" v-html="$t('welcome.steps.step1.title', { name: userName })"></h1>
-        <p class="welcome-text" v-html="$t('welcome.steps.step1.text')"></p>
+      <div class="welcome-step"
+        v-for="(step, index) in STEPS"
+        :key="`step-${index}`"
+        :class="{ 'welcome-step-active': currentStep === index }"
+      >
+        <h1 class="welcome-title" v-html="$t(step.title, { name: userName })"></h1>
+        <p class="welcome-text" v-html="$t(step.text)"></p>
         <div class="welcome-image">
-          <BrainIcon />
-        </div>
-      </div>
-
-      <!-- Step 2 -->
-      <div class="welcome-step">
-        <h2 class="welcome-title" v-html="$t('welcome.steps.step2.title')"></h2>
-        <p class="welcome-text" v-html="$t('welcome.steps.step2.text')"></p>
-        <div class="welcome-image">
-           <!-- You can add an illustration or icon here -->
-        </div>
-      </div>
-
-      <!-- Step 3 -->
-      <div class="welcome-step welcome-step-3">
-        <h2 class="welcome-title" v-html="$t('welcome.steps.step3.title')"></h2>
-        <p class="welcome-text" v-html="$t('welcome.steps.step3.text')"></p>
-        <div class="welcome-image">
-          <!-- You can add an illustration or icon here -->
-          <GrowIcon />
+          <component :is="step.image" />
         </div>
       </div>
     </div>
@@ -37,11 +21,11 @@
     <!-- Navigation dots -->
     <div class="welcome-dots flex gap-sm justify-center items-center">
       <div
-        v-for="step in totalSteps"
-        :key="step"
+        v-for="(_, index) in STEPS"
+        :key="index"
         class="welcome-dot"
-        :class="{ active: currentStep === step - 1 }"
-        @click="setStep(step - 1)"
+        :class="{ active: currentStep === index }"
+        @click="setStep(index)"
       ></div>
     </div>
 
@@ -76,14 +60,39 @@ const router = useRouter()
 const currentStep = ref(0)
 const userName = ref('')
 
-// Constants
-const TOTAL_STEPS = 3
+const STEPS = [
+  {
+    title: 'welcome.steps.step1.title',
+    text: 'welcome.steps.step1.text',
+    image: BrainIcon
+  },
+  {
+    title: 'welcome.steps.step2.title',
+    text: 'welcome.steps.step2.text',
+    image: null
+  },
+  {
+    title: 'welcome.steps.step3.title',
+    text: 'welcome.steps.step3.text',
+    image: null
+  },
+  {
+    title: 'welcome.steps.step4.title',
+    text: 'welcome.steps.step4.text',
+    image: GrowIcon
+  },
+  {
+    title: 'welcome.steps.step5.title',
+    text: 'welcome.steps.step5.text',
+    image: null
+  }
+]
 
-const isLastStep = computed(() => currentStep.value === TOTAL_STEPS - 1)
+const isLastStep = computed(() => currentStep.value === STEPS.length - 1)
 
 // Swipe handling
 const handleSwipe = (direction: string) => {
-  if (direction === 'left' && currentStep.value < TOTAL_STEPS - 1) {
+  if (direction === 'left' && currentStep.value < STEPS.length - 1) {
     nextStep()
   } else if (direction === 'right' && currentStep.value > 0) {
     previousStep()
@@ -122,7 +131,8 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .welcome-container {
-  height: 100vh;
+  height: 100%;
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -159,8 +169,9 @@ onMounted(() => {
 
 .welcome-text {
   color: var(--white-color);
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1.6;
+  opacity: 0.8;
 
   :deep(span) {
     color: var(--primary);

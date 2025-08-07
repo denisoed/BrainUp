@@ -66,6 +66,9 @@ async function onOpenAboutGameDialog() {
 
 <style lang="scss" scoped>
 .game-page {
+  min-height: 100vh;
+  padding: 16px 0 32px;
+
   &_header {
     width: 100%;
     position: absolute;

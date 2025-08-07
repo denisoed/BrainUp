@@ -426,14 +426,22 @@
   "welcome": {
     "steps": {
       "step1": {
-        "title": "Welcome to <span>Mentorius Bot</span>",
-        "text": "<span>Develop</span> your attention, memory, and thinking with engaging exercises. Our trainings will help you become faster, more attentive, and more effective in everyday tasks."
+        "title": "Welcome to <span>Mentorius Bot</span>!",
+        "text": "You've entered an application for <span>brain development</span> through fun games and exercises."
       },
       "step2": {
-        "title": "Why is it <span>important</span>?",
-        "text": "Cognitive abilities are the foundation of successful thinking. Regular training improves concentration, learning ability, and decision-making. And it's just fun!"
+        "title": "What's <span>waiting</span> for you?",
+        "text": "In the application <span>15+ different games</span>: from logic puzzles to breathing exercises. Each game adapts to your level and helps develop specific skills."
       },
       "step3": {
+        "title": "What will you <span>get</span>?",
+        "text": "Regular training will make you <span>faster, more attentive, and more effective</span>. Concentration, memory, decision-making speed, and overall productivity in everyday tasks will improve."
+      },
+      "step4": {
+        "title": "Why is it <span>important</span>?",
+        "text": "<span>Cognitive abilities</span> are the foundation of successful thinking in the modern world. A trained brain better handles stress, learns faster, and makes better decisions."
+      },
+      "step5": {
         "title": "Start <span>now</span>!",
         "text": "Pass the first training and evaluate your level. <span>Only 5 minutes a day</span> — and your brain will become sharper than ever!"
       }

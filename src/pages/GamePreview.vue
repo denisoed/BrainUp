@@ -127,6 +127,7 @@ onMounted(() => {
   background: linear-gradient(175deg, #212121 0%, rgba(34, 40, 49, 1) 100%);
   display: flex;
   flex-direction: column;
+  padding: 16px 0 32px;
 }
 
 .game-preview__header {
